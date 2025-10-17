@@ -1,0 +1,11 @@
+# Compilation dir
+/bin/
+
+# Eclipse specific files
+.classpath
+.project
+/.settings/
+/target/
+
+# Created files
+ftlmoddingtool-log.txt
