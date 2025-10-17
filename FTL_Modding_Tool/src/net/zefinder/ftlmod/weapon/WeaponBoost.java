@@ -7,15 +7,21 @@ import net.zefinder.ftlmod.xml.XmlTag;
 
 public record WeaponBoost(WeaponBoostType weaponBoostType, int amount, int count) implements XmlObject {
 
+	static final WeaponBoost EMPTY = new WeaponBoost(null, 0, 0);
+
 	@Override
 	public XmlTag<?> toXmlTag() {
+		if (weaponBoostType == null) {
+			return XmlTag.EMPTY;
+		}
+
 		XmlTag<WeaponBoostType> weaponBoostTypeTag = new XmlTag<WeaponBoostType>("type", weaponBoostType);
 		XmlTag<Integer> amountTag = new XmlTag<Integer>("amount", amount);
 		XmlTag<Integer> countTag = new XmlTag<Integer>("count", count);
 
 		return new XmlTag<List<XmlTag<?>>>("boost", List.of(weaponBoostTypeTag, amountTag, countTag));
 	}
-	
+
 	@Override
 	public final String toString() {
 		return toXmlTag().toString();

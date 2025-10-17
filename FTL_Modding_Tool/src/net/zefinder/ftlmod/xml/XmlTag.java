@@ -29,6 +29,9 @@ public class XmlTag<T> {
 		format.setEncoding("UTF-8");
 	}
 
+	@SuppressWarnings("rawtypes")
+	public static final XmlTag EMPTY = new XmlTag<>("");
+	
 	private final String tagName;
 	private final T element;
 	private final Set<Attribute> attributes;

@@ -139,20 +139,20 @@ class WeaponPropertyFactory {
 		return new XmlTag<Integer>("persDamage", persDamage);
 	}
 
-	public static XmlTag<Integer> createLockdown(int lockdown) {
-		return new XmlTag<Integer>("lockdown", lockdown);
+	public static XmlTag<Integer> createLockdown(boolean lockdown) {
+		return new XmlTag<Integer>("lockdown", lockdown ? 1 : 0);
 	}
 
 	public static XmlTag<Integer> createSysDamage(int sysDamage) {
 		return new XmlTag<Integer>("sysDamage", sysDamage);
 	}
 
-	public static XmlTag<Integer> createHullBust(int hullBust) {
-		return new XmlTag<Integer>("hullBust", hullBust);
+	public static XmlTag<Integer> createHullBust(boolean hullBust) {
+		return new XmlTag<Integer>("hullBust", hullBust ? 1 : 0);
 	}
 
-	public static XmlTag<Integer> createDroneTargetable(int droneTargetable) {
-		return new XmlTag<Integer>("droneTargetable", droneTargetable);
+	public static XmlTag<Integer> createDroneTargetable(boolean droneTargetable) {
+		return new XmlTag<Integer>("droneTargetable", droneTargetable ? 1 : 0);
 	}
 
 	public static XmlTag<Integer> createMissiles(int missiles) {
@@ -167,8 +167,8 @@ class WeaponPropertyFactory {
 		return new XmlTag<String>("explosion", explosionReference);
 	}
 
-	public static XmlTag<Integer> createLocked(int locked) {
-		return new XmlTag<Integer>("locked", locked);
+	public static XmlTag<Integer> createLocked(boolean locked) {
+		return new XmlTag<Integer>("locked", locked ? 1 : 0);
 	}
 
 	public static WeaponBoost createBoost(WeaponBoostType weaponBoostType, int amount, int count) {
