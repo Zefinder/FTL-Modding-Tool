@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,10 +27,14 @@ public class XmlTag<T> {
 		format.setSuppressDeclaration(true);
 		format.setEncoding("UTF-8");
 	}
-
-	@SuppressWarnings("rawtypes")
-	public static final XmlTag EMPTY = new XmlTag<>("");
 	
+	private static final XmlTag<?> EMPTY = new XmlTag<>("");
+	public static final <T> XmlTag<T> empty() {
+        @SuppressWarnings("unchecked")
+        XmlTag<T> t = (XmlTag<T>) EMPTY;
+        return t;
+	};
+
 	private final String tagName;
 	private final T element;
 	private final Set<Attribute> attributes;
@@ -68,9 +71,16 @@ public class XmlTag<T> {
 		return Optional.ofNullable(element);
 	}
 
-//	public final XmlTag<T> setElement(T element) {
-//		return new XmlTag<T>(tagName, element, attributes.toArray(Attribute[]::new));
-//	}
+	/**
+	 * Creates a clone of this object. Because the element is not known before
+	 * runtime, it is impossible to create a clone of it. Thus, if the XmlTag
+	 * contains mutable objects (such as a {@link Collection}), then you need to
+	 * clone it by hand!
+	 */
+	@Override
+	public XmlTag<T> clone() {
+		return new XmlTag<T>(tagName, element, attributes.toArray(Attribute[]::new));
+	}
 
 	@Override
 	public String toString() {
@@ -111,28 +121,6 @@ public class XmlTag<T> {
 		public final String toString() {
 			return "%s=\"%s\"".formatted(name, value);
 		}
-	}
-
-	public static void main(String[] args) {
-		XmlTag<String> systemType = new XmlTag<>("type", "battery");
-		XmlTag<?> systemTitle = new XmlTag<>("title", new Attribute("id", "system_battery_title"));
-		XmlTag<?> systemDesc = new XmlTag<>("desc", new Attribute("id", "system_battery_desc"));
-		XmlTag<Integer> systemStartPower = new XmlTag<>("startPower", 1);
-		XmlTag<Integer> systemMaxPower = new XmlTag<>("maxPower", 2);
-		XmlTag<Integer> systemRarity = new XmlTag<>("rarity", 1);
-		XmlTag<Integer> level = new XmlTag<>("level", 50);
-		XmlTag<Set<XmlTag<?>>> systemUpgradeCost = new XmlTag<>("startPower", Set.of(level));
-		XmlTag<Integer> systemCost = new XmlTag<>("cost", 35);
-
-		List<XmlTag<?>> tags = List.of(systemType, systemTitle, systemDesc, systemStartPower, systemMaxPower,
-				systemRarity, systemUpgradeCost, systemCost);
-		XmlTag<List<XmlTag<?>>> systemBlueprint = new XmlTag<>("systemBlueprint", tags,
-				new Attribute("name", "battery"));
-
-		XmlTag<?> FTL = new XmlTag<>("FTL", Set.of(systemBlueprint));
-
-		System.out.println(FTL.toString().strip());
-
 	}
 
 }
