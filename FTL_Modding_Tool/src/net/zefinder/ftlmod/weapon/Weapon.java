@@ -18,6 +18,61 @@ public class Weapon implements XmlObject {
 
 	private static final Logger log = LoggerFactory.getLogger(Weapon.class);
 
+	public static final String WEAPON_TYPE_TAG_NAME_STRING = "";
+	public static final String TIP_TAG_NAME_STRING = "";
+	public static final String TITLE_TAG_NAME_STRING = "";
+	public static final String SHORT_TAG_NAME_STRING = "";
+	public static final String DESCRIPTION_TAG_NAME_STRING = "";
+	public static final String TOOLTIP_TAG_NAME_STRING = "";
+	public static final String COOLDOWN_TAG_NAME_STRING = "";
+	public static final String POWER_TAG_NAME_STRING = "";
+	public static final String COST_TAG_NAME_STRING = "";
+	public static final String RARITY_TAG_NAME_STRING = "";
+	public static final String DAMAGE_TAG_NAME_STRING = "";
+	public static final String SHIELD_PIERCING_TAG_NAME_STRING = "";
+	public static final String BP_TAG_NAME_STRING = "";
+	public static final String FIRE_CHANCE_TAG_NAME_STRING = "";
+	public static final String BREACH_CHANCE_TAG_NAME_STRING = "";
+	public static final String IMAGE_TAG_NAME_STRING = "";
+	public static final String ICON_IMAGE_TAG_NAME_STRING = "";
+	public static final String WEAPON_ART_TAG_NAME_STRING = "";
+	public static final String LAUNCH_SOUNDS_TAG_NAME_STRING = "";
+	public static final String SOUND_TAG_NAME_STRING = "";
+	public static final String LENGTH_TAG_NAME_STRING = "";
+	public static final String COLOR_TAG_NAME_STRING = "";
+	public static final String R_TAG_NAME_STRING = "";
+	public static final String G_TAG_NAME_STRING = "";
+	public static final String B_TAG_NAME_STRING = "";
+	public static final String PROJECTILES_TAG_NAME_STRING = "";
+	public static final String PROJECTILE_TAG_NAME_STRING = "";
+	public static final String RADIUS_TAG_NAME_STRING = "";
+	public static final String SPIN_TAG_NAME_STRING = "";
+	public static final String FLAVOR_TYPE_TAG_NAME_STRING = "";
+	public static final String STUN_CHANCE_TAG_NAME_STRING = "";
+	public static final String SPEED_TAG_NAME_STRING = "";
+	public static final String PERS_DAMAGE_TAG_NAME_STRING = "";
+	public static final String LOCKDOWN_TAG_NAME_STRING = "";
+	public static final String SYSTEM_DAMAGE_TAG_NAME_STRING = "";
+	public static final String HULL_BUST_TAG_NAME_STRING = "";
+	public static final String DRONE_TARGETABLE_TAG_NAME_STRING = "";
+	public static final String MISSILES_TAG_NAME_STRING = "";
+	public static final String ION_TAG_NAME_STRING = "";
+	public static final String EXPLOSION_TAG_NAME_STRING = "";
+	public static final String LOCKED_TAG_NAME_STRING = "";
+	public static final String WEAPON_BOOST_TAG_NAME_STRING = "";
+	public static final String BOOST_TYPE_TAG_NAME_STRING = "";
+	public static final String BOOST_AMOUNT_TAG_NAME_STRING = "";
+	public static final String BOOST_COUNT_TAG_NAME_STRING = "";
+	public static final String CHARGE_LEVELS_TAG_NAME_STRING = "";
+	public static final String HIT_SHIP_SOUNDS_TAG_NAME_STRING = "";
+	public static final String HIT_SHIELD_SOUNDS_TAG_NAME_STRING = "";
+	public static final String MISS_SOUNDS_TAG_NAME_STRING = "";
+
+	private static final String TITLE_REFERENCE_DEFAULT_FORMAT = "weapon_%s_title";
+	private static final String SHORT_REFERENCE_DEFAULT_FORMAT = "weapon_%s_short";
+	private static final String DESCRIPTION_REFERENCE_DEFAULT_FORMAT = "weapon_%s_desc";
+	private static final String TOOLTIP_REFERENCE_DEFAULT_FORMAT = "weapon_%s_tooltip";
+
 	private final String name;
 
 	// On all weapons
@@ -104,7 +159,7 @@ public class Weapon implements XmlObject {
 			if (!length.hasElement()) {
 				setLength(1);
 			}
-			
+
 		} else if (weaponType == WeaponType.BURST) {
 			if (!projectiles.hasElement()) {
 				setProjectiles();
@@ -278,10 +333,9 @@ public class Weapon implements XmlObject {
 		this.launchSounds = WeaponPropertyFactory.createLaunchSounds(sounds);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setLength(int length) {
 		if (length < 0) {
-			this.length = XmlTag.EMPTY;
+			this.length = XmlTag.empty();
 		} else {
 			if (length < 1) {
 				log.warn("The length must be geater than 0! Set to 1...");
@@ -292,28 +346,25 @@ public class Weapon implements XmlObject {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setColor(Color color) {
 		if (color == null) {
-			this.color = XmlTag.EMPTY;
+			this.color = XmlTag.empty();
 		} else {
 			this.color = WeaponPropertyFactory.createColor(color);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setProjectiles(WeaponProjectile... projectiles) {
 		if (projectiles == null) {
-			this.projectiles = XmlTag.EMPTY;
+			this.projectiles = XmlTag.empty();
 		} else {
 			this.projectiles = WeaponPropertyFactory.createProjectiles(projectiles);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setRadius(int radius) {
 		if (radius < 0) {
-			this.radius = XmlTag.EMPTY;
+			this.radius = XmlTag.empty();
 		} else {
 			if (radius < 1) {
 				log.warn("The radius must be geater than 0! Set to 1...");
@@ -324,10 +375,9 @@ public class Weapon implements XmlObject {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setSpin(int spin) {
 		if (spin < 0) {
-			this.spin = XmlTag.EMPTY;
+			this.spin = XmlTag.empty();
 		} else {
 			if (spin < 1) {
 				log.warn("The spin must be geater than 0! Set to 1...");
@@ -338,10 +388,9 @@ public class Weapon implements XmlObject {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setShots(int shots) {
 		if (shots < 0) {
-			this.shots = XmlTag.EMPTY;
+			this.shots = XmlTag.empty();
 		} else {
 			if (shots < 1) {
 				log.warn("The shots must be geater than 0! Set to 1...");
@@ -352,19 +401,17 @@ public class Weapon implements XmlObject {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setFlavorType(String flavorType) {
 		if (flavorType == null) {
-			this.flavorType = XmlTag.EMPTY;
+			this.flavorType = XmlTag.empty();
 		} else {
 			this.flavorType = WeaponPropertyFactory.createFlavorType(flavorType);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setStunChance(int stunChance) {
 		if (stunChance < 0) {
-			this.stunChance = XmlTag.EMPTY;
+			this.stunChance = XmlTag.empty();
 		} else {
 			if (stunChance > 10) {
 				log.warn("The breach chance cannot be greater than 10! Set to 10...");
@@ -375,10 +422,9 @@ public class Weapon implements XmlObject {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setSpeed(int speed) {
 		if (speed < 0) {
-			this.speed = XmlTag.EMPTY;
+			this.speed = XmlTag.empty();
 		} else {
 			if (speed < 1) {
 				log.warn("The speed must be geater than 0! Set to 1...");
@@ -409,19 +455,17 @@ public class Weapon implements XmlObject {
 		this.droneTargetable = WeaponPropertyFactory.createDroneTargetable(droneTargetable);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setMissiles(int missiles) {
 		if (missiles < 0) {
-			this.missiles = XmlTag.EMPTY;
+			this.missiles = XmlTag.empty();
 		} else {
 			this.missiles = WeaponPropertyFactory.createMissiles(missiles);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setIon(int ion) {
 		if (ion < 0) {
-			this.ion = XmlTag.EMPTY;
+			this.ion = XmlTag.empty();
 		} else {
 			this.ion = WeaponPropertyFactory.createIon(ion);
 		}
@@ -449,37 +493,33 @@ public class Weapon implements XmlObject {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setChargeLevels(int chargeLevels) {
 		if (chargeLevels < 0) {
-			this.chargeLevels = XmlTag.EMPTY;
+			this.chargeLevels = XmlTag.empty();
 		} else {
 			this.chargeLevels = WeaponPropertyFactory.createChargeLevels(chargeLevels);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setHitShipSounds(String... sounds) {
 		if (sounds == null) {
-			this.hitShipSounds = XmlTag.EMPTY;
+			this.hitShipSounds = XmlTag.empty();
 		} else {
 			this.hitShipSounds = WeaponPropertyFactory.createHitShipSounds(sounds);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setHitShieldSounds(String... sounds) {
 		if (sounds == null) {
-			this.hitShieldSounds = XmlTag.EMPTY;
+			this.hitShieldSounds = XmlTag.empty();
 		} else {
 			this.hitShieldSounds = WeaponPropertyFactory.createHitShieldSounds(sounds);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setMissSounds(String... sounds) {
 		if (sounds == null) {
-			this.missSounds = XmlTag.EMPTY;
+			this.missSounds = XmlTag.empty();
 		} else {
 			this.missSounds = WeaponPropertyFactory.createMissSounds(sounds);
 		}
@@ -492,10 +532,10 @@ public class Weapon implements XmlObject {
 	public void reset() {
 		setWeaponType(WeaponType.LASER);
 		setTip("tip_laser");
-		setTitle("weapon_LASER_BURST_1_title");
-		setShortTitle("weapon_LASER_BURST_1_short");
-		setDescription("weapon_LASER_BURST_1_desc");
-		setToolTip("weapon_LASER_BURST_1_tooltip");
+		setTitle(TITLE_REFERENCE_DEFAULT_FORMAT.formatted(name));
+		setShortTitle(SHORT_REFERENCE_DEFAULT_FORMAT.formatted(name));
+		setDescription(DESCRIPTION_REFERENCE_DEFAULT_FORMAT.formatted(name));
+		setToolTip(TOOLTIP_REFERENCE_DEFAULT_FORMAT.formatted(name));
 		setCooldown(10);
 		setPower(1);
 		setCost(20);
@@ -653,6 +693,72 @@ public class Weapon implements XmlObject {
 		return new XmlTag<List<XmlTag<?>>>("weaponBlueprint", tags, new Attribute("name", name));
 	}
 
+	public String name() {
+		return name;
+	}
+
+	public void copyFrom(Weapon other) {
+		// XmlTags are immutable types and their values (String, Integer and immutable
+		// List) are immutable too.
+		// WeaponBoost is immutable since it's a record of enum and int
+		this.weaponType = other.weaponType;
+		this.tipReference = other.tipReference;
+		this.titleReference = other.titleReference;
+		this.shortTitleReference = other.shortTitleReference;
+		this.descriptionReference = other.descriptionReference;
+		this.tooltipReference = other.tooltipReference;
+		this.cooldown = other.cooldown;
+		this.power = other.power;
+		this.cost = other.cost;
+		this.rarity = other.rarity;
+		this.damage = other.damage;
+		this.shieldPiercing = other.shieldPiercing;
+		this.bp = other.bp;
+		this.fireChance = other.fireChance;
+		this.breachChance = other.breachChance;
+		this.imageReference = other.imageReference;
+		this.iconImageReference = other.iconImageReference;
+		this.weaponArtReference = other.weaponArtReference;
+		this.launchSounds = other.launchSounds;
+		this.length = other.length;
+		this.color = other.color;
+		this.projectiles = other.projectiles;
+		this.radius = other.radius;
+		this.spin = other.spin;
+		this.shots = other.shots;
+		this.flavorType = other.flavorType;
+		this.stunChance = other.stunChance;
+		this.speed = other.speed;
+		this.persDamage = other.persDamage;
+		this.lockdown = other.lockdown;
+		this.systemDamage = other.systemDamage;
+		this.hullBust = other.hullBust;
+		this.droneTargetable = other.droneTargetable;
+		this.missiles = other.missiles;
+		this.ion = other.ion;
+		this.explosionReference = other.explosionReference;
+		this.locked = other.locked;
+		this.weaponBoost = other.weaponBoost;
+		this.chargeLevels = other.chargeLevels;
+		this.hitShipSounds = other.hitShipSounds;
+		this.hitShieldSounds = other.hitShieldSounds;
+		this.missSounds = other.missSounds;
+	}
+
+	@Override
+	public Weapon clone() {
+		Weapon clone = null;
+		try {
+			clone = new Weapon(name);
+			clone.copyFrom(this);
+		} catch (WeaponCreationException e) {
+			// Cannot go here since name is final and cannot be null
+			e.printStackTrace();
+		}
+
+		return clone;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof Weapon other && other.name.equals(this.name);
@@ -667,7 +773,6 @@ public class Weapon implements XmlObject {
 		Weapon w = new Weapon("test");
 		w.setLength(50);
 		w.setWeaponType(WeaponType.BEAM);
-		System.out.println(w.toXmlTag().toString());
 	}
 
 }
