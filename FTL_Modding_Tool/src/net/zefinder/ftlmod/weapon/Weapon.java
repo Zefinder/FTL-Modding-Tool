@@ -67,6 +67,11 @@ public class Weapon implements XmlObject {
 	public static final String HIT_SHIP_SOUNDS_TAG_NAME_STRING = "hitShipSounds";
 	public static final String HIT_SHIELD_SOUNDS_TAG_NAME_STRING = "hitShieldSounds";
 	public static final String MISS_SOUNDS_TAG_NAME_STRING = "missSounds";
+	
+	public static final String NAME_ATTRIBUTE = "name";
+	public static final String ID_ATTRIBUTE = "id";
+	public static final String COUNT_ATTRIBUTE = "count";
+	public static final String FAKE_ATTRIBUTE = "fake";
 
 	private static final String TITLE_REFERENCE_DEFAULT_FORMAT = "weapon_%s_title";
 	private static final String SHORT_REFERENCE_DEFAULT_FORMAT = "weapon_%s_short";
@@ -690,7 +695,7 @@ public class Weapon implements XmlObject {
 			tags.add(missSounds);
 		}
 
-		return new XmlTag<List<XmlTag<?>>>("weaponBlueprint", tags, new Attribute("name", name));
+		return new XmlTag<List<XmlTag<?>>>("weaponBlueprint", tags, new Attribute(NAME_ATTRIBUTE, name));
 	}
 
 	public String name() {

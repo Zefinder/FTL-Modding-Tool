@@ -16,6 +16,7 @@ import static net.zefinder.ftlmod.weapon.Weapon.HIT_SHIELD_SOUNDS_TAG_NAME_STRIN
 import static net.zefinder.ftlmod.weapon.Weapon.HIT_SHIP_SOUNDS_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.HULL_BUST_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.ICON_IMAGE_TAG_NAME_STRING;
+import static net.zefinder.ftlmod.weapon.Weapon.ID_ATTRIBUTE;
 import static net.zefinder.ftlmod.weapon.Weapon.IMAGE_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.ION_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.LAUNCH_SOUNDS_TAG_NAME_STRING;
@@ -62,23 +63,23 @@ final class WeaponPropertyFactory {
 	}
 
 	public static final XmlTag<Void> createTip(String tipReference) {
-		return new XmlTag<Void>(TIP_TAG_NAME_STRING, new Attribute("id", tipReference));
+		return new XmlTag<Void>(TIP_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, tipReference));
 	}
 
 	public static final XmlTag<Void> createTitle(String titleReference) {
-		return new XmlTag<Void>(TITLE_TAG_NAME_STRING, new Attribute("id", titleReference));
+		return new XmlTag<Void>(TITLE_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, titleReference));
 	}
 
 	public static final XmlTag<Void> createShortTitle(String shortTitleReference) {
-		return new XmlTag<Void>(SHORT_TAG_NAME_STRING, new Attribute("id", shortTitleReference));
+		return new XmlTag<Void>(SHORT_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, shortTitleReference));
 	}
 
 	public static final XmlTag<Void> createDescription(String descriptionReference) {
-		return new XmlTag<Void>(DESCRIPTION_TAG_NAME_STRING, new Attribute("id", descriptionReference));
+		return new XmlTag<Void>(DESCRIPTION_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, descriptionReference));
 	}
 
 	public static final XmlTag<Void> createTooltip(String tooltipReference) {
-		return new XmlTag<Void>(TOOLTIP_TAG_NAME_STRING, new Attribute("id", tooltipReference));
+		return new XmlTag<Void>(TOOLTIP_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, tooltipReference));
 	}
 
 	public static final XmlTag<Integer> createCooldown(int cooldown) {
@@ -165,7 +166,7 @@ final class WeaponPropertyFactory {
 	}
 
 	public static final XmlTag<Void> createFlavorType(String flavorType) {
-		return new XmlTag<Void>(FLAVOR_TYPE_TAG_NAME_STRING, new Attribute("id", flavorType));
+		return new XmlTag<Void>(FLAVOR_TYPE_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, flavorType));
 	}
 
 	public static final XmlTag<Integer> createStunChance(int stunChance) {
