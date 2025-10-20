@@ -10,11 +10,11 @@ public record WeaponBeamColor(int r, int g, int b) implements XmlObject {
 
 	@Override
 	public XmlTag<?> toXmlTag() {
-		XmlTag<Integer> rTag = new XmlTag<Integer>(R_TAG_NAME_STRING, r);
-		XmlTag<Integer> gTag = new XmlTag<Integer>(G_TAG_NAME_STRING, g);
-		XmlTag<Integer> bTag = new XmlTag<Integer>(B_TAG_NAME_STRING, b);
+		XmlTag<Integer> rTag = new XmlTag<Integer>(R_TAG_NAME, r);
+		XmlTag<Integer> gTag = new XmlTag<Integer>(G_TAG_NAME, g);
+		XmlTag<Integer> bTag = new XmlTag<Integer>(B_TAG_NAME, b);
 
-		return new XmlTag<List<XmlTag<Integer>>>(COLOR_TAG_NAME_STRING, List.of(rTag, gTag, bTag));
+		return new XmlTag<List<XmlTag<Integer>>>(COLOR_TAG_NAME, List.of(rTag, gTag, bTag));
 	}
 
 	@Override
