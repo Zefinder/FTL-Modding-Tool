@@ -1,19 +1,22 @@
 package net.zefinder.ftlmod.analyser;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.zefinder.ftlmod.project.Project;
+import net.zefinder.ftlmod.project.ProjectCreationException;
+import net.zefinder.ftlmod.project.ProjectManager;
+import net.zefinder.ftlmod.weapon.WeaponCreationException;
 
 /**
  * Used to analyse a blueprint file and gather their names.
@@ -23,6 +26,9 @@ public class BlueprintAnalyser {
 	private static final Logger log = LoggerFactory.getLogger(BlueprintAnalyser.class);
 
 	private static final String BLUEPRINT_PATTERN_FORMAT = "<%sBlueprint name=\"([^\"]+)\"";
+
+	private static final List<String> PATHS_TO_ANALYSE = List.of("blueprints.xml", "dlcBlueprints.xml");
+	private static final Set<String> WEAPON_FILE_NAMES = Set.of("blueprints.xml", "dlcBlueprints.xml");
 
 	private static enum BlueprintType {
 		WEAPON("weapon"), SHIP("ship"), AUG("aug"), SYSTEM("system"), CREW("crew"), DRONE("drone");
@@ -46,107 +52,60 @@ public class BlueprintAnalyser {
 	 * 
 	 * @param blueprintFile the file to analyse
 	 * @return an immutable set of type and names
+	 * @throws DocumentException
 	 */
-	public static Set<Result> analyse(File blueprintFile) {
-		if (!blueprintFile.exists()) {
-			return Set.of();
-		}
-
-		final Set<Result> results = new HashSet<Result>();
-		try (BufferedReader reader = new BufferedReader(new FileReader(blueprintFile))) {
-			String line;
-			Matcher matcher;
-
-			while ((line = reader.readLine()) != null) {
-				// Check for each type
-				for (final BlueprintType type : BlueprintType.values()) {
-					matcher = type.pattern.matcher(line);
-
-					if (matcher.find()) {
-						results.add(new Result(type, matcher.group(1)));
-
-						// Exit the type loop
-						break;
-					}
-				}
-			}
-
-		} catch (IOException e) {
-			log.error("An error occured when analysing the following blueprint file: " + blueprintFile.getName(), e);
-
-			// Return empty set, error means probably corrupted data
-			return Set.of();
-		}
-
-		return Set.copyOf(results);
-	}
-
-	public static record Result(BlueprintType blueprintType, String name) {
-	};
-
-//	private static void analyse(HashMap<BlueprintType, Set<String>> results, File blueprintFile) throws FileNotFoundException, IOException {
-//		Pattern sub = Pattern.compile("<(([^/>! ]+))");
-//		Pattern close = Pattern.compile("</");
-//
-//		try (BufferedReader reader = new BufferedReader(new FileReader(blueprintFile))) {
-//			String line;
-//			Matcher matcher;
-//			boolean in = false;
-//			BlueprintType currentType = BlueprintType.WEAPON;
-//
-//			while ((line = reader.readLine()) != null) {
-//				if (!in) {
-//					for (final BlueprintType type : BlueprintType.values()) {
-//						matcher = type.pattern.matcher(line);
-//
-//						if (matcher.find()) {
-//							currentType = type;
-//							in = true;
-//							close = Pattern.compile("</%sBlueprint>".formatted(type.name().toLowerCase()));
-//							
-//							results.computeIfAbsent(type, t -> new HashSet<String>());
-//							
-//							// Exit the type loop
-//							break;
-//						}
-//					}
-//				} else {
-//					matcher = sub.matcher(line);
-//					if (matcher.find()) {
-//						results.get(currentType).add(matcher.group(1));
-//					} else {
-//						matcher = close.matcher(line);
-//						if (matcher.find()) {
-//							in = false;
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
-	
-	public static void main(String[] args) throws IOException, DocumentException {
-//		HashMap<BlueprintType, Set<String>> results = new HashMap<BlueprintAnalyser.BlueprintType, Set<String>>();
-//		analyse(results, new File("C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\res\\data\\blueprints.xml"));
-//		analyse(results, new File("C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\res\\data\\dlcBlueprints.xml"));
-//		
-//		System.out.println(results.toString());
-//		
-//		results.forEach((k, v) -> {
-//			System.out.println(k.toString() + " -> " + v.contains("sound"));
-//		});
-//		
-//		System.out.println();
-//		System.out.println(String.join("\n", results.get(BlueprintType.WEAPON)));
-		
+	public static void analyse() throws DocumentException {
 		SAXReader reader = new SAXReader();
 		reader.setIgnoreComments(true);
-		var doc = reader.read(new File("C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\res\\data\\blueprints.xml"));
-		
-		System.out.println();
-		for (Element element : doc.getRootElement().elements("weaponBlueprint")) {
-			System.out.println(element);
+
+		// Get the resource path from the project manager
+		String resourcePath = ProjectManager.getInstance().getResourceDirectoryPath();
+		if (!resourcePath.isEmpty()) {
+			File dataDir = new File(resourcePath + Project.DATA_PATH);
+
+			// Should exist but we never know with users...
+			if (dataDir.exists()) {
+				for (String pathToAnalyse : PATHS_TO_ANALYSE) {
+					File fileToAnalyse = new File(dataDir.getPath() + File.separator + pathToAnalyse);
+					if (fileToAnalyse.exists()) {
+						log.info("Analying file " + pathToAnalyse);
+						Document doc = reader.read(fileToAnalyse);
+						Element root = doc.getRootElement();
+
+						if (WEAPON_FILE_NAMES.contains(pathToAnalyse)) {
+							try {
+								WeaponAnalyser.analyse(root.elements("weaponBlueprint"));
+							} catch (WeaponCreationException e) {
+								log.error("Error when reading a weapon, skip weapon analysis for file " + pathToAnalyse,
+										e);
+							}
+						}
+
+					} else {
+						log.info("File %s does not exist... User, I'll find you!".formatted(pathToAnalyse));
+					}
+				}
+			} else {
+				log.info("Data directory do not exist... Why user? whyyyyyyy?");
+			}
+
+		} else {
+			log.info("Game resource directory not set, ignore...");
 		}
+
+		// Get the project path from the project manager
+		String projectPath = ProjectManager.getInstance().getProjectDirectoryPath();
+		if (!projectPath.isEmpty()) {
+
+		}
+
+	}
+
+	public static void main(String[] args) throws IOException, DocumentException, ProjectCreationException {
+		ProjectManager.getInstance().createProject("AAA", "C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\esc_room_1",
+				"C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\res");
+		ProjectManager.getInstance().openProject("AAA", "C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\esc_room_1");
+		BlueprintAnalyser.analyse();
 	}
 
 }

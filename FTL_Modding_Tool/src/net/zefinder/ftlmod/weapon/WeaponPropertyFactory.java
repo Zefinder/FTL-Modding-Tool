@@ -32,9 +32,11 @@ import static net.zefinder.ftlmod.weapon.Weapon.RADIUS_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.RARITY_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.SHIELD_PIERCING_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.SHORT_TAG_NAME_STRING;
+import static net.zefinder.ftlmod.weapon.Weapon.SHOTS_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.SPEED_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.SPIN_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.STUN_CHANCE_TAG_NAME_STRING;
+import static net.zefinder.ftlmod.weapon.Weapon.STUN_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.SYSTEM_DAMAGE_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.TIP_TAG_NAME_STRING;
 import static net.zefinder.ftlmod.weapon.Weapon.TITLE_TAG_NAME_STRING;
@@ -66,24 +68,40 @@ final class WeaponPropertyFactory {
 		return new XmlTag<Void>(TIP_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, tipReference));
 	}
 
-	public static final XmlTag<Void> createTitle(String titleReference) {
-		return new XmlTag<Void>(TITLE_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, titleReference));
+	public static final XmlTag<?> createTitle(String title, boolean isReference) {
+		if (isReference) {
+			return new XmlTag<Void>(TITLE_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, title));
+		}
+
+		return new XmlTag<String>(TITLE_TAG_NAME_STRING, title);
 	}
 
-	public static final XmlTag<Void> createShortTitle(String shortTitleReference) {
-		return new XmlTag<Void>(SHORT_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, shortTitleReference));
+	public static final XmlTag<?> createShortTitle(String shortTitle, boolean isReference) {
+		if (isReference) {
+			return new XmlTag<Void>(SHORT_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, shortTitle));
+		}
+
+		return new XmlTag<String>(SHORT_TAG_NAME_STRING, shortTitle);
 	}
 
-	public static final XmlTag<Void> createDescription(String descriptionReference) {
-		return new XmlTag<Void>(DESCRIPTION_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, descriptionReference));
+	public static final XmlTag<?> createDescription(String description, boolean isReference) {
+		if (isReference) {
+			return new XmlTag<Void>(DESCRIPTION_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, description));
+		}
+
+		return new XmlTag<String>(DESCRIPTION_TAG_NAME_STRING, description);
 	}
 
-	public static final XmlTag<Void> createTooltip(String tooltipReference) {
-		return new XmlTag<Void>(TOOLTIP_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, tooltipReference));
+	public static final XmlTag<?> createTooltip(String tooltip, boolean isReference) {
+		if (isReference) {
+			return new XmlTag<Void>(TOOLTIP_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, tooltip));
+		}
+
+		return new XmlTag<String>(TOOLTIP_TAG_NAME_STRING, tooltip);
 	}
 
-	public static final XmlTag<Integer> createCooldown(int cooldown) {
-		return new XmlTag<Integer>(COOLDOWN_TAG_NAME_STRING, cooldown);
+	public static final XmlTag<Double> createCooldown(double cooldown) {
+		return new XmlTag<Double>(COOLDOWN_TAG_NAME_STRING, cooldown);
 	}
 
 	public static final XmlTag<Integer> createPower(int power) {
@@ -162,15 +180,23 @@ final class WeaponPropertyFactory {
 	}
 
 	public static final XmlTag<Integer> createShots(int shots) {
-		return new XmlTag<Integer>(SHORT_TAG_NAME_STRING, shots);
+		return new XmlTag<Integer>(SHOTS_TAG_NAME_STRING, shots);
 	}
 
-	public static final XmlTag<Void> createFlavorType(String flavorType) {
-		return new XmlTag<Void>(FLAVOR_TYPE_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, flavorType));
+	public static final XmlTag<?> createFlavorType(String flavorType, boolean isReference) {
+		if (isReference) {
+			return new XmlTag<Void>(FLAVOR_TYPE_TAG_NAME_STRING, new Attribute(ID_ATTRIBUTE, flavorType));
+		}
+
+		return new XmlTag<String>(FLAVOR_TYPE_TAG_NAME_STRING, flavorType);
 	}
 
 	public static final XmlTag<Integer> createStunChance(int stunChance) {
 		return new XmlTag<Integer>(STUN_CHANCE_TAG_NAME_STRING, stunChance);
+	}
+
+	public static final XmlTag<Integer> createStun(int stun) {
+		return new XmlTag<Integer>(STUN_TAG_NAME_STRING, stun);
 	}
 
 	public static final XmlTag<Integer> createSpeed(int speed) {
