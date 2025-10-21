@@ -217,7 +217,7 @@ public class Weapon implements XmlObject {
 
 	public void setTitle(String title, boolean isReference) {
 		if (title == null || title.isBlank()) {
-			log.warn("The title reference cannot be null nor empty! Ignore setTitle...");
+			log.warn("The title cannot be null nor empty! Ignore setTitle...");
 			return;
 		}
 
@@ -226,7 +226,7 @@ public class Weapon implements XmlObject {
 
 	public void setShortTitle(String shortTitle, boolean isReference) {
 		if (shortTitle == null || shortTitle.isBlank()) {
-			log.warn("The short title reference cannot be null nor empty! Ignore setShortTitle...");
+			log.warn("The short title cannot be null nor empty! Ignore setShortTitle...");
 			return;
 		}
 
@@ -235,7 +235,7 @@ public class Weapon implements XmlObject {
 
 	public void setDescription(String description, boolean isReference) {
 		if (description == null || description.isBlank()) {
-			log.warn("The description reference cannot be null nor empty! Ignore setDescription...");
+			log.warn("The description cannot be null nor empty! Ignore setDescription...");
 			return;
 		}
 
@@ -244,7 +244,7 @@ public class Weapon implements XmlObject {
 
 	public void setTooltip(String tooltip, boolean isReference) {
 		if (tooltip == null || tooltip.isBlank()) {
-			log.warn("The tooltip reference cannot be null nor empty! Ignore setToolTip...");
+			log.warn("The tooltip cannot be null nor empty! Ignore setToolTip...");
 			return;
 		}
 
