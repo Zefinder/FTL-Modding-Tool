@@ -2,8 +2,6 @@ package net.zefinder.ftlmod.analyser;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.dom4j.Document;
@@ -25,22 +23,23 @@ public class BlueprintAnalyser {
 
 	private static final Logger log = LoggerFactory.getLogger(BlueprintAnalyser.class);
 
-	private static final String BLUEPRINT_PATTERN_FORMAT = "<%sBlueprint name=\"([^\"]+)\"";
+	private static final String USER_DEFINED_FILES_EXTENSION = ".append";
+//	private static final String BLUEPRINT_PATTERN_FORMAT = "<%sBlueprint name=\"([^\"]+)\"";
 
-	private static final List<String> PATHS_TO_ANALYSE = List.of("blueprints.xml", "dlcBlueprints.xml");
-	private static final Set<String> WEAPON_FILE_NAMES = Set.of("blueprints.xml", "dlcBlueprints.xml");
+//	private static final List<String> PATHS_TO_ANALYSE = List.of("blueprints.xml", "dlcBlueprints.xml");
+//	private static final Set<String> WEAPON_FILE_NAMES = Set.of("blueprints.xml", "dlcBlueprints.xml");
 
-	private static enum BlueprintType {
-		WEAPON("weapon"), SHIP("ship"), AUG("aug"), SYSTEM("system"), CREW("crew"), DRONE("drone");
-
-		// Keep them local!
-		private final Pattern pattern;
-
-		private BlueprintType(final String typeName) {
-			this.pattern = Pattern.compile(BLUEPRINT_PATTERN_FORMAT.formatted(typeName));
-		}
-
-	}
+//	private static enum BlueprintType {
+//		WEAPON("weapon"), SHIP("ship"), AUG("aug"), SYSTEM("system"), CREW("crew"), DRONE("drone");
+//
+//		// Keep them local!
+//		private final Pattern pattern;
+//
+//		private BlueprintType(final String typeName) {
+//			this.pattern = Pattern.compile(BLUEPRINT_PATTERN_FORMAT.formatted(typeName));
+//		}
+//
+//	}
 
 	private BlueprintAnalyser() {
 		// Nothing to see here
@@ -62,27 +61,26 @@ public class BlueprintAnalyser {
 		String resourcePath = ProjectManager.getInstance().getResourceDirectoryPath();
 		if (!resourcePath.isEmpty()) {
 			File dataDir = new File(resourcePath + Project.DATA_PATH);
+			boolean isUser = false;
 
 			// Should exist but we never know with users...
 			if (dataDir.exists()) {
-				for (String pathToAnalyse : PATHS_TO_ANALYSE) {
-					File fileToAnalyse = new File(dataDir.getPath() + File.separator + pathToAnalyse);
-					if (fileToAnalyse.exists()) {
-						log.info("Analying file " + pathToAnalyse);
-						Document doc = reader.read(fileToAnalyse);
-						Element root = doc.getRootElement();
+				// List all xml files
+				File[] filesToAnalyse = dataDir.listFiles((dir, name) -> name.endsWith(".xml"));
 
-						if (WEAPON_FILE_NAMES.contains(pathToAnalyse)) {
-							try {
-								WeaponAnalyser.analyse(root.elements("weaponBlueprint"));
-							} catch (WeaponCreationException e) {
-								log.error("Error when reading a weapon, skip weapon analysis for file " + pathToAnalyse,
-										e);
-							}
-						}
+				for (File fileToAnalyse : filesToAnalyse) {
+					log.info("Analying file " + fileToAnalyse.getName());
+					Document doc = reader.read(fileToAnalyse);
+					Element root = doc.getRootElement();
 
-					} else {
-						log.info("File %s does not exist... User, I'll find you!".formatted(pathToAnalyse));
+					TextAnalyser.analyse(root.elements("text"), isUser);
+					
+					try {
+						WeaponAnalyser.analyse(root.elements("weaponBlueprint"), isUser);
+					} catch (WeaponCreationException e) {
+						log.error(
+								"Error when reading a weapon, skip weapon analysis for file " + fileToAnalyse.getName(),
+								e);
 					}
 				}
 			} else {
@@ -96,7 +94,7 @@ public class BlueprintAnalyser {
 		// Get the project path from the project manager
 		String projectPath = ProjectManager.getInstance().getProjectDirectoryPath();
 		if (!projectPath.isEmpty()) {
-
+			
 		}
 
 	}

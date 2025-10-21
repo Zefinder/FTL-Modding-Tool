@@ -81,7 +81,7 @@ final class WeaponAnalyser {
 	private WeaponAnalyser() {
 	}
 
-	public static final void analyse(List<Element> weaponElements) throws WeaponCreationException {
+	public static final void analyse(final List<Element> weaponElements, boolean isUser) throws WeaponCreationException {
 		WeaponManager manager = WeaponManager.getInstance();
 		for (Element weaponElement : weaponElements) {
 			final String name = weaponElement.attributeValue(NAME_ATTRIBUTE);
@@ -307,7 +307,7 @@ final class WeaponAnalyser {
 				}
 
 				// Add the weapon to the manager
-				manager.addWeapon(weapon);
+				manager.addWeapon(weapon, isUser);
 			}
 		}
 	}

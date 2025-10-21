@@ -14,6 +14,10 @@ public enum WeaponType {
 	}
 
 	public static WeaponType fromString(final String type) {
+		if (type == null) {
+			return LASER;
+		}
+		
 		return switch (type.toUpperCase()) {
 		case "LASER" -> LASER;
 		case "BEAM" -> BEAM;

@@ -14,7 +14,7 @@ public final class WeaponManager {
 	private WeaponManager() {
 	}
 
-	public final Optional<Weapon> getOriginalWeapon(String name) {
+	public final Optional<Weapon> getOriginalWeapon(final String name) {
 		if (ORIGINAL_GAME_WEAPONS.containsKey(name)) {
 			return Optional.of(ORIGINAL_GAME_WEAPONS.get(name));
 		}
@@ -29,7 +29,7 @@ public final class WeaponManager {
 	 * @param name the weapon name
 	 * @return a defined weapon, or {@link Optional#empty()}
 	 */
-	public final Optional<Weapon> getWeapon(String name) {
+	public final Optional<Weapon> getWeapon(final String name) {
 		if (USER_WEAPONS.containsKey(name)) {
 			return Optional.of(USER_WEAPONS.get(name));
 		}
@@ -42,17 +42,21 @@ public final class WeaponManager {
 	 * 
 	 * @param weapon the weapon's name to remove
 	 */
-	public final void removeWeapon(String weaponName) {
+	public final void removeWeapon(final String weaponName) {
 		USER_WEAPONS.remove(weaponName);
 	}
 
 	/**
-	 * Adds a weapon to the users weapons.
+	 * Adds a weapons to either the user or the original game.
 	 * 
 	 * @param weapon the weapon to add
 	 */
-	public final void addWeapon(Weapon weapon) {
-		USER_WEAPONS.put(weapon.name(), weapon);
+	public final void addWeapon(final Weapon weapon, final boolean isUser) {
+		if (isUser) {			
+			USER_WEAPONS.put(weapon.name(), weapon);
+		} else {
+			ORIGINAL_GAME_WEAPONS.put(weapon.name(), weapon);
+		}
 	}
 
 	public final void clearOriginalWeapons() {

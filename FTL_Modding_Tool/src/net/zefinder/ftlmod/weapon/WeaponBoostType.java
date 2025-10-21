@@ -13,7 +13,11 @@ public enum WeaponBoostType {
 		return propertyName;
 	}
 
-	public static WeaponBoostType fromString(String type) {
+	public static WeaponBoostType fromString(final String type) {
+		if (type == null) {
+			return DAMAGE;
+		}
+		
 		return switch (type) {
 		case "damage" -> DAMAGE;
 		case "cooldown" -> COOLDOWN;
