@@ -74,7 +74,7 @@ public class BlueprintAnalyser {
 					Element root = doc.getRootElement();
 
 					TextAnalyser.analyse(root.elements("text"), isUser);
-					
+
 					try {
 						WeaponAnalyser.analyse(root.elements("weaponBlueprint"), isUser);
 					} catch (WeaponCreationException e) {
@@ -82,7 +82,21 @@ public class BlueprintAnalyser {
 								"Error when reading a weapon, skip weapon analysis for file " + fileToAnalyse.getName(),
 								e);
 					}
+					
+					// Events
+//					ElementAnalyser.analyse(root.elements("event"), isUser);
+//					ElementAnalyser.analyse(root.elements("eventList").stream().map(t -> t.elements("event"))
+//							.<Element>flatMap(t -> t.stream()).toList(), isUser);
+					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("choice"))
+							.<Element>flatMap(t -> t.stream()).map(t -> t.elements("event"))
+							.<Element>flatMap(t -> t.stream()).toList(), isUser);
+					
+					// Choices
+//					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("choice"))
+//							.<Element>flatMap(t -> t.stream()).toList(), isUser);
+
 				}
+				ElementAnalyser.showResults();
 			} else {
 				log.info("Data directory do not exist... Why user? whyyyyyyy?");
 			}
@@ -94,7 +108,7 @@ public class BlueprintAnalyser {
 		// Get the project path from the project manager
 		String projectPath = ProjectManager.getInstance().getProjectDirectoryPath();
 		if (!projectPath.isEmpty()) {
-			
+
 		}
 
 	}
