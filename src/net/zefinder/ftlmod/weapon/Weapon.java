@@ -102,7 +102,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 			.setBp(2)
 			.setFireChance(1)
 			.setBreachChance(0)
-//			.setImageReference("laser_light1")
 			.setWeaponArtReference("laser_burst_1")
 			.setLaunchSounds(List.of(new WeaponSound("lightLaser1"),
 					new WeaponSound("lightLaser2"), new WeaponSound("lightLaser3")))
@@ -265,8 +264,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 
 	private static final String checkTip(String tip) {
 		if (tip == null || tip.isBlank()) {
-//			log.error("The tip reference cannot be null nor empty!");
-//			throw new WeaponCreationException("The tip reference cannot be null nor empty!");
 			return "";
 		}
 
@@ -284,8 +281,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 
 	private static final String checkShortTitle(String shortTitle) {
 		if (shortTitle == null || shortTitle.isBlank()) {
-//			log.error("The short title cannot be null nor empty!");
-//			throw new WeaponCreationException("The short title cannot be null nor empty!");
 			return "";
 		}
 
@@ -294,8 +289,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 
 	private static final String checkDescription(String description) {
 		if (description == null || description.isBlank()) {
-//			log.error("The description cannot be null nor empty!");
-//			throw new WeaponCreationException("The description cannot be null nor empty!");
 			return "";
 		}
 
@@ -304,8 +297,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 
 	private static final String checkTooltip(String tooltip) {
 		if (tooltip == null || tooltip.isBlank()) {
-//			log.error("The tooltip cannot be null nor empty!");
-//			throw new WeaponCreationException("The tooltip cannot be null nor empty!");
 			return "";
 		}
 
@@ -344,8 +335,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 
 	private static final int checkSp(WeaponType weaponType, int sp) {
 		if (sp < 0 && weaponType != WeaponType.BEAM) {
-//			log.warn("The shield piercing cannot be negative if the weapon is not a beam! Set to 0...");
-			// Useless when not a beam apparently
 			sp = 0;
 		}
 
@@ -378,8 +367,7 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 
 	private static final String checkImage(String imageReference) {
 		if (imageReference == null) {
-			log.error("Image reference not set! Is it a mistake?");
-//			throw new WeaponCreationException("The image reference cannot be null!");
+			log.warn("Image reference not set! Is it a mistake?");
 			return "";
 		}
 
@@ -388,8 +376,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 
 	private static final String checkIconImage(String iconImageReference) {
 		if (iconImageReference == null) {
-//			log.error("The icon image reference cannot be null!");
-//			throw new WeaponCreationException("The icon image reference cannot be null!");
 			return "";
 		}
 
