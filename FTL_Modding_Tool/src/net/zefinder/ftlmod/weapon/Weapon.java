@@ -1,6 +1,5 @@
 package net.zefinder.ftlmod.weapon;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,16 @@ import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 /**
  * Defines a weapon with its attributes
  */
-public class Weapon implements XmlObject {
+public record Weapon(String name, boolean noloc, boolean titleReference, boolean shortTitleReference,
+		boolean descriptionReference, boolean tooltipReference, boolean flavorTypeReference, WeaponType weaponType,
+		String tipReference, String title, String shortTitle, String description, String tooltip, double cooldown,
+		int power, int cost, int rarity, int damage, int shieldPiercing, int bp, int fireChance, int breachChance,
+		String imageReference, String iconImageReference, String weaponArtReference, List<WeaponSound> launchSounds,
+		int length, WeaponBeamColor color, List<WeaponProjectile> projectiles, int radius, int spin, int shots,
+		String flavorType, int stunChance, int stun, int speed, int persDamage, boolean lockdown, int systemDamage,
+		boolean hullBust, boolean droneTargetable, int missiles, int ion, String explosionReference, boolean locked,
+		WeaponBoost weaponBoost, int chargeLevels, List<WeaponSound> hitShipSounds, List<WeaponSound> hitShieldSounds,
+		List<WeaponSound> missSounds) implements XmlObject {
 
 	private static final Logger log = LoggerFactory.getLogger(Weapon.class);
 
@@ -80,200 +88,249 @@ public class Weapon implements XmlObject {
 	public static final String NOLOC_ATTRIBUTE_FALSE = "0";
 	public static final String NOLOC_ATTRIBUTE_TRUE = "1";
 
-	private static final String TITLE_REFERENCE_DEFAULT_FORMAT = "weapon_%s_title";
-	private static final String SHORT_REFERENCE_DEFAULT_FORMAT = "weapon_%s_short";
-	private static final String DESCRIPTION_REFERENCE_DEFAULT_FORMAT = "weapon_%s_desc";
-	private static final String TOOLTIP_REFERENCE_DEFAULT_FORMAT = "weapon_%s_tooltip";
-
-	private final String name;
-	private boolean noloc;
-	
-	// True if they are a reference
-	private boolean titleReference;
-	private boolean shortTitleReference;
-	private boolean descriptionReference;
-	private boolean tooltipReference;
-	private boolean flavorTypeReference;
-
-	// On all weapons
 	/**
-	 * Defines the weapon type. Default: LASER
+	 * Default weapon is only the mandatory parts of the laser burst 1 shot
 	 */
-	private XmlTag<WeaponType> weaponType;
-	private XmlTag<Void> tipReference;
-	private XmlTag<?> title;
-	private XmlTag<?> shortTitle;
-	private XmlTag<?> description;
-	private XmlTag<?> tooltip;
-
-	private XmlTag<Double> cooldown;
-	private XmlTag<Integer> power;
-	private XmlTag<Integer> cost;
-	private XmlTag<Integer> rarity; // 0 - 5
-	private XmlTag<Integer> damage;
-	private XmlTag<Integer> shieldPiercing;
-	private XmlTag<Integer> bp; // Unused
-
-	private XmlTag<Integer> fireChance; // Only 0 to 10, each point = 10%
-	private XmlTag<Integer> breachChance; // Only 0 to 10, each point = 10%
-
-	private XmlTag<String> imageReference;
-	private XmlTag<String> iconImageReference;
-	private XmlTag<String> weaponArtReference;
-
-	private XmlTag<List<WeaponSound>> launchSounds;
-
-	// On beams only
-	private XmlTag<Integer> length; // Mandatory
-	private XmlTag<WeaponBeamColor> color; // Optional
-
-	// On burst only (flak-like weapons), mandatory?
-	private XmlTag<List<WeaponProjectile>> projectiles;
-	private XmlTag<Integer> radius;
-	private XmlTag<Integer> spin;
-
-	// If there is a value, can add
-	private XmlTag<Integer> shots;
-	private XmlTag<?> flavorType;
-	private XmlTag<Integer> stunChance; // Only 0 to 10, each point = 10%
-	private XmlTag<Integer> stun;
-	private XmlTag<Integer> speed;
-	private XmlTag<Integer> persDamage; // 1 point = 15 hp
-	private XmlTag<Integer> lockdown; // 0 or 1
-	private XmlTag<Integer> systemDamage; // Usually on bomb weapons
-	private XmlTag<Integer> hullBust; // 0 or 1
-	private XmlTag<Integer> droneTargetable; // 0 or 1
-	private XmlTag<Integer> missiles;
-	private XmlTag<Integer> ion;
-	private XmlTag<String> explosionReference;
-	private XmlTag<Integer> locked; // 0 or 1
-
-	// Chain weapons
-	private WeaponBoost weaponBoost;
-
-	// Charged weapons
-	private XmlTag<Integer> chargeLevels;
-
-	// Optional sounds
-	private XmlTag<List<WeaponSound>> hitShipSounds;
-	private XmlTag<List<WeaponSound>> hitShieldSounds;
-	private XmlTag<List<WeaponSound>> missSounds;
+	public static final Weapon DEFAULT_WEAPON = new WeaponBuilder()
+			.setName("LASER_BURST_1")
+			.setTitleReference(true)
+			.setWeaponType(WeaponType.LASER)
+			.setTitle("weapon_LASER_BURST_1_title")
+			.setPower(1)
+			.setRarity(0)
+			.setDamage(1)
+			.setBp(2)
+			.setFireChance(1)
+			.setBreachChance(0)
+//			.setImageReference("laser_light1")
+			.setWeaponArtReference("laser_burst_1")
+			.setLaunchSounds(List.of(new WeaponSound("lightLaser1"),
+					new WeaponSound("lightLaser2"), new WeaponSound("lightLaser3")))
+			.build();
 	
-	public Weapon(final String name, boolean noloc) throws WeaponCreationException {
+	public Weapon(String name, boolean noloc, boolean titleReference, boolean shortTitleReference,
+			boolean descriptionReference, boolean tooltipReference, boolean flavorTypeReference, WeaponType weaponType,
+			String tipReference, String title, String shortTitle, String description, String tooltip, double cooldown,
+			int power, int cost, int rarity, int damage, int shieldPiercing, int bp, int fireChance, int breachChance,
+			String imageReference, String iconImageReference, String weaponArtReference, List<WeaponSound> launchSounds,
+			int length, WeaponBeamColor color, List<WeaponProjectile> projectiles, int radius, int spin, int shots,
+			String flavorType, int stunChance, int stun, int speed, int persDamage, boolean lockdown, int systemDamage,
+			boolean hullBust, boolean droneTargetable, int missiles, int ion, String explosionReference, boolean locked,
+			WeaponBoost weaponBoost, int chargeLevels, List<WeaponSound> hitShipSounds, List<WeaponSound> hitShieldSounds,
+			List<WeaponSound> missSounds) {
+		this.name = name;
+		this.noloc = noloc;
+		
+		this.titleReference = titleReference;
+		this.shortTitleReference = shortTitleReference;
+		this.descriptionReference = descriptionReference;
+		this.tooltipReference = tooltipReference;
+		this.flavorTypeReference = flavorTypeReference;
+
+		this.weaponType = checkWeaponType(weaponType);
+		this.tipReference = checkTip(tipReference);
+		this.title = checkTitle(title);
+		this.shortTitle = checkShortTitle(shortTitle);
+		this.description = checkDescription(description);
+		this.tooltip = checkTooltip(tooltip);
+		this.cooldown = checkCooldown(cooldown);
+		this.power = power;
+		this.cost = checkCost(cost);
+		this.rarity = checkRarity(rarity);
+		this.damage = damage;
+		this.shieldPiercing = checkSp(weaponType, shieldPiercing);
+		this.bp = bp;
+		this.fireChance = checkFireChance(fireChance);
+		this.breachChance = checkBreachChance(breachChance);
+		this.imageReference = checkImage(imageReference);
+		this.iconImageReference = checkIconImage(iconImageReference);
+		this.weaponArtReference = checkWeaponArt(weaponArtReference);
+		this.launchSounds = checkLaunchSounds(launchSounds);
+		this.length = checkLength(length);
+		this.color = color;
+		this.projectiles = checkProjectiles(projectiles);
+		this.radius = checkRadius(radius);
+		this.spin = checkSpin(spin);
+		this.shots = checkShots(shots);
+		this.flavorType = checkFlavorType(flavorType);
+		this.stunChance = checkStunChance(stunChance);
+		this.stun = checkStun(stun);
+		this.speed = checkSpeed(speed);
+		this.persDamage = persDamage;
+		this.lockdown = lockdown;
+		this.systemDamage = systemDamage;
+		this.hullBust = hullBust;
+		this.droneTargetable = droneTargetable;
+		this.missiles = checkMissiles(missiles);
+		this.ion = checkIon(ion);
+		this.explosionReference = checkExplosion(explosionReference);
+		this.locked = locked;
+		this.weaponBoost = checkBoost(weaponBoost);
+		this.chargeLevels = checkChargeLevels(chargeLevels);
+		this.hitShipSounds = checkHitShipSounds(hitShipSounds);
+		this.hitShieldSounds = checkHitShieldSounds(hitShieldSounds);
+		this.missSounds = checkMissSounds(missSounds);
+		
 		if (name == null || name.isBlank()) {
 			// Should never go there if created using the GUI
 			log.error("Weapon name null or empty, error!");
 			throw new WeaponCreationException("Weapon name cannot be null or empty!");
 		}
 
-		this.name = name;
-		reset();
+		// Check if beam that length has been set
+		if (weaponType == WeaponType.BEAM && length == 0) {
+			log.error("Weapon is a beam with no length!");
+			throw new WeaponCreationException("Beam length must be set!");
+		}
+
+		// Check if burst that projectiles, radius and spin has been set
+		if (weaponType == WeaponType.BURST) {
+			if (projectiles.isEmpty()) {
+				log.error("Weapon is a burst with no projectile!");
+				throw new WeaponCreationException("Burst projectiles must be set!");
+			}
+
+			if (radius == 0) {
+				log.error("Weapon is a burst with no radius!");
+				throw new WeaponCreationException("Burst radius must be set!");
+			}
+
+			if (spin == 0) {
+				log.error("Weapon is a burst with no projectile spin!");
+				throw new WeaponCreationException("Burst spin must be set!");
+			}
+		}
+	}
+	
+	Weapon(WeaponBuilder builder) throws WeaponCreationException {
+		this(builder.getName(), 
+				builder.isNoloc(),
+				builder.isTitleReference(),
+				builder.isShortTitleReference(),
+				builder.isDescriptionReference(),
+				builder.isTooltipReference(),
+				builder.isFlavorTypeReference(),
+				builder.getWeaponType(),
+				builder.getTipReference(),
+				builder.getTitle(),
+				builder.getShortTitle(),
+				builder.getDescription(),
+				builder.getTooltip(),
+				builder.getCooldown(),
+				builder.getPower(),
+				builder.getCost(),
+				builder.getRarity(),
+				builder.getDamage(),
+				builder.getShieldPiercing(),
+				builder.getBp(),
+				builder.getFireChance(),
+				builder.getBreachChance(),
+				builder.getImageReference(),
+				builder.getIconImageReference(),
+				builder.getWeaponArtReference(),
+				builder.getLaunchSounds(),
+				builder.getLength(),
+				builder.getColor(),
+				builder.getProjectiles(),
+				builder.getRadius(),
+				builder.getSpin(),
+				builder.getShots(),
+				builder.getFlavorType(),
+				builder.getStunChance(),
+				builder.getStun(),
+				builder.getSpeed(),
+				builder.getPersDamage(),
+				builder.isLockdown(),
+				builder.getSystemDamage(),
+				builder.isHullBust(),
+				builder.isDroneTargetable(),
+				builder.getMissiles(),
+				builder.getIon(),
+				builder.getExplosionReference(),
+				builder.isLocked(),
+				builder.getWeaponBoost(),
+				builder.getChargeLevels(),
+				builder.getHitShipSounds(),
+				builder.getHitShieldSounds(),
+				builder.getMissSounds());
 	}
 
-	public Weapon(final String name) throws WeaponCreationException {
-		this(name, false);
-	}
-
-	public void setNoloc(boolean noloc) {
-		this.noloc = noloc;
-	}
-
-	public void setWeaponType(WeaponType weaponType) {
+	private static final WeaponType checkWeaponType(WeaponType weaponType) {
 		if (weaponType == null) {
-			log.warn("The weapon type cannot be null! Ignore setWeaponType...");
-			return;
+			log.error("The weapon type cannot be null!");
+			throw new WeaponCreationException("The weapon type cannot be null!");
 		}
-
-		if (weaponType == WeaponType.BEAM) {
-			if (!length.hasElement()) {
-				setLength(1);
-			}
-
-		} else if (weaponType == WeaponType.BURST) {
-			if (!projectiles.hasElement()) {
-				setProjectiles();
-			}
-
-			if (!radius.hasElement()) {
-				setRadius(1);
-			}
-
-			if (!spin.hasElement()) {
-				setSpin(1);
-			}
-		}
-
-		this.weaponType = WeaponPropertyFactory.createWeaponType(weaponType);
+		return weaponType;
 	}
 
-	public void setTip(String tipReference) {
-		if (tipReference == null || tipReference.isBlank()) {
-			log.warn("The tip reference cannot be null nor empty! Ignore setTip...");
-			return;
+	private static final String checkTip(String tip) {
+		if (tip == null || tip.isBlank()) {
+//			log.error("The tip reference cannot be null nor empty!");
+//			throw new WeaponCreationException("The tip reference cannot be null nor empty!");
+			return "";
 		}
 
-		this.tipReference = WeaponPropertyFactory.createTip(tipReference);
+		return tip;
 	}
 
-	public void setTitle(String title, boolean isReference) {
+	private static final String checkTitle(String title) {
 		if (title == null || title.isBlank()) {
-			log.warn("The title cannot be null nor empty! Ignore setTitle...");
-			return;
+			log.error("The title cannot be null nor empty!");
+			throw new WeaponCreationException("The title cannot be null nor empty!");
 		}
 
-		this.title = WeaponPropertyFactory.createTitle(title, isReference);
+		return title;
 	}
 
-	public void setShortTitle(String shortTitle, boolean isReference) {
+	private static final String checkShortTitle(String shortTitle) {
 		if (shortTitle == null || shortTitle.isBlank()) {
-			log.warn("The short title cannot be null nor empty! Ignore setShortTitle...");
-			return;
+//			log.error("The short title cannot be null nor empty!");
+//			throw new WeaponCreationException("The short title cannot be null nor empty!");
+			return "";
 		}
 
-		this.shortTitle = WeaponPropertyFactory.createShortTitle(shortTitle, isReference);
+		return shortTitle;
 	}
 
-	public void setDescription(String description, boolean isReference) {
+	private static final String checkDescription(String description) {
 		if (description == null || description.isBlank()) {
-			log.warn("The description cannot be null nor empty! Ignore setDescription...");
-			return;
+//			log.error("The description cannot be null nor empty!");
+//			throw new WeaponCreationException("The description cannot be null nor empty!");
+			return "";
 		}
 
-		this.description = WeaponPropertyFactory.createDescription(description, isReference);
+		return description;
 	}
 
-	public void setTooltip(String tooltip, boolean isReference) {
+	private static final String checkTooltip(String tooltip) {
 		if (tooltip == null || tooltip.isBlank()) {
-			log.warn("The tooltip cannot be null nor empty! Ignore setToolTip...");
-			return;
+//			log.error("The tooltip cannot be null nor empty!");
+//			throw new WeaponCreationException("The tooltip cannot be null nor empty!");
+			return "";
 		}
 
-		this.tooltip = WeaponPropertyFactory.createTooltip(tooltip, isReference);
+		return tooltip;
 	}
 
-	public void setCooldown(double cooldown) {
+	private static final double checkCooldown(double cooldown) {
 		if (cooldown < 0) {
-			log.warn("The cooldown cannot be negative! Set to 0...");
-			cooldown = 0;
+			log.warn("Cooldown is not set! Is it a mistake?");
+			cooldown = -1;
 		}
 
-		this.cooldown = WeaponPropertyFactory.createCooldown(cooldown);
+		return cooldown;
 	}
 
-	public void setPower(int power) {
-		this.power = WeaponPropertyFactory.createPower(power);
-	}
-
-	public void setCost(int cost) {
+	private static final int checkCost(int cost) {
 		if (cost < 0) {
-			log.warn("The cost cannot be negative! Set to 0...");
-			cost = 0;
+			log.warn("Cost is not set! Is it a mistake?");
+			cost = -1;
 		}
 
-		this.cost = WeaponPropertyFactory.createCost(cost);
+		return cost;
 	}
 
-	public void setRarity(int rarity) {
+	private static final int checkRarity(int rarity) {
 		if (rarity < 0) {
 			log.warn("The rarity cannot be negative! Set to 0...");
 			rarity = 0;
@@ -282,27 +339,20 @@ public class Weapon implements XmlObject {
 			rarity = 5;
 		}
 
-		this.rarity = WeaponPropertyFactory.createRarity(rarity);
+		return rarity;
 	}
 
-	public void setDamage(int damage) {
-		this.damage = WeaponPropertyFactory.createDamage(damage);
-	}
-
-	public void setSp(int sp) {
-		if (sp < 0 && weaponType.getElement().get() != WeaponType.BEAM) {
-			log.warn("The shield piercing cannot be negative if the weapon is not a beam! Set to 0...");
+	private static final int checkSp(WeaponType weaponType, int sp) {
+		if (sp < 0 && weaponType != WeaponType.BEAM) {
+//			log.warn("The shield piercing cannot be negative if the weapon is not a beam! Set to 0...");
+			// Useless when not a beam apparently
 			sp = 0;
 		}
 
-		this.shieldPiercing = WeaponPropertyFactory.createSp(sp);
+		return sp;
 	}
 
-	public void setBp(int bp) { // What is this even????
-		this.bp = WeaponPropertyFactory.createBp(bp);
-	}
-
-	public void setFireChance(int fireChance) {
+	private static final int checkFireChance(int fireChance) {
 		if (fireChance < 0) {
 			log.warn("The fire chance cannot be negative! Set to 0...");
 			fireChance = 0;
@@ -311,10 +361,10 @@ public class Weapon implements XmlObject {
 			fireChance = 10;
 		}
 
-		this.fireChance = WeaponPropertyFactory.createFireChance(fireChance);
+		return fireChance;
 	}
 
-	public void setBreachChance(int breachChance) {
+	private static final int checkBreachChance(int breachChance) {
 		if (breachChance < 0) {
 			log.warn("The breach chance cannot be negative! Set to 0...");
 			breachChance = 0;
@@ -323,309 +373,217 @@ public class Weapon implements XmlObject {
 			breachChance = 10;
 		}
 
-		this.breachChance = WeaponPropertyFactory.createBreachChance(breachChance);
+		return breachChance;
 	}
 
-	public void setImage(String imageReference) {
+	private static final String checkImage(String imageReference) {
 		if (imageReference == null) {
-			log.warn("The image reference cannot be null! Ignore setImage...");
-			return;
+			log.error("Image reference not set! Is it a mistake?");
+//			throw new WeaponCreationException("The image reference cannot be null!");
+			return "";
 		}
 
-		this.imageReference = WeaponPropertyFactory.createImage(imageReference);
+		return imageReference;
 	}
 
-	public void setIconImage(String iconImageReference) {
+	private static final String checkIconImage(String iconImageReference) {
 		if (iconImageReference == null) {
-			log.warn("The icon image reference cannot be null! Ignore setIconImage...");
-			return;
+//			log.error("The icon image reference cannot be null!");
+//			throw new WeaponCreationException("The icon image reference cannot be null!");
+			return "";
 		}
 
-		this.iconImageReference = WeaponPropertyFactory.createIconImage(iconImageReference);
+		return iconImageReference;
 	}
 
-	public void setWeaponArt(String weaponArtReference) {
+	private static final String checkWeaponArt(String weaponArtReference) {
 		if (weaponArtReference == null) {
-			log.warn("The weapon art reference cannot be null! Ignore setWeaponArt...");
-			return;
+			log.error("The weapon art reference cannot be null!");
+			throw new WeaponCreationException("The weapon art reference cannot be null!");
 		}
 
-		this.weaponArtReference = WeaponPropertyFactory.createWeaponArt(weaponArtReference);
+		return weaponArtReference;
 	}
 
-	public void setLaunchSounds(String... sounds) {
+	private static final List<WeaponSound> checkLaunchSounds(List<WeaponSound> sounds) {
 		if (sounds == null) {
-			log.warn("The launch sounds cannot be null! Ignore setLaunchSounds...");
-			return;
+			log.error("The launch sounds cannot be null!");
+			throw new WeaponCreationException("The launch sounds cannot be null!");
 		}
 
-		this.launchSounds = WeaponPropertyFactory.createLaunchSounds(sounds);
+		return List.copyOf(sounds);
 	}
 
-	public void setLength(int length) {
+	private static final int checkLength(int length) {
 		if (length < 0) {
-			this.length = XmlTag.empty();
+			return -1;
 		} else {
 			if (length < 1) {
 				log.warn("The length must be geater than 0! Set to 1...");
 				length = 1;
 			}
 
-			this.length = WeaponPropertyFactory.createLength(length);
+			return length;
 		}
 	}
 
-	public void setColor(WeaponBeamColor color) {
-		if (color == null) {
-			this.color = XmlTag.empty();
-		} else {
-			this.color = WeaponPropertyFactory.createColor(color);
-		}
-	}
-
-	public void setColor(Color color) {
-		if (color == null) {
-			this.color = XmlTag.empty();
-		} else {
-			this.color = WeaponPropertyFactory.createColor(color);
-		}
-	}
-
-	public void setProjectiles(WeaponProjectile... projectiles) {
+	private static final List<WeaponProjectile> checkProjectiles(List<WeaponProjectile> projectiles) {
 		if (projectiles == null) {
-			this.projectiles = XmlTag.empty();
+			return List.of();
 		} else {
-			this.projectiles = WeaponPropertyFactory.createProjectiles(projectiles);
+			return List.copyOf(projectiles);
 		}
 	}
 
-	public void setRadius(int radius) {
+	private static final int checkRadius(int radius) {
 		if (radius < 0) {
-			this.radius = XmlTag.empty();
+			return -1;
 		} else {
 			if (radius < 1) {
 				log.warn("The radius must be geater than 0! Set to 1...");
 				radius = 1;
 			}
 
-			this.radius = WeaponPropertyFactory.createRadius(radius);
+			return radius;
 		}
 	}
 
-	public void setSpin(int spin) {
+	private static final int checkSpin(int spin) {
 		if (spin < 0) {
-			this.spin = XmlTag.empty();
+			return -1;
 		} else {
 			if (spin < 1) {
 				log.warn("The spin must be geater than 0! Set to 1...");
 				spin = 1;
 			}
 
-			this.spin = WeaponPropertyFactory.createSpin(spin);
+			return spin;
 		}
 	}
 
-	public void setShots(int shots) {
+	private static final int checkShots(int shots) {
 		if (shots < 0) {
-			this.shots = XmlTag.empty();
+			return -1;
 		} else {
 			if (shots < 1) {
 				log.warn("The shots must be geater than 0! Set to 1...");
 				shots = 1;
 			}
 
-			this.shots = WeaponPropertyFactory.createShots(shots);
+			return shots;
 		}
 	}
 
-	public void setFlavorType(String flavorType, boolean isReference) {
+	private static final String checkFlavorType(String flavorType) {
 		if (flavorType == null) {
-			this.flavorType = XmlTag.empty();
+			return "";
 		} else {
-			this.flavorType = WeaponPropertyFactory.createFlavorType(flavorType, isReference);
+			return flavorType;
 		}
 	}
 
-	public void setStunChance(int stunChance) {
+	private static final int checkStunChance(int stunChance) {
 		if (stunChance < 0) {
-			this.stunChance = XmlTag.empty();
+			return -1;
 		} else {
 			if (stunChance > 10) {
 				log.warn("The breach chance cannot be greater than 10! Set to 10...");
 				stunChance = 10;
 			}
 
-			this.stunChance = WeaponPropertyFactory.createStunChance(stunChance);
+			return stunChance;
 		}
 	}
 
-	public void setStun(int stun) {
+	private static final int checkStun(int stun) {
 		if (stun < 0) {
-			this.stun = XmlTag.empty();
+			return -1;
 		} else {
-			this.stun = WeaponPropertyFactory.createStun(stun);
+			return stun;
 		}
 	}
 
-	public void setSpeed(int speed) {
+	private static final int checkSpeed(int speed) {
 		if (speed < 0) {
-			this.speed = XmlTag.empty();
+			return -1;
 		} else {
 			if (speed < 1) {
 				log.warn("The speed must be geater than 0! Set to 1...");
 				speed = 1;
 			}
 
-			this.speed = WeaponPropertyFactory.createSpeed(speed);
+			return speed;
 		}
 	}
 
-	public void setPersDamage(int persDamage) {
-		this.persDamage = WeaponPropertyFactory.createPersDamage(persDamage);
-	}
-
-	public void setLockdown(boolean lockdown) {
-		this.lockdown = WeaponPropertyFactory.createLockdown(lockdown);
-	}
-
-	public void setSysDamage(int sysDamage) {
-		this.systemDamage = WeaponPropertyFactory.createSysDamage(sysDamage);
-	}
-
-	public void setHullBust(boolean hullBust) {
-		this.hullBust = WeaponPropertyFactory.createHullBust(hullBust);
-	}
-
-	public void setDroneTargetable(boolean droneTargetable) {
-		this.droneTargetable = WeaponPropertyFactory.createDroneTargetable(droneTargetable);
-	}
-
-	public void setMissiles(int missiles) {
+	private static final int checkMissiles(int missiles) {
 		if (missiles < 0) {
-			this.missiles = XmlTag.empty();
+			return -1;
 		} else {
-			this.missiles = WeaponPropertyFactory.createMissiles(missiles);
+			return missiles;
 		}
 	}
 
-	public void setIon(int ion) {
+	private static final int checkIon(int ion) {
 		if (ion < 0) {
-			this.ion = XmlTag.empty();
+			return -1;
 		} else {
-			this.ion = WeaponPropertyFactory.createIon(ion);
+			return ion;
 		}
 	}
 
-	public void setExplosion(String explosionReference) {
-		// Null makes an empty XmlTag
-		this.explosionReference = WeaponPropertyFactory.createExplosion(explosionReference);
-	}
-
-	public void setLocked(boolean locked) {
-		this.locked = WeaponPropertyFactory.createLocked(locked);
-	}
-
-	public void setBoost(WeaponBoostType weaponBoostType, int amount, int count) {
-		if (weaponBoostType == null) {
-			this.weaponBoost = WeaponBoost.EMPTY;
+	private static final String checkExplosion(String explosionReference) {
+		if (explosionReference == null) {
+			return "";
 		} else {
+			return explosionReference;
+		}
+	}
+
+	private static final WeaponBoost checkBoost(WeaponBoost weaponBoost) {
+		if (weaponBoost == null) {
+			return WeaponBoost.EMPTY;
+		} else {
+			int count = weaponBoost.count();
 			if (count < 0) {
 				log.warn("The boost count cannot be negative! Set to 0...");
 				count = 0;
 			}
 
-			this.weaponBoost = WeaponPropertyFactory.createBoost(weaponBoostType, amount, count);
+			return new WeaponBoost(weaponBoost.weaponBoostType(), weaponBoost.amount(), count);
 		}
 	}
 
-	public void setChargeLevels(int chargeLevels) {
+	private static final int checkChargeLevels(int chargeLevels) {
 		if (chargeLevels < 0) {
-			this.chargeLevels = XmlTag.empty();
+			return -1;
 		} else {
-			this.chargeLevels = WeaponPropertyFactory.createChargeLevels(chargeLevels);
+			return chargeLevels;
 		}
 	}
 
-	public void setHitShipSounds(String... sounds) {
+	private static final List<WeaponSound> checkHitShipSounds(List<WeaponSound> sounds) {
 		if (sounds == null) {
-			this.hitShipSounds = XmlTag.empty();
+			return List.of();
 		} else {
-			this.hitShipSounds = WeaponPropertyFactory.createHitShipSounds(sounds);
+			return List.copyOf(sounds);
 		}
 	}
 
-	public void setHitShieldSounds(String... sounds) {
+	private static final List<WeaponSound> checkHitShieldSounds(List<WeaponSound> sounds) {
 		if (sounds == null) {
-			this.hitShieldSounds = XmlTag.empty();
+			return List.of();
 		} else {
-			this.hitShieldSounds = WeaponPropertyFactory.createHitShieldSounds(sounds);
+			return List.copyOf(sounds);
 		}
 	}
 
-	public void setMissSounds(String... sounds) {
+	private static final List<WeaponSound> checkMissSounds(List<WeaponSound> sounds) {
 		if (sounds == null) {
-			this.missSounds = XmlTag.empty();
+			return List.of();
 		} else {
-			this.missSounds = WeaponPropertyFactory.createMissSounds(sounds);
+			return List.copyOf(sounds);
 		}
-	}
-
-	/**
-	 * Resets the weapon to an empty weapon, being the basic laser 1 without the
-	 * optional properties.
-	 */
-	public void reset() {
-		noloc = false;
-		titleReference = true;
-		shortTitleReference = true;
-		descriptionReference = true;
-		tooltipReference = true;
-		flavorTypeReference = false;
-		
-		setWeaponType(WeaponType.LASER);
-		setTip("tip_laser");
-		setTitle(TITLE_REFERENCE_DEFAULT_FORMAT.formatted(name), titleReference);
-		setShortTitle(SHORT_REFERENCE_DEFAULT_FORMAT.formatted(name), shortTitleReference);
-		setDescription(DESCRIPTION_REFERENCE_DEFAULT_FORMAT.formatted(name), descriptionReference);
-		setTooltip(TOOLTIP_REFERENCE_DEFAULT_FORMAT.formatted(name), tooltipReference);
-		setCooldown(10);
-		setPower(1);
-		setCost(20);
-		setRarity(0);
-		setDamage(1);
-		setSp(0);
-		setBp(2);
-		setFireChance(1);
-		setBreachChance(0);
-		setImage("laser_light1");
-		setIconImage("laser");
-		setWeaponArt("laser_burst_1");
-		setLaunchSounds("lightLaser1", "lightLaser2", "lightLaser3");
-
-		// Optional properties are set to empty or no impact
-		setLength(-1);
-		setColor((Color) null);
-		setProjectiles((WeaponProjectile[]) null);
-		setRadius(-1);
-		setSpin(-1);
-		setShots(-1);
-		setFlavorType(null, flavorTypeReference);
-		setStunChance(-1);
-		setSpeed(-1);
-		setPersDamage(0); // negative are possible
-		setLockdown(false);
-		setSysDamage(0); // negative are possible
-		setHullBust(false);
-		setDroneTargetable(false);
-		setMissiles(-1);
-		setIon(-1);
-		setExplosion(null);
-		setLocked(false);
-		setBoost(null, 0, 0);
-		setChargeLevels(-1);
-		setHitShipSounds((String[]) null);
-		setHitShieldSounds((String[]) null);
-		setMissSounds((String[]) null);
 	}
 
 	@Override
@@ -633,117 +591,144 @@ public class Weapon implements XmlObject {
 		List<XmlTag<?>> tags = new ArrayList<XmlTag<?>>();
 
 		// Mandatory properties
-		tags.add(weaponType);
-		tags.add(tipReference);
-		tags.add(title);
-		tags.add(shortTitle);
-		tags.add(description);
-		tags.add(tooltip);
-		tags.add(cooldown);
-		tags.add(power);
-		tags.add(cost);
-		tags.add(rarity);
-		tags.add(damage);
-		tags.add(shieldPiercing);
-		tags.add(bp);
-		tags.add(fireChance);
-		tags.add(breachChance);
-		tags.add(imageReference);
-		tags.add(iconImageReference);
-		tags.add(weaponArtReference);
-		tags.add(launchSounds);
+		tags.add(WeaponPropertyFactory.createWeaponType(weaponType));
+		tags.add(WeaponPropertyFactory.createTitle(title, titleReference));
+		tags.add(WeaponPropertyFactory.createPower(power));
+		tags.add(WeaponPropertyFactory.createRarity(rarity));
+		tags.add(WeaponPropertyFactory.createDamage(damage));
+		tags.add(WeaponPropertyFactory.createBp(bp));
+		tags.add(WeaponPropertyFactory.createFireChance(fireChance));
+		tags.add(WeaponPropertyFactory.createBreachChance(breachChance));
+		tags.add(WeaponPropertyFactory.createWeaponArt(weaponArtReference));
+		tags.add(WeaponPropertyFactory.createLaunchSounds(launchSounds));
 
 		// Beam specific (length is mandatory but automatically set when setting type to
 		// BEAM)
-		if (weaponType.getElement().get() == WeaponType.BEAM) {
-			tags.add(length);
-			if (color.hasElement()) {
-				tags.add(color);
+		if (weaponType == WeaponType.BEAM) {
+			tags.add(WeaponPropertyFactory.createLength(length));
+			if (color != null) {
+				tags.add(WeaponPropertyFactory.createColor(color));
 			}
 		}
 
 		// Burst specific (all are mandatory)
-		else if (weaponType.getElement().get() == WeaponType.BURST) {
-			tags.add(projectiles);
-			tags.add(radius);
-			tags.add(spin);
+		else if (weaponType == WeaponType.BURST) {
+			tags.add(WeaponPropertyFactory.createProjectiles(projectiles));
+			tags.add(WeaponPropertyFactory.createRadius(radius));
+			tags.add(WeaponPropertyFactory.createSpin(spin));
 		}
 
 		// Put the remaining
-		if (shots.hasElement()) {
-			tags.add(shots);
+		if (!tipReference.isBlank()) {			
+			tags.add(WeaponPropertyFactory.createTip(tipReference));
+		}
+		
+		if (!shortTitle.isBlank()) {			
+			tags.add(WeaponPropertyFactory.createShortTitle(shortTitle, shortTitleReference));
+		}
+	
+		if (!description.isBlank()) {
+			tags.add(WeaponPropertyFactory.createDescription(description, descriptionReference));
+		}
+		
+		if (!tooltip.isBlank()) {
+			tags.add(WeaponPropertyFactory.createTooltip(tooltip, tooltipReference));
+		}
+		
+		if (cooldown > 0) {			
+			tags.add(WeaponPropertyFactory.createCooldown(cooldown));
+		}
+		
+		if (cost > 0) {
+			tags.add(WeaponPropertyFactory.createCost(cost));
+		}
+		
+		if (shieldPiercing > 0) {
+			tags.add(WeaponPropertyFactory.createSp(shieldPiercing));
+		}
+		
+		if (!imageReference.isBlank()) {
+			tags.add(WeaponPropertyFactory.createImage(imageReference));
+		}
+		
+		if (!iconImageReference.isBlank()) {			
+			tags.add(WeaponPropertyFactory.createIconImage(iconImageReference));
+		}
+		
+		if (shots > 0) {
+			tags.add(WeaponPropertyFactory.createShots(shots));
 		}
 
-		if (flavorType.hasElement()) {
-			tags.add(flavorType);
+		if (!flavorType.isBlank()) {
+			tags.add(WeaponPropertyFactory.createFlavorType(flavorType, flavorTypeReference));
 		}
 
-		if (stunChance.hasElement() && stunChance.getElement().get() != 0) {
-			tags.add(stunChance);
+		if (stunChance > 0) {
+			tags.add(WeaponPropertyFactory.createStunChance(stunChance));
 		}
 
-		if (stun.hasElement() && stun.getElement().get() != 0) {
-			tags.add(stun);
+		if (stun > 0) {
+			tags.add(WeaponPropertyFactory.createStun(stun));
 		}
 
-		if (speed.hasElement()) {
-			tags.add(speed);
+		if (speed > 0) {
+			tags.add(WeaponPropertyFactory.createSpeed(speed));
 		}
 
-		if (persDamage.hasElement() && persDamage.getElement().get() != 0) {
-			tags.add(persDamage);
+		if (persDamage != 0) {
+			tags.add(WeaponPropertyFactory.createPersDamage(persDamage));
 		}
 
-		if (lockdown.hasElement() && lockdown.getElement().get() != 0) {
-			tags.add(lockdown);
+		if (lockdown) {
+			tags.add(WeaponPropertyFactory.createLockdown(lockdown));
 		}
 
-		if (systemDamage.hasElement() && systemDamage.getElement().get() != 0) {
-			tags.add(systemDamage);
+		if (systemDamage != 0) {
+			tags.add(WeaponPropertyFactory.createSysDamage(systemDamage));
 		}
 
-		if (hullBust.hasElement() && hullBust.getElement().get() != 0) {
-			tags.add(hullBust);
+		if (hullBust) {
+			tags.add(WeaponPropertyFactory.createHullBust(hullBust));
 		}
 
-		if (droneTargetable.hasElement() && droneTargetable.getElement().get() != 0) {
-			tags.add(droneTargetable);
+		if (droneTargetable) {
+			tags.add(WeaponPropertyFactory.createDroneTargetable(droneTargetable));
 		}
 
-		if (missiles.hasElement() && missiles.getElement().get() != 0) {
-			tags.add(missiles);
+		if (missiles > 0) {
+			tags.add(WeaponPropertyFactory.createMissiles(missiles));
 		}
 
-		if (ion.hasElement() && ion.getElement().get() != 0) {
-			tags.add(ion);
+		if (ion > 0) {
+			tags.add(WeaponPropertyFactory.createIon(ion));
 		}
 
-		if (explosionReference.hasElement()) {
-			tags.add(explosionReference);
+		if (!explosionReference.isBlank()) {
+			tags.add(WeaponPropertyFactory.createExplosion(explosionReference));
 		}
 
-		if (locked.hasElement() && locked.getElement().get() != 0) {
-			tags.add(locked);
+		if (locked) {
+			tags.add(WeaponPropertyFactory.createLocked(locked));
 		}
 
 		if (!weaponBoost.equals(WeaponBoost.EMPTY)) {
 			tags.add(weaponBoost.toXmlTag());
 		}
 
-		if (chargeLevels.hasElement()) {
-			tags.add(chargeLevels);
+		if (chargeLevels > 0) {
+			tags.add(WeaponPropertyFactory.createChargeLevels(chargeLevels));
 		}
 
-		if (hitShipSounds.hasElement()) {
-			tags.add(hitShipSounds);
+		if (!hitShipSounds.isEmpty()) {
+			tags.add(WeaponPropertyFactory.createHitShipSounds(hitShipSounds));
 		}
 
-		if (hitShieldSounds.hasElement()) {
-			tags.add(hitShieldSounds);
+		if (!hitShieldSounds.isEmpty()) {
+			tags.add(WeaponPropertyFactory.createHitShieldSounds(hitShieldSounds));
 		}
 
-		if (missSounds.hasElement()) {
-			tags.add(missSounds);
+		if (!missSounds.isEmpty()) {
+			tags.add(WeaponPropertyFactory.createMissSounds(missSounds));
 		}
 
 		final List<Attribute> attributes = new ArrayList<Attribute>();
@@ -752,94 +737,12 @@ public class Weapon implements XmlObject {
 			attributes.add(new Attribute(NOLOC_ATTRIBUTE, NOLOC_ATTRIBUTE_TRUE));
 		}
 
-		return new XmlTag<List<XmlTag<?>>>(WEAPON_BLUEPRINT_TAG_NAME, tags,
-				attributes.toArray(Attribute[]::new));
+		return new XmlTag<List<XmlTag<?>>>(WEAPON_BLUEPRINT_TAG_NAME, tags, attributes.toArray(Attribute[]::new));
 	}
 
-	public String name() {
-		return name;
+	public static void main(String[] args) throws WeaponCreationException {
+		WeaponBuilder builder = new WeaponBuilder().copyFrom(DEFAULT_WEAPON);
+		System.out.println(builder.build().toXmlTag().toString());
 	}
-
-	public void copyFrom(Weapon other) {
-		// XmlTags are immutable types and their values (String, Integer and immutable
-		// List) are immutable too.
-		// WeaponBoost is immutable since it's a record of enum and int
-		this.noloc = other.noloc;
-		this.weaponType = other.weaponType;
-		this.tipReference = other.tipReference;
-		this.title = other.title;
-		this.shortTitle = other.shortTitle;
-		this.description = other.description;
-		this.tooltip = other.tooltip;
-		this.cooldown = other.cooldown;
-		this.power = other.power;
-		this.cost = other.cost;
-		this.rarity = other.rarity;
-		this.damage = other.damage;
-		this.shieldPiercing = other.shieldPiercing;
-		this.bp = other.bp;
-		this.fireChance = other.fireChance;
-		this.breachChance = other.breachChance;
-		this.imageReference = other.imageReference;
-		this.iconImageReference = other.iconImageReference;
-		this.weaponArtReference = other.weaponArtReference;
-		this.launchSounds = other.launchSounds;
-		this.length = other.length;
-		this.color = other.color;
-		this.projectiles = other.projectiles;
-		this.radius = other.radius;
-		this.spin = other.spin;
-		this.shots = other.shots;
-		this.flavorType = other.flavorType;
-		this.stunChance = other.stunChance;
-		this.stun = other.stun;
-		this.speed = other.speed;
-		this.persDamage = other.persDamage;
-		this.lockdown = other.lockdown;
-		this.systemDamage = other.systemDamage;
-		this.hullBust = other.hullBust;
-		this.droneTargetable = other.droneTargetable;
-		this.missiles = other.missiles;
-		this.ion = other.ion;
-		this.explosionReference = other.explosionReference;
-		this.locked = other.locked;
-		this.weaponBoost = other.weaponBoost;
-		this.chargeLevels = other.chargeLevels;
-		this.hitShipSounds = other.hitShipSounds;
-		this.hitShieldSounds = other.hitShieldSounds;
-		this.missSounds = other.missSounds;
-	}
-
-	@Override
-	public Weapon clone() {
-		Weapon clone = null;
-		try {
-			clone = new Weapon(name);
-			clone.copyFrom(this);
-		} catch (WeaponCreationException e) {
-			// Cannot go here since name is final and cannot be null
-			e.printStackTrace();
-		}
-
-		return clone;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof Weapon other && other.name.equals(this.name);
-	}
-
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
-
-//	public static void main(String[] args) throws WeaponCreationException {
-//		Weapon w = new Weapon("test", true);
-//		w.setLength(50);
-//		w.setStun(0);
-//		w.setWeaponType(WeaponType.BEAM);
-//		System.out.println(w.toXmlTag());
-//	}
 
 }

@@ -46,7 +46,6 @@ import static net.zefinder.ftlmod.weapon.Weapon.WEAPON_TYPE_TAG_NAME;
 
 import java.awt.Color;
 import java.util.List;
-import java.util.stream.Stream;
 
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
@@ -64,8 +63,8 @@ final class WeaponPropertyFactory {
 		return new XmlTag<WeaponType>(WEAPON_TYPE_TAG_NAME, weaponType);
 	}
 
-	public static final XmlTag<Void> createTip(String tipReference) {
-		return new XmlTag<Void>(TIP_TAG_NAME, new Attribute(ID_ATTRIBUTE, tipReference));
+	public static final XmlTag<String> createTip(String tipReference) {
+		return new XmlTag<String>(TIP_TAG_NAME, tipReference);
 	}
 
 	public static final XmlTag<?> createTitle(String title, boolean isReference) {
@@ -148,9 +147,8 @@ final class WeaponPropertyFactory {
 		return new XmlTag<String>(WEAPON_ART_TAG_NAME, weaponArtReference);
 	}
 
-	public static final XmlTag<List<WeaponSound>> createLaunchSounds(String... sounds) {
-		List<WeaponSound> weaponSounds = Stream.of(sounds).map(sound -> new WeaponSound(sound)).toList();
-		return new XmlTag<List<WeaponSound>>(LAUNCH_SOUNDS_TAG_NAME, weaponSounds);
+	public static final XmlTag<List<WeaponSound>> createLaunchSounds(List<WeaponSound> sounds) {
+		return new XmlTag<List<WeaponSound>>(LAUNCH_SOUNDS_TAG_NAME, sounds);
 	}
 
 	public static final XmlTag<Integer> createLength(int length) {
@@ -166,9 +164,8 @@ final class WeaponPropertyFactory {
 		return new XmlTag<WeaponBeamColor>(COLOR_TAG_NAME, color);
 	}
 
-	public static final XmlTag<List<WeaponProjectile>> createProjectiles(WeaponProjectile... projectiles) {
-		List<WeaponProjectile> weaponProjectiles = List.of(projectiles);
-		return new XmlTag<List<WeaponProjectile>>(PROJECTILES_TAG_NAME, weaponProjectiles);
+	public static final XmlTag<List<WeaponProjectile>> createProjectiles(List<WeaponProjectile> projectiles) {
+		return new XmlTag<List<WeaponProjectile>>(PROJECTILES_TAG_NAME, projectiles);
 	}
 
 	public static final XmlTag<Integer> createRadius(int radius) {
@@ -247,18 +244,15 @@ final class WeaponPropertyFactory {
 		return new XmlTag<Integer>(CHARGE_LEVELS_TAG_NAME, chargeLevels);
 	}
 
-	public static final XmlTag<List<WeaponSound>> createHitShipSounds(String... sounds) {
-		List<WeaponSound> weaponSounds = Stream.of(sounds).map(sound -> new WeaponSound(sound)).toList();
-		return new XmlTag<List<WeaponSound>>(HIT_SHIP_SOUNDS_TAG_NAME, weaponSounds);
+	public static final XmlTag<List<WeaponSound>> createHitShipSounds(List<WeaponSound> sounds) {
+		return new XmlTag<List<WeaponSound>>(HIT_SHIP_SOUNDS_TAG_NAME, sounds);
 	}
 
-	public static final XmlTag<List<WeaponSound>> createHitShieldSounds(String... sounds) {
-		List<WeaponSound> weaponSounds = Stream.of(sounds).map(sound -> new WeaponSound(sound)).toList();
-		return new XmlTag<List<WeaponSound>>(HIT_SHIELD_SOUNDS_TAG_NAME, weaponSounds);
+	public static final XmlTag<List<WeaponSound>> createHitShieldSounds(List<WeaponSound> sounds) {
+		return new XmlTag<List<WeaponSound>>(HIT_SHIELD_SOUNDS_TAG_NAME, sounds);
 	}
 
-	public static final XmlTag<List<WeaponSound>> createMissSounds(String... sounds) {
-		List<WeaponSound> weaponSounds = Stream.of(sounds).map(sound -> new WeaponSound(sound)).toList();
-		return new XmlTag<List<WeaponSound>>(MISS_SOUNDS_TAG_NAME, weaponSounds);
+	public static final XmlTag<List<WeaponSound>> createMissSounds(List<WeaponSound> sounds) {
+		return new XmlTag<List<WeaponSound>>(MISS_SOUNDS_TAG_NAME, sounds);
 	}
 }

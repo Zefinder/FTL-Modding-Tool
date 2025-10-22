@@ -13,7 +13,7 @@ import net.zefinder.ftlmod.xml.XmlTag;
 public record WeaponBoost(WeaponBoostType weaponBoostType, int amount, int count) implements XmlObject {
 
 	static final WeaponBoost EMPTY = new WeaponBoost(null, 0, 0);
-
+	
 	@Override
 	public XmlTag<?> toXmlTag() {
 		if (weaponBoostType == null) {

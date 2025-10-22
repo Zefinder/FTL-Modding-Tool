@@ -65,13 +65,14 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.zefinder.ftlmod.weapon.Weapon;
 import net.zefinder.ftlmod.weapon.WeaponBeamColor;
 import net.zefinder.ftlmod.weapon.WeaponBoost;
 import net.zefinder.ftlmod.weapon.WeaponBoostType;
+import net.zefinder.ftlmod.weapon.WeaponBuilder;
 import net.zefinder.ftlmod.weapon.WeaponCreationException;
 import net.zefinder.ftlmod.weapon.WeaponManager;
 import net.zefinder.ftlmod.weapon.WeaponProjectile;
+import net.zefinder.ftlmod.weapon.WeaponSound;
 import net.zefinder.ftlmod.weapon.WeaponType;
 
 final class WeaponAnalyser {
@@ -81,115 +82,127 @@ final class WeaponAnalyser {
 	private WeaponAnalyser() {
 	}
 
-	public static final void analyse(final List<Element> weaponElements, boolean isUser) throws WeaponCreationException {
+	public static final void analyse(final List<Element> weaponElements, boolean isUser)
+			throws WeaponCreationException {
 		WeaponManager manager = WeaponManager.getInstance();
 		for (Element weaponElement : weaponElements) {
 			final String name = weaponElement.attributeValue(NAME_ATTRIBUTE);
 			String noLocAttribute = weaponElement.attributeValue(NOLOC_ATTRIBUTE);
 			final boolean noLoc = noLocAttribute != null && noLocAttribute.equals(NOLOC_ATTRIBUTE_TRUE);
 
-			Weapon weapon = new Weapon(name);
+			WeaponBuilder weaponBuilder = new WeaponBuilder();
+			weaponBuilder.setName(name).setNoloc(noLoc);
 			log.info("Registering weapon %s (noloc: %b)".formatted(name, noLoc));
+
 			// Fill the weapon with elements found in the XML
 			for (Element weaponProperty : weaponElement.elements()) {
 				String propertyName = weaponProperty.getName();
 				String data = (String) weaponProperty.getData();
+//				System.out.println(propertyName);
 
 				switch (propertyName) {
 				case WEAPON_TYPE_TAG_NAME:
-					weapon.setWeaponType(WeaponType.fromString(data));
+					weaponBuilder.setWeaponType(WeaponType.fromString(data));
 					break;
 
 				case TIP_TAG_NAME:
-					weapon.setTip(data);
+					weaponBuilder.setTipReference(data);
 					break;
 
 				case TITLE_TAG_NAME:
 					if (data == null || data.isBlank()) {
-						weapon.setTitle(weaponProperty.attributeValue(ID_ATTRIBUTE), true);
+						weaponBuilder.setTitleReference(true);
+						weaponBuilder.setTitle(weaponProperty.attributeValue(ID_ATTRIBUTE));
 					} else {
-						weapon.setTitle(data, false);
+						weaponBuilder.setTitleReference(true);
+						weaponBuilder.setTitle(data);
 					}
 					break;
 
 				case SHORT_TAG_NAME:
 					if (data == null || data.isBlank()) {
-						weapon.setShortTitle(weaponProperty.attributeValue(ID_ATTRIBUTE), true);
+						weaponBuilder.setShortTitleReference(true);
+						weaponBuilder.setShortTitle(weaponProperty.attributeValue(ID_ATTRIBUTE));
 					} else {
-						weapon.setShortTitle(data, false);
+						weaponBuilder.setShortTitleReference(false);
+						weaponBuilder.setShortTitle(data);
 					}
 					break;
 
 				case DESCRIPTION_TAG_NAME:
 					if (data == null || data.isBlank()) {
-						weapon.setDescription(weaponProperty.attributeValue(ID_ATTRIBUTE), true);
+						weaponBuilder.setDescriptionReference(true);
+						weaponBuilder.setDescription(weaponProperty.attributeValue(ID_ATTRIBUTE));
 					} else {
-						weapon.setDescription(data, false);
+						weaponBuilder.setDescriptionReference(false);
+						weaponBuilder.setDescription(data);
 					}
 					break;
 
 				case TOOLTIP_TAG_NAME:
 					if (data == null || data.isBlank()) {
-						weapon.setTooltip(weaponProperty.attributeValue(ID_ATTRIBUTE), true);
+						weaponBuilder.setTooltipReference(true);
+						weaponBuilder.setTooltip(weaponProperty.attributeValue(ID_ATTRIBUTE));
 					} else {
-						weapon.setTooltip(data, false);
+						weaponBuilder.setTooltipReference(false);
+						weaponBuilder.setTooltip(data);
 					}
 					break;
 
 				case COOLDOWN_TAG_NAME:
-					weapon.setCooldown(Double.valueOf(data));
+					weaponBuilder.setCooldown(Double.valueOf(data));
 					break;
 
 				case POWER_TAG_NAME:
-					weapon.setPower(Integer.valueOf(data));
+					weaponBuilder.setPower(Integer.valueOf(data));
 					break;
 
 				case COST_TAG_NAME:
-					weapon.setCost(Integer.valueOf(data));
+					weaponBuilder.setCost(Integer.valueOf(data));
 					break;
 
 				case RARITY_TAG_NAME:
-					weapon.setRarity(Integer.valueOf(data));
+					weaponBuilder.setRarity(Integer.valueOf(data));
 					break;
 
 				case DAMAGE_TAG_NAME:
-					weapon.setDamage(Integer.valueOf(data));
+					weaponBuilder.setDamage(Integer.valueOf(data));
 					break;
 
 				case SHIELD_PIERCING_TAG_NAME:
-					weapon.setSp(Integer.valueOf(data));
+					weaponBuilder.setShieldPiercing(Integer.valueOf(data));
 					break;
 
 				case BP_TAG_NAME:
-					weapon.setBp(Integer.valueOf(data));
+					weaponBuilder.setBp(Integer.valueOf(data));
 					break;
 
 				case FIRE_CHANCE_TAG_NAME:
-					weapon.setFireChance(Integer.valueOf(data));
+					weaponBuilder.setFireChance(Integer.valueOf(data));
 					break;
 
 				case BREACH_CHANCE_TAG_NAME:
-					weapon.setBreachChance(Integer.valueOf(data));
+					weaponBuilder.setBreachChance(Integer.valueOf(data));
 					break;
 
 				case IMAGE_TAG_NAME:
-					weapon.setImage(data);
+					weaponBuilder.setImageReference(data);
 					break;
 
 				case ICON_IMAGE_TAG_NAME:
-					weapon.setIconImage(data);
+					weaponBuilder.setIconImageReference(data);
 					break;
 
 				case WEAPON_ART_TAG_NAME:
-					weapon.setWeaponArt(data);
+					weaponBuilder.setWeaponArtReference(data);
 					break;
 
 				case LAUNCH_SOUNDS_TAG_NAME:
-					weapon.setLaunchSounds(getSoundsFromElement(weaponProperty));
+					weaponBuilder.setLaunchSounds(getSoundsFromElement(weaponProperty));
 					break;
 
 				case LENGTH_TAG_NAME:
-					weapon.setLength(Integer.valueOf(data));
+					weaponBuilder.setLength(Integer.valueOf(data));
 					break;
 
 				case COLOR_TAG_NAME: {
@@ -198,81 +211,83 @@ final class WeaponAnalyser {
 					if (color == null) {
 						log.info("Error when reading color, skip!");
 					} else {
-						weapon.setColor(color);
+						weaponBuilder.setColor(color);
 					}
 					break;
 				}
 
 				case PROJECTILES_TAG_NAME:
-					weapon.setProjectiles(getWeaponProjectilesFromElement(weaponProperty));
+					weaponBuilder.setProjectiles(getWeaponProjectilesFromElement(weaponProperty));
 					break;
 
 				case RADIUS_TAG_NAME:
-					weapon.setRadius(Integer.valueOf(data));
+					weaponBuilder.setRadius(Integer.valueOf(data));
 					break;
 
 				case SPIN_TAG_NAME:
-					weapon.setSpin(Integer.valueOf(data));
+					weaponBuilder.setSpin(Integer.valueOf(data));
 					break;
 
 				case SHOTS_TAG_NAME:
-					weapon.setShots(Integer.valueOf(data));
+					weaponBuilder.setShots(Integer.valueOf(data));
 					break;
 
 				case FLAVOR_TYPE_TAG_NAME:
 					if (data == null || data.isBlank()) {
-						weapon.setFlavorType(weaponProperty.attributeValue(ID_ATTRIBUTE), true);
+						weaponBuilder.setFlavorTypeReference(true);
+						weaponBuilder.setFlavorType(weaponProperty.attributeValue(ID_ATTRIBUTE));
 					} else {
-						weapon.setFlavorType(data, false);
+						weaponBuilder.setFlavorTypeReference(false);
+						weaponBuilder.setFlavorType(data);
 					}
 					break;
 
 				case STUN_CHANCE_TAG_NAME:
-					weapon.setStunChance(Integer.valueOf(data));
+					weaponBuilder.setStunChance(Integer.valueOf(data));
 					break;
 
 				case STUN_TAG_NAME:
-					weapon.setStun(Integer.valueOf(data));
+					weaponBuilder.setStun(Integer.valueOf(data));
 					break;
 
 				case SPEED_TAG_NAME:
-					weapon.setSpeed(Integer.valueOf(data));
+					weaponBuilder.setSpeed(Integer.valueOf(data));
 					break;
 
 				case PERS_DAMAGE_TAG_NAME:
-					weapon.setPersDamage(Integer.valueOf(data));
+					weaponBuilder.setPersDamage(Integer.valueOf(data));
 					break;
 
 				case LOCKDOWN_TAG_NAME:
-					weapon.setLockdown(Integer.valueOf(data) == 1);
+					weaponBuilder.setLockdown(Integer.valueOf(data) == 1);
 					break;
 
 				case SYSTEM_DAMAGE_TAG_NAME:
-					weapon.setSysDamage(Integer.valueOf(data));
+					weaponBuilder.setSystemDamage(Integer.valueOf(data));
 					break;
 
 				case HULL_BUST_TAG_NAME:
-					weapon.setHullBust(Integer.valueOf(data) == 1);
+					weaponBuilder.setHullBust(Integer.valueOf(data) == 1);
 					break;
 
 				case DRONE_TARGETABLE_TAG_NAME:
-					weapon.setDroneTargetable(Integer.valueOf(data) == 1);
+					weaponBuilder.setDroneTargetable(Integer.valueOf(data) == 1);
 					break;
 
 				case MISSILES_TAG_NAME:
-					weapon.setMissiles(Integer.valueOf(data));
+					weaponBuilder.setMissiles(Integer.valueOf(data));
 					break;
 
 				case ION_TAG_NAME:
-					weapon.setIon(Integer.valueOf(data));
+					weaponBuilder.setIon(Integer.valueOf(data));
 					break;
 
 				case EXPLOSION_TAG_NAME:
-					weapon.setExplosion(data);
+					weaponBuilder.setExplosionReference(data);
 					break;
 
 				case LOCKED_TAG_NAME:
-					weapon.setLocked(Integer.valueOf(data) == 1);
+					weaponBuilder.setLocked(Integer.valueOf(data) == 1);
 					break;
 
 				case WEAPON_BOOST_TAG_NAME:
@@ -281,33 +296,37 @@ final class WeaponAnalyser {
 					if (weaponBoost == null) {
 						log.info("Error when reading boost, skip!");
 					} else {
-						weapon.setBoost(weaponBoost.weaponBoostType(), weaponBoost.amount(), weaponBoost.count());
+						weaponBuilder.setWeaponBoost(weaponBoost);
 					}
 					break;
 
 				case CHARGE_LEVELS_TAG_NAME:
-					weapon.setChargeLevels(Integer.valueOf(data));
+					weaponBuilder.setChargeLevels(Integer.valueOf(data));
 					break;
 
 				case HIT_SHIP_SOUNDS_TAG_NAME:
-					weapon.setHitShipSounds(getSoundsFromElement(weaponProperty));
+					weaponBuilder.setHitShipSounds(getSoundsFromElement(weaponProperty));
 					break;
 
 				case HIT_SHIELD_SOUNDS_TAG_NAME:
-					weapon.setHitShieldSounds(getSoundsFromElement(weaponProperty));
+					weaponBuilder.setHitShieldSounds(getSoundsFromElement(weaponProperty));
 					break;
 
 				case MISS_SOUNDS_TAG_NAME:
-					weapon.setMissSounds(getSoundsFromElement(weaponProperty));
+					weaponBuilder.setMissSounds(getSoundsFromElement(weaponProperty));
 					break;
 
 				default:
 					log.warn("Unknown element %s (value %s), ignored...".formatted(propertyName, data));
 					break;
 				}
+			}
 
-				// Add the weapon to the manager
-				manager.addWeapon(weapon, isUser);
+			// Add the weapon to the manager
+			try {
+				manager.addWeapon(weaponBuilder.build(), isUser);
+			} catch (WeaponCreationException e) {
+				log.error("Something happened during weapon build...", e);
 			}
 		}
 	}
@@ -315,15 +334,15 @@ final class WeaponAnalyser {
 	// TODO Create a getValueFromElement or something like that so it'll easier to
 	// read (and less code duplication)
 
-	private static final String[] getSoundsFromElement(Element element) {
+	private static final List<WeaponSound> getSoundsFromElement(Element element) {
 		List<Element> soundElements = element.elements(SOUND_TAG_NAME);
 		if (soundElements == null) {
 			log.warn("Empty %s, returning empty array instead of null".formatted(element.getName()));
-			return new String[0];
+			return List.of();
 		}
 
 		return soundElements.stream().map(soundElement -> (String) soundElement.getData())
-				.filter(sound -> sound != null && !sound.isBlank()).toArray(String[]::new);
+				.filter(sound -> sound != null && !sound.isBlank()).map(sound -> new WeaponSound(sound)).toList();
 	}
 
 	private static final WeaponBeamColor getWeaponBeamColorFromElement(Element element) {
@@ -369,11 +388,11 @@ final class WeaponAnalyser {
 		return new WeaponBeamColor(r, g, b);
 	}
 
-	private static final WeaponProjectile[] getWeaponProjectilesFromElement(Element element) {
+	private static final List<WeaponProjectile> getWeaponProjectilesFromElement(Element element) {
 		List<Element> projectileElements = element.elements(PROJECTILE_TAG_NAME);
 		if (projectileElements == null) {
 			log.warn("Empty projectiles, returning empty array instead of null");
-			return new WeaponProjectile[0];
+			return List.of();
 		}
 
 		List<WeaponProjectile> projectiles = new ArrayList<WeaponProjectile>();
@@ -409,7 +428,7 @@ final class WeaponAnalyser {
 			projectiles.add(new WeaponProjectile(count, fake, data));
 		}
 
-		return projectiles.toArray(WeaponProjectile[]::new);
+		return List.copyOf(projectiles);
 	}
 
 	private static final WeaponBoost getWeaponBoostFromElement(Element element) {
