@@ -1,6 +1,8 @@
 package net.zefinder.ftlmod.event;
 
-public class EventCreationException extends Exception {
+import net.zefinder.ftlmod.FtlException;
+
+public class EventCreationException extends FtlException {
 
 	/**
 	 * 

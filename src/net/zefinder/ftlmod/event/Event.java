@@ -3,6 +3,7 @@ package net.zefinder.ftlmod.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.zefinder.ftlmod.text.Text;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
@@ -23,7 +24,7 @@ public class Event implements XmlObject {
 	private final String name;
 	private final boolean unique;
 
-	private final EventText eventText;
+	private final Text eventText;
 	private final List<EventChoice> choices;
 
 	/**
@@ -33,11 +34,11 @@ public class Event implements XmlObject {
 		eventType = EventType.NONE;
 		name = "";
 		unique = false;
-		eventText = EventText.EMPTY;
+		eventText = Text.EMPTY;
 		choices = List.of();
 	}
 
-	public Event(final EventType eventType, final String name, final boolean unique, final EventText eventText,
+	public Event(final EventType eventType, final String name, final boolean unique, Text eventText,
 			final EventChoice... choices) throws EventCreationException {
 		if (eventType == null) {
 			throw new EventCreationException("Event type cannot be null or empty, error!");
@@ -76,8 +77,13 @@ public class Event implements XmlObject {
 		if (unique) {
 			attributes.add(new Attribute(UNIQUE_ATTRIBUTE_NAME, Boolean.toString(unique)));
 		}
+		
+		List<XmlTag<?>> tags = new ArrayList<XmlTag<?>>();
+		if (!choices.isEmpty()) {
+			tags.addAll(choices.stream().map(eventChoice -> eventChoice.toXmlTag()).toList());
+		}
 
-		return new XmlTag<List<EventChoice>>(EVENT_TAG_NAME, choices, attributes.toArray(Attribute[]::new));
+		return new XmlTag<List<XmlTag<?>>>(EVENT_TAG_NAME, tags, attributes.toArray(Attribute[]::new));
 	}
 
 	@Override

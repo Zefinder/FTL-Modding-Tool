@@ -11,7 +11,11 @@ import org.slf4j.LoggerFactory;
 import net.zefinder.ftlmod.text.Text;
 import net.zefinder.ftlmod.text.TextLanguage;
 import net.zefinder.ftlmod.text.TextManager;
+import net.zefinder.ftlmod.text.TextType;
 
+/**
+ * Analyser used to get all isolated text tags (they must be named)
+ */
 public class TextAnalyser {
 
 	private static final Logger log = LoggerFactory.getLogger(TextAnalyser.class);
@@ -36,7 +40,7 @@ public class TextAnalyser {
 				continue;
 			}
 
-			TextManager.getInstance().addText(new Text(name, text, language), isUser);
+			TextManager.getInstance().addText(new Text(TextType.NAMED, name, text, language), isUser);
 		}
 	}
 

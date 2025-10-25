@@ -1,6 +1,8 @@
 package net.zefinder.ftlmod.weapon;
 
-public class WeaponCreationException extends RuntimeException {
+import net.zefinder.ftlmod.FtlException;
+
+public class WeaponCreationException extends FtlException {
 
 	/**
 	 * 
