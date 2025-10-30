@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.zefinder.ftlmod.text.Text;
-import net.zefinder.ftlmod.text.TextType;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
@@ -86,12 +85,6 @@ public record EventChoice(boolean hidden, int level, int minLevel, int maxLevel,
 		tags.add(text.toXmlTag());
 
 		return new XmlTag<List<XmlTag<?>>>(CHOICE_TAG_NAME, tags, attributes.toArray(Attribute[]::new));
-	}
-
-	public static void main(String[] args) throws EventCreationException {
-		var a = new EventChoice(true, 3, 0, 0, 0, true, "clonebay", new Event(EventType.LOAD, "test", false, null),
-				new Text(TextType.NAMED, "This is a test"));
-		System.out.println(a.toXmlTag());
 	}
 
 }
