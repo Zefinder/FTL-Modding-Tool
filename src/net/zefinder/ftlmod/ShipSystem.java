@@ -1,17 +1,23 @@
 package net.zefinder.ftlmod;
 
-public enum System {
+public enum ShipSystem {
+	// Random system, is not a true system BUT is used for some events
+	RANDOM("random"),
+	
 	// Primary
 	PILOT("pilot"), BATTERY("battery"), SENSORS("sensors"), DOORS("doors"),
 
 	// Secondary
 	REACTOR("reactor"), SHIELDS("shields"), ENGINES("engines"), OXYGEN("oxygen"), MEDBAY("medbay"),
 	CLONEBAY("clonebay"), HACKING("hacking"), MIND("mind"), CLOAKING("cloaking"), TELEPORTER("teleporter"),
-	WEAPONS("weapons"), DRONES("drones");
+	WEAPONS("weapons"), DRONES("drones"),
+	
+	// Empty room
+	ROOM("room");
 
 	private final String systemName;
 
-	private System(final String systemName) {
+	private ShipSystem(final String systemName) {
 		this.systemName = systemName;
 	}
 
@@ -19,8 +25,9 @@ public enum System {
 		return systemName;
 	}
 	
-	public static final System fromString(String name) {
+	public static final ShipSystem fromString(String name) {
 		return switch (name) {
+		case "random" -> RANDOM;
 		case "pilot" -> PILOT;
 		case "battery" -> BATTERY;
 		case "sensors" -> SENSORS;
@@ -37,7 +44,8 @@ public enum System {
 		case "teleporter" -> TELEPORTER;
 		case "weapons" -> WEAPONS;
 		case "drones" -> DRONES;
-		default -> REACTOR; // Reactor seems to be a reasonable fallback
+		case "room" -> ROOM;
+		default -> ROOM; // Empty room as fallback
 		};
 	}
 }
