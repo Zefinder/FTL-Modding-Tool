@@ -1,8 +1,12 @@
 package net.zefinder.ftlmod;
 
 public enum Race {
+	NONE(""),
+	
 	HUMAN("human"), ENGI("engi"), MANTIS("mantis"), SLUG("slug"), ZOLTAN("energy"), ROCK("rock"), LANIUS("anaerobic"),
-	CRYSTAL("crystal"), GHOST("ghost");
+	CRYSTAL("crystal"), GHOST("ghost"), 
+	/** This one is used when one crew becomes hostile */
+	TRAITOR("traitor");
 
 	private final String race;
 
@@ -10,11 +14,15 @@ public enum Race {
 		this.race = race;
 	}
 
-	public String race() {
+	public String raceName() {
 		return race;
 	}
 
 	public static final Race fromString(String race) {
+		if (race == null) {
+			return HUMAN;
+		}
+		
 		return switch (race) {
 		case "human" -> HUMAN;
 		case "engi" -> ENGI;
@@ -25,7 +33,8 @@ public enum Race {
 		case "anaerobic" -> LANIUS;
 		case "crystal" -> CRYSTAL;
 		case "ghost" -> GHOST;
-		default -> HUMAN;
+		case "traitor" -> TRAITOR;
+		default -> NONE;
 		};
 	}
 }

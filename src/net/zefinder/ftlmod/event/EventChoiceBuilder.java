@@ -2,7 +2,6 @@ package net.zefinder.ftlmod.event;
 
 import net.zefinder.ftlmod.Builder;
 import net.zefinder.ftlmod.text.Text;
-import net.zefinder.ftlmod.xml.XmlObject;
 
 public class EventChoiceBuilder implements Builder {
 
@@ -102,7 +101,7 @@ public class EventChoiceBuilder implements Builder {
 	}
 	
 	@Override
-	public XmlObject build() throws Exception {
+	public EventChoice build() {
 		return new EventChoice(this);
 	}
 	

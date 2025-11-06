@@ -26,6 +26,10 @@ public enum ShipSystem {
 	}
 	
 	public static final ShipSystem fromString(String name) {
+		if (name == null) {
+			return ROOM;
+		}
+		
 		return switch (name) {
 		case "random" -> RANDOM;
 		case "pilot" -> PILOT;

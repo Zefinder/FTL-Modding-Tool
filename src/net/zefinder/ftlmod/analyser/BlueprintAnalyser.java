@@ -84,12 +84,15 @@ public class BlueprintAnalyser {
 					}
 					
 					// Events
-					ElementAnalyser.analyse(root.elements("event"), isUser);
-					ElementAnalyser.analyse(root.elements("eventList").stream().map(t -> t.elements("event"))
-							.<Element>flatMap(t -> t.stream()).toList(), isUser);
-					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("choice"))
-							.<Element>flatMap(t -> t.stream()).map(t -> t.elements("event"))
-							.<Element>flatMap(t -> t.stream()).toList(), isUser);
+//					ElementAnalyser.analyse(root.elements("event"), isUser);
+//					ElementAnalyser.analyse(root.elements("eventList").stream().map(t -> t.elements("event"))
+//							.<Element>flatMap(t -> t.stream()).toList(), isUser);
+//					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("choice"))
+//							.<Element>flatMap(t -> t.stream()).map(t -> t.elements("event"))
+//							.<Element>flatMap(t -> t.stream()).toList(), isUser);
+					
+					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("item_modify"))
+					.<Element>flatMap(t -> t.stream()).toList(), isUser);
 					
 					// Choices
 //					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("choice"))

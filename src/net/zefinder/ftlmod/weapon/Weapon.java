@@ -25,7 +25,7 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 		List<WeaponSound> missSounds) implements XmlObject {
 
 	private static final Logger log = LoggerFactory.getLogger(Weapon.class);
-
+	
 	public static final String WEAPON_BLUEPRINT_TAG_NAME = "weaponBlueprint";
 	public static final String WEAPON_TYPE_TAG_NAME = "type";
 	public static final String TIP_TAG_NAME = "tip";
@@ -87,6 +87,8 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 
 	public static final String NOLOC_ATTRIBUTE_FALSE = "0";
 	public static final String NOLOC_ATTRIBUTE_TRUE = "1";
+	
+	public static final String RANDOM_WEAPON_NAME = "RANDOM";
 
 	/**
 	 * Default weapon is only the mandatory parts of the laser burst 1 shot
@@ -724,11 +726,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 		}
 
 		return new XmlTag<List<XmlTag<?>>>(WEAPON_BLUEPRINT_TAG_NAME, tags, attributes.toArray(Attribute[]::new));
-	}
-
-	public static void main(String[] args) throws WeaponCreationException {
-		WeaponBuilder builder = new WeaponBuilder().copyFrom(DEFAULT_WEAPON);
-		System.out.println(builder.build().toXmlTag().toString());
 	}
 
 }

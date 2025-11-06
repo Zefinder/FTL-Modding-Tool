@@ -25,7 +25,7 @@ public record EventBoarders(boolean breach, int min, int max, Race race) impleme
 		return new XmlTag<Void>(BOARDERS_TAG_NAME, new Attribute(BREACH_ATTRIBUTE_NAME, Boolean.toString(breach)),
 				new Attribute(MIN_ATTRIBUTE_NAME, Integer.toString(min)),
 				new Attribute(MAX_ATTRIBUTE_NAME, Integer.toString(max)),
-				new Attribute(CLASS_ATTRIBUTE_NAME, race.race()));
+				new Attribute(CLASS_ATTRIBUTE_NAME, race.raceName()));
 	}
 
 }

@@ -14,6 +14,10 @@ public enum DamageEffect {
 	}
 	
 	public static final DamageEffect fromString(String effect) {
+		if (effect == null) {
+			return ALL;
+		}
+		
 		return switch (effect) {
 		case "random" -> RANDOM;
 		case "all" -> ALL;
