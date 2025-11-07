@@ -1,4 +1,4 @@
-package net.zefinder.ftlmod;
+package net.zefinder.ftlmod.game;
 
 public enum ShipSystem {
 	// Random system, is not a true system BUT is used for some events

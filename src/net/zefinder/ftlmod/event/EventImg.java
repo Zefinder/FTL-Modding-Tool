@@ -1,7 +1,7 @@
 package net.zefinder.ftlmod.event;
 
-import net.zefinder.ftlmod.Background;
-import net.zefinder.ftlmod.Planet;
+import net.zefinder.ftlmod.game.Background;
+import net.zefinder.ftlmod.game.Planet;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;

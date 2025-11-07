@@ -1,4 +1,4 @@
-package net.zefinder.ftlmod;
+package net.zefinder.ftlmod.game;
 
 public record Crew(String nameRef, Race race, int allSkills, int pilot, int shields, int engines, int combat,
 		int repair, int weapons) {

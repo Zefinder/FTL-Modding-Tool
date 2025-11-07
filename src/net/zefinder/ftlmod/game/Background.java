@@ -1,4 +1,4 @@
-package net.zefinder.ftlmod;
+package net.zefinder.ftlmod.game;
 
 public enum Background {
 	BACKGROUND, BG_DARK, BG_NEBULA;

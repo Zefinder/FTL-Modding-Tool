@@ -1,4 +1,4 @@
-package net.zefinder.ftlmod;
+package net.zefinder.ftlmod.game;
 
 public enum DamageEffect {
 	RANDOM("random"), ALL("all"), BREACH("breach"), FIRE("fire");

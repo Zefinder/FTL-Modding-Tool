@@ -3,8 +3,8 @@ package net.zefinder.ftlmod.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.zefinder.ftlmod.Crew;
-import net.zefinder.ftlmod.Race;
+import net.zefinder.ftlmod.game.Crew;
+import net.zefinder.ftlmod.game.Race;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;

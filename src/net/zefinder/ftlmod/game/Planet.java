@@ -1,4 +1,4 @@
-package net.zefinder.ftlmod;
+package net.zefinder.ftlmod.game;
 
 public enum Planet {
 	NONE, PLANET_UNPOPULATED, PLANET_POPULATED_SMALL, PLANET_POPULATED, PLANET_GAS;

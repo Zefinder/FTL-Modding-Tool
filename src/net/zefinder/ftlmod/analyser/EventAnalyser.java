@@ -6,6 +6,8 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.zefinder.ftlmod.event.EventCreationException;
+
 public class EventAnalyser {
 
 	private static final Logger log = LoggerFactory.getLogger(EventAnalyser.class);
@@ -13,7 +15,7 @@ public class EventAnalyser {
 	private EventAnalyser() {
 	}
 
-	public static final void analyse(final List<Element> elements, final boolean isUser) {
+	public static final void analyse(final List<Element> elements, final boolean isUser) throws EventCreationException {
 		for (Element eventElement : elements) {
 		}
 

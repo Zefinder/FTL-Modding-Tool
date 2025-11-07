@@ -48,7 +48,7 @@ public class Event implements XmlObject {
 	private final EventImg eventImg;
 	private final EventBoarders eventBoarders;
 	private final boolean secretSector;
-	private final EventItemModify eventItemModify; // TODO
+	private final EventItemModify eventItemModify;
 	private final EventShip eventShip;
 	private final Event eventQuest;
 	private final String remove;
