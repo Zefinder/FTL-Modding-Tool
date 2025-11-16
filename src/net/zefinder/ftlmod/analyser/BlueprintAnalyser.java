@@ -83,6 +83,10 @@ public class BlueprintAnalyser {
 								e);
 					}
 					
+					// Analyse events from root and from event lists
+					EventAnalyser.analyse(root.elements("event"), isUser);
+					EventAnalyser.analyse(root.elements("eventList"), isUser);
+					
 					// Events
 //					ElementAnalyser.analyse(root.elements("event"), isUser);
 //					ElementAnalyser.analyse(root.elements("eventList").stream().map(t -> t.elements("event"))
@@ -117,9 +121,12 @@ public class BlueprintAnalyser {
 	}
 
 	public static void main(String[] args) throws IOException, DocumentException, ProjectCreationException {
-		ProjectManager.getInstance().createProject("AAA", "C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\esc_room_1",
-				"C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\res");
-		ProjectManager.getInstance().openProject("AAA", "C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\esc_room_1");
+		ProjectManager.getInstance().createProject("AAA", "C:\\Users\\adric\\Desktop\\Travail\\mod",
+				"C:\\Users\\adric\\Desktop\\Travail\\FTL_dat");
+		ProjectManager.getInstance().openProject("AAA", "C:\\Users\\adric\\Desktop\\Travail\\mod");
+//		ProjectManager.getInstance().createProject("AAA", "C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\esc_room_1",
+//				"C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\res");
+//		ProjectManager.getInstance().openProject("AAA", "C:\\Users\\Jakub\\Desktop\\Travail\\FTL_Mod\\esc_room_1");
 		BlueprintAnalyser.analyse();
 	}
 

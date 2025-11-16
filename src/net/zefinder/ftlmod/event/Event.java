@@ -86,6 +86,13 @@ public class Event implements XmlObject {
 			}
 		}
 
+		if (eventType == EventType.NORMAL) {
+			// If loading an event, the name cannot be null!
+			if (name == null || name.isBlank()) {
+				throw new EventCreationException("Event name cannot be null or empty, error!");
+			}
+		}
+
 		this.eventType = eventType;
 		this.name = name == null ? "" : name;
 		this.unique = unique;
@@ -142,9 +149,9 @@ public class Event implements XmlObject {
 
 		// From here normal event
 		List<Attribute> attributes = new ArrayList<Attribute>();
-		if (!name.isBlank()) {
-			attributes.add(new Attribute(NAME_ATTRIBUTE_NAME, name));
-		}
+
+		// From here there must be a non empty name
+		attributes.add(new Attribute(NAME_ATTRIBUTE_NAME, name));
 
 		if (unique) {
 			attributes.add(new Attribute(UNIQUE_ATTRIBUTE_NAME, Boolean.toString(unique)));
