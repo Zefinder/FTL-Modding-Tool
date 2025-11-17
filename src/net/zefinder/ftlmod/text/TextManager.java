@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class TextManager {
+	
+	// TODO Use ObjectManager
 
 	private static final TextManager instance = new TextManager();
 

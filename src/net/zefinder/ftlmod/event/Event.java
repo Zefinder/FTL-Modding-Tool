@@ -3,13 +3,20 @@ package net.zefinder.ftlmod.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.zefinder.ftlmod.NamedObject;
 import net.zefinder.ftlmod.text.Text;
 import net.zefinder.ftlmod.text.TextType;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
-public class Event implements XmlObject {
+public record Event(EventType eventType, String name, boolean unique, Text eventText, boolean repair, boolean fleet,
+		EventDamage eventDamage, EventImg eventImg, EventBoarders eventBoarders, boolean secretSector,
+		EventItemModify eventItemModify, EventShip eventShip, Event eventQuest, String remove, int modifyPoursuit,
+		String augmentName, String weaponName, boolean revealMap, EventAutoReward eventAutoReward,
+		EventUpgrade eventUpgrade, int unlockShip, boolean store, String droneName, boolean distressBeacon,
+		EventEnvironment eventEnvironment, EventRemoveCrew eventRemoveCrew, EventCrewMember eventCrewMember,
+		EventStatus eventStatus, List<EventChoice> choices) implements NamedObject, XmlObject {
 
 	public static final String EVENT_TAG_NAME = "event";
 	public static final String REPAIR_TAG_NAME = "repair";
@@ -35,38 +42,7 @@ public class Event implements XmlObject {
 	public static final String EVENT_ATTRIBUTE_NAME = "event";
 	public static final String AMOUNT_ATTRIBUTE_NAME = "amount";
 
-	public static final Event EMPTY = new EventBuilder().build();
-
-	private final EventType eventType;
-	private final String name;
-	private final boolean unique;
-
-	private final Text eventText;
-	private final boolean repair;
-	private final boolean fleet;
-	private final EventDamage eventDamage;
-	private final EventImg eventImg;
-	private final EventBoarders eventBoarders;
-	private final boolean secretSector;
-	private final EventItemModify eventItemModify;
-	private final EventShip eventShip;
-	private final Event eventQuest;
-	private final String remove;
-	private final int modifyPoursuit;
-	private final String augmentName;
-	private final String weaponName;
-	private final boolean revealMap;
-	private final EventAutoReward eventAutoReward;
-	private final EventUpgrade eventUpgrade;
-	private final int unlockShip;
-	private final boolean store;
-	private final String droneName;
-	private final boolean distressBeacon;
-	private final EventEnvironment eventEnvironment;
-	private final EventRemoveCrew eventRemoveCrew;
-	private final EventCrewMember eventCrewMember;
-	private final EventStatus eventStatus;
-	private final List<EventChoice> choices;
+	public static final Event EMPTY = new EventBuilder().setEventType(EventType.NONE).build();
 
 	public Event(EventType eventType, String name, boolean unique, Text eventText, boolean repair, boolean fleet,
 			EventDamage eventDamage, EventImg eventImg, EventBoarders eventBoarders, boolean secretSector,
@@ -96,8 +72,6 @@ public class Event implements XmlObject {
 		this.eventType = eventType;
 		this.name = name == null ? "" : name;
 		this.unique = unique;
-
-		// Event text is mandatory
 		this.eventText = eventText == null ? Text.EMPTY : eventText;
 		this.repair = repair;
 		this.fleet = fleet;
@@ -267,6 +241,7 @@ public class Event implements XmlObject {
 
 	public static void main(String[] args) {
 		System.out.println(new EventBuilder().setEventType(EventType.NORMAL)
+				.setName("Test")
 				.setEventText(new Text(TextType.NORMAL, "This is a test event")).setDroneName("drone_COMBAT1").build()
 				.toXmlTag().toString());
 	}

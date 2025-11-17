@@ -1,12 +1,10 @@
 package net.zefinder.ftlmod.event;
 
-public final class EventManager {
+import net.zefinder.ftlmod.ObjectManager;
+
+public final class EventManager extends ObjectManager<Event> {
 
 	private static final EventManager instance = new EventManager();
-	
-	
-	private EventManager() {
-	}
 	
 	public static final EventManager getInstance() {
 		return instance;

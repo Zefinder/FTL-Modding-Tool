@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.zefinder.ftlmod.NamedObject;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
@@ -22,7 +23,7 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 		String flavorType, int stunChance, int stun, int speed, int persDamage, boolean lockdown, int systemDamage,
 		boolean hullBust, boolean droneTargetable, int missiles, int ion, String explosionReference, boolean locked,
 		WeaponBoost weaponBoost, int chargeLevels, List<WeaponSound> hitShipSounds, List<WeaponSound> hitShieldSounds,
-		List<WeaponSound> missSounds) implements XmlObject {
+		List<WeaponSound> missSounds) implements NamedObject, XmlObject {
 
 	private static final Logger log = LoggerFactory.getLogger(Weapon.class);
 	

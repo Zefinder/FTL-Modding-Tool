@@ -324,7 +324,7 @@ final class WeaponAnalyser {
 
 			// Add the weapon to the manager
 			try {
-				manager.addWeapon(weaponBuilder.build(), isUser);
+				manager.addObject(weaponBuilder.build(), isUser);
 			} catch (WeaponCreationException e) {
 				log.error("Something happened during weapon build...", e);
 			}
