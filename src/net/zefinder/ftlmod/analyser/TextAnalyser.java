@@ -40,7 +40,7 @@ public class TextAnalyser {
 				continue;
 			}
 
-			TextManager.getInstance().addText(new Text(TextType.NAMED, name, text, language), isUser);
+			TextManager.getInstance().addText(new Text(TextType.NAMED, name, text, language), language, isUser);
 		}
 	}
 

@@ -1,63 +1,106 @@
 package net.zefinder.ftlmod.text;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import net.zefinder.ftlmod.ObjectManager;
 
 public final class TextManager {
-	
-	// TODO Use ObjectManager
+
+	// This uses one manager per language
+	private static final Map<TextLanguage, LanguageTextManager> LANGUAGE_MAP = new HashMap<TextLanguage, LanguageTextManager>();
+
+	private static final class LanguageTextManager extends ObjectManager<Text> {
+	}
 
 	private static final TextManager instance = new TextManager();
-
-	private static final Map<TextLanguage, Map<String, Text>> ORIGINAL_TEXTS_PER_LANGUAGE = new HashMap<TextLanguage, Map<String, Text>>();
-	private static final Map<TextLanguage, Map<String, Text>> USER_TEXTS_PER_LANGUAGE = new HashMap<TextLanguage, Map<String, Text>>();
 
 	private TextManager() {
 	}
 
-	public final void addText(final Text text, final boolean isUser) {
-		if (isUser) {
-			USER_TEXTS_PER_LANGUAGE.computeIfAbsent(text.language(), t -> new LinkedHashMap<String, Text>())
-					.put(text.name(), text);
-		} else {
-			ORIGINAL_TEXTS_PER_LANGUAGE.computeIfAbsent(text.language(), t -> new LinkedHashMap<String, Text>())
-					.put(text.name(), text);
-		}
-	}
-
-	public final Text getOriginalText(String name, TextLanguage language) {
-		Map<String, Text> languageTexts = ORIGINAL_TEXTS_PER_LANGUAGE.get(language);
-		if (languageTexts != null) {
-			return languageTexts.getOrDefault(name, Text.EMPTY);
+	public final Optional<Text> getOriginalText(final String name, final TextLanguage language) {
+		LanguageTextManager languageTextManager = LANGUAGE_MAP.get(language);
+		if (languageTextManager != null) {
+			return languageTextManager.getOriginalObject(name);
 		}
 
-		return Text.EMPTY;
+		return Optional.empty();
 	}
 
-	public final Text getText(String name, TextLanguage language) {
-		Map<String, Text> languageTexts = USER_TEXTS_PER_LANGUAGE.get(language);
-		if (languageTexts != null) {
-			return languageTexts.getOrDefault(name, getOriginalText(name, language));
-		}
-
-		return getOriginalText(name, language);
-	}
-
-	public final Text getOriginalText(String name) {
+	public final Optional<Text> getOriginalText(final String name) {
 		return getOriginalText(name, TextLanguage.EN);
 	}
 
-	public final Text getText(String name) {
+	public final Optional<Text> getText(final String name, final TextLanguage language) {
+		LanguageTextManager languageTextManager = LANGUAGE_MAP.get(language);
+		if (languageTextManager != null) {
+			return languageTextManager.getObject(name);
+		}
+
+		return Optional.empty();
+	}
+
+	public final Optional<Text> getText(final String name) {
 		return getText(name, TextLanguage.EN);
 	}
 
-	public final void clearOriginalTexts() {
-		ORIGINAL_TEXTS_PER_LANGUAGE.clear();
+	public final void removeText(final String name, final TextLanguage language) {
+		LanguageTextManager languageTextManager = LANGUAGE_MAP.get(language);
+		if (languageTextManager != null) {
+			languageTextManager.removeObject(name);
+		}
 	}
-	
-	public final void clearUserTexts() {
-		USER_TEXTS_PER_LANGUAGE.clear();
+
+	public final void removeText(final String name) {
+		LANGUAGE_MAP.forEach((language, manager) -> manager.removeObject(name));
+	}
+
+	public final void addText(final Text text, final TextLanguage language, final boolean isUser) {
+		LANGUAGE_MAP.computeIfAbsent(language, l -> new LanguageTextManager()).addObject(text, isUser);
+	}
+
+	public final void addText(final Text text, final boolean isUser) {
+		addText(text, TextLanguage.EN, isUser);
+	}
+
+	public final void useText(final String name, final TextLanguage language) {
+		LANGUAGE_MAP.computeIfAbsent(language, l -> new LanguageTextManager()).useObject(name);
+	}
+
+	public final void useText(final String name) {
+		useText(name, TextLanguage.EN);
+	}
+
+	public final boolean isTextUsed(final String name, final TextLanguage language) {
+		LanguageTextManager languageTextManager = LANGUAGE_MAP.get(language);
+		if (languageTextManager != null) {
+			return languageTextManager.isObjectUsed(name);
+		}
+
+		return false;
+	}
+
+	public final void resetUsage() {
+		LANGUAGE_MAP.forEach((language, manager) -> manager.resetUsage());
+	}
+
+	public final List<Text> getUnusedText(final TextLanguage language) {
+		LanguageTextManager languageTextManager = LANGUAGE_MAP.get(language);
+		if (languageTextManager != null) {
+			return languageTextManager.getUnusedObjects();
+		}
+
+		return List.of();
+	}
+
+	public final void clearOriginalText() {
+		LANGUAGE_MAP.forEach((language, manager) -> manager.clearOriginalObjects());
+	}
+
+	public final void clearUserText() {
+		LANGUAGE_MAP.forEach((language, manager) -> manager.clearUserObjects());
 	}
 
 	public static TextManager getInstance() {

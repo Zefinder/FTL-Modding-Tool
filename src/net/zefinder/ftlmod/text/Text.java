@@ -3,11 +3,12 @@ package net.zefinder.ftlmod.text;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.zefinder.ftlmod.NamedObject;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
-public record Text(TextType textType, String name, String text, TextLanguage language) implements XmlObject {
+public record Text(TextType textType, String name, String text, TextLanguage language) implements NamedObject, XmlObject {
 
 	public static final Text EMPTY = new Text(TextType.NORMAL, "", "", TextLanguage.EN);
 
