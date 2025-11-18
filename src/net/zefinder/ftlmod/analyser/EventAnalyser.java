@@ -23,10 +23,10 @@ public class EventAnalyser {
 			
 			if (load != null) {
 				// Load event
-				log.info("Registering load event " + load);
+				log.info("Load event %s, register usage in manager...".formatted(load));
 			} else if (name == null) {
 				// Empty event
-				log.info("Registering empty event");
+				log.info("Empty event, skip!");
 			} else {
 				// Normal event
 				boolean unique = Boolean.valueOf(eventElement.attributeValue(Event.UNIQUE_ATTRIBUTE_NAME));

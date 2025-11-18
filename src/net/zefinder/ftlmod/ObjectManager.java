@@ -5,14 +5,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class ObjectManager<T extends NamedObject> {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public abstract class ObjectManager<T extends NamedObject> {
+
+	private final Logger log;
 	private final Map<String, UsedObject<T>> originalObjects;
 	private final Map<String, UsedObject<T>> userObjects;
 
 	protected ObjectManager() {
 		originalObjects = new HashMap<String, UsedObject<T>>();
 		userObjects = new HashMap<String, UsedObject<T>>();
+		log = LoggerFactory.getLogger(getClass());
 	}
 
 	public final Optional<T> getOriginalObject(final String name) {
@@ -20,12 +25,13 @@ public class ObjectManager<T extends NamedObject> {
 			return Optional.ofNullable(originalObjects.get(name).getObject());
 		}
 
+		log.warn("Object not found, return empty...");
 		return Optional.empty();
 	}
 
 	/**
-	 * Tries to get an object from the user objects. If it does not exist, then tries
-	 * to get it from the original game. This throws a
+	 * Tries to get an object from the user objects. If it does not exist, then
+	 * tries to get it from the original game. This throws a
 	 * {@link NullPointerException} if the object has been redefined by the user BUT
 	 * is null.
 	 * 
@@ -60,13 +66,22 @@ public class ObjectManager<T extends NamedObject> {
 		UsedObject<T> usedObject = UsedObject.of(object);
 
 		if (isUser) {
-			if (originalObjects.containsKey(objectName) && originalObjects.get(objectName).isUsed()) {
+			// If already registered, check if already used before adding it
+			if (originalObjects.containsKey(objectName) && originalObjects.get(objectName).isUsed()
+					|| userObjects.containsKey(objectName) && userObjects.get(objectName).isUsed()) {
+				log.info("Object exists and is used, replace!");
 				usedObject.use();
 			}
 
-			userObjects.put(object.name(), usedObject);
+			userObjects.put(objectName, usedObject);
 		} else {
-			originalObjects.put(object.name(), UsedObject.of(object));
+			// If already registered, then check usage (should not happen but we never know)
+			if (originalObjects.containsKey(objectName) && originalObjects.get(objectName).isUsed()) {
+				log.info("Object exists and is used, replace!");
+				usedObject.use();
+			}
+
+			originalObjects.put(objectName, usedObject);
 		}
 	}
 
@@ -76,22 +91,30 @@ public class ObjectManager<T extends NamedObject> {
 		} else if (originalObjects.containsKey(objectName)) {
 			originalObjects.get(objectName).use();
 		} else {
-			originalObjects.put(objectName, UsedObject.empty());
+			log.info("Unknown object %s... Creating used placeholder!".formatted(objectName));
+
+			// Create a holder in the original objects
+			UsedObject<T> usedObject = UsedObject.empty();
+			usedObject.use();
+			originalObjects.put(objectName, usedObject);
 		}
 	}
 
 	public final boolean isObjectUsed(final String objectName) {
+		UsedObject<T> object = null;
 		if (userObjects.containsKey(objectName)) {
-			return userObjects.get(objectName).isUsed();
+			object = userObjects.get(objectName);
 		} else if (originalObjects.containsKey(objectName)) {
-			return originalObjects.get(objectName).isUsed();
+			object = originalObjects.get(objectName);
 		}
 
-		return false;
+		return object == null ? false : object.isUsed();
 	}
 
 	public final void resetUsage() {
+		log.info("Reset all object usage flag...");
 		userObjects.forEach((name, usedObject) -> usedObject.reset());
+		log.info("Done!");
 	}
 
 	public final List<T> getUnusedObjects() {
@@ -104,11 +127,15 @@ public class ObjectManager<T extends NamedObject> {
 	}
 
 	public final void clearOriginalObjects() {
+		log.info("Clearing all original game objects...");
 		originalObjects.clear();
+		log.info("Done!");
 	}
 
 	public final void clearUserObjects() {
+		log.info("Clearing all user defined objects...");
 		userObjects.clear();
+		log.info("Done!");
 	}
-	
+
 }

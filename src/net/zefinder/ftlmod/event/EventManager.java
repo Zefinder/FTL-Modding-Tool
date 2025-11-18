@@ -9,5 +9,5 @@ public final class EventManager extends ObjectManager<Event> {
 	public static final EventManager getInstance() {
 		return instance;
 	}
-
+	
 }
