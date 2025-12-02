@@ -19,7 +19,7 @@ public class EventBuilder implements Builder {
 	private EventImg eventImg;
 	private EventBoarders eventBoarders;
 	private boolean secretSector;
-	private EventItemModify eventItemModify; // TODO
+	private EventItemModify eventItemModify;
 	private EventShip eventShip;
 	private Event eventQuest;
 	private String remove;

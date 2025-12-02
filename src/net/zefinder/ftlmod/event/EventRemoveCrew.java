@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +9,7 @@ import net.zefinder.ftlmod.text.Text;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 
-public record EventRemoveCrew(boolean canReclone, Text cloneText) implements XmlObject {
-	
-	public static final String REMOVE_CREW_TAG_NAME = "removeCrew";
-	public static final String CLONE_TAG_NAME = "clone";
-	public static final String TEXT_TAG_NAME = "text";
-	
+public record EventRemoveCrew(boolean canReclone, Text cloneText) implements XmlObject {	
 	
 	public EventRemoveCrew(boolean canReclone, Text cloneText) {
 		this.canReclone = canReclone;

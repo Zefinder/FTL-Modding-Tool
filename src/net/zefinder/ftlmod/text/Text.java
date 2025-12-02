@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.text;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +14,6 @@ public record Text(TextType textType, String name, String text, TextLanguage lan
 
 	public static final Text EMPTY = new Text(TextType.NORMAL, "", "", TextLanguage.EN);
 
-	public static final String TEXT_TAG_NAME = "text";
-	public static final String TEXT_NAME_ATTRIBUTE = "name";
-	public static final String LOAD_ATTRIBUTE_NAME = "load";
-	public static final String ID_ATTRIBUTE_NAME = "id";
-	public static final String TEXT_LANGUAGE_ATTRIBUTE = "language";
-
 	public Text(final TextType textType, final String name, final String text, final TextLanguage language) {
 		this.textType = textType == null ? TextType.NORMAL : textType;
 		this.name = name == null ? "" : name;
@@ -25,6 +21,10 @@ public record Text(TextType textType, String name, String text, TextLanguage lan
 		this.language = language == null ? TextLanguage.EN : language;
 	}
 
+	public Text(final TextType textType, final String name, final String text) {
+		this(textType, name, text, TextLanguage.EN);
+	}
+	
 	public Text(final TextType textType, final String text) {
 		this(textType, "", text, TextLanguage.EN);
 	}
@@ -32,20 +32,20 @@ public record Text(TextType textType, String name, String text, TextLanguage lan
 	@Override
 	public XmlTag<?> toXmlTag() {
 		if (textType == TextType.LOAD) {
-			return new XmlTag<String>(TEXT_TAG_NAME, new Attribute(LOAD_ATTRIBUTE_NAME, text));
+			return new XmlTag<Void>(TEXT_TAG_NAME, new Attribute(LOAD_ATTRIBUTE_NAME, name));
 		}
 
 		if (textType == TextType.REFERENCE) {
-			return new XmlTag<String>(TEXT_TAG_NAME, new Attribute(ID_ATTRIBUTE_NAME, text));
+			return new XmlTag<Void>(TEXT_TAG_NAME, new Attribute(ID_ATTRIBUTE_NAME, name));
 		}
 
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		if (language != TextLanguage.EN) {
-			attributes.add(new Attribute(TEXT_LANGUAGE_ATTRIBUTE, language.languageCode()));
+			attributes.add(new Attribute(LANGUAGE_ATTRIBUTE_NAME, language.languageCode()));
 		}
 
 		if (textType == TextType.NAMED) {
-			attributes.add(new Attribute(TEXT_NAME_ATTRIBUTE, name));
+			attributes.add(new Attribute(NAME_ATTRIBUTE_NAME, name));
 		}
 
 		return new XmlTag<String>(TEXT_TAG_NAME, text, attributes.toArray(Attribute[]::new));

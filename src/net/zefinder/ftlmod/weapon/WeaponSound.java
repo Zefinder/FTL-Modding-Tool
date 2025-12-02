@@ -1,6 +1,6 @@
 package net.zefinder.ftlmod.weapon;
 
-import static net.zefinder.ftlmod.weapon.Weapon.SOUND_TAG_NAME;
+import static net.zefinder.ftlmod.Consts.*;
 
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;

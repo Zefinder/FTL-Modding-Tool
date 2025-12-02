@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,10 +10,6 @@ import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventShip(String name, boolean hostile) implements XmlObject {
-
-	public static final String SHIP_TAG_NAME = "ship";
-	public static final String LOAD_ATTRIBUTE_NAME = "load";
-	public static final String HOSTILE_ATTRIBUTE_NAME = "hostile";
 
 	public EventShip(String name, boolean hostile) {
 		this.name = name == null ? "" : name;

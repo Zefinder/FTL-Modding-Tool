@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,30 +19,6 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 		EventUpgrade eventUpgrade, int unlockShip, boolean store, String droneName, boolean distressBeacon,
 		EventEnvironment eventEnvironment, EventRemoveCrew eventRemoveCrew, EventCrewMember eventCrewMember,
 		EventStatus eventStatus, List<EventChoice> choices) implements NamedObject, XmlObject {
-
-	public static final String EVENT_TAG_NAME = "event";
-	public static final String REPAIR_TAG_NAME = "repair";
-	public static final String FLEET_TAG_NAME = "fleet";
-	public static final String SECRET_SECTOR_TAG_NAME = "secretSector";
-	public static final String ITEM_MODIFY_TAG_NAME = "item_modify";
-	public static final String QUEST_TAG_NAME = "quest";
-	public static final String REMOVE_TAG_NAME = "remove";
-	public static final String MODIFY_POURSUIT_TAG_NAME = "modifyPoursuit";
-	public static final String AUGMENT_TAG_NAME = "augment";
-	public static final String WEAPON_TAG_NAME = "weapon";
-	public static final String REVEAL_MAP_TAG_NAME = "reveal_map";
-	public static final String UNLOCK_SHIP_TAG_NAME = "unlockShip";
-	public static final String STORE_TAG_NAME = "store";
-	public static final String DRONE_TAG_NAME = "drone";
-	public static final String DISTRESS_BEACON_TAG_NAME = "distressBeacon";
-
-	public static final String LOAD_ATTRIBUTE_NAME = "load";
-	public static final String NAME_ATTRIBUTE_NAME = "name";
-	public static final String UNIQUE_ATTRIBUTE_NAME = "unique";
-	public static final String ID_ATTRIBUTE_NAME = "id";
-	public static final String STEAL_ATTRIBUTE_NAME = "steal";
-	public static final String EVENT_ATTRIBUTE_NAME = "event";
-	public static final String AMOUNT_ATTRIBUTE_NAME = "amount";
 
 	public static final Event EMPTY = new EventBuilder().setEventType(EventType.NONE).build();
 

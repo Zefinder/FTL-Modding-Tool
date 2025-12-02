@@ -1,8 +1,6 @@
 package net.zefinder.ftlmod.weapon;
 
-import static net.zefinder.ftlmod.weapon.Weapon.COUNT_ATTRIBUTE;
-import static net.zefinder.ftlmod.weapon.Weapon.FAKE_ATTRIBUTE;
-import static net.zefinder.ftlmod.weapon.Weapon.PROJECTILE_TAG_NAME;
+import static net.zefinder.ftlmod.Consts.*;
 
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
@@ -12,8 +10,8 @@ public record WeaponProjectile(int count, boolean fake, String projectileImageRe
 
 	@Override
 	public XmlTag<?> toXmlTag() {
-		Attribute countAttribute = new Attribute(COUNT_ATTRIBUTE, String.valueOf(count));
-		Attribute fakeAttribute = new Attribute(FAKE_ATTRIBUTE, String.valueOf(fake));
+		Attribute countAttribute = new Attribute(COUNT_ATTRIBUTE_NAME, String.valueOf(count));
+		Attribute fakeAttribute = new Attribute(FAKE_ATTRIBUTE_NAME, String.valueOf(fake));
 
 		return new XmlTag<String>(PROJECTILE_TAG_NAME, projectileImageReference, countAttribute, fakeAttribute);
 	}

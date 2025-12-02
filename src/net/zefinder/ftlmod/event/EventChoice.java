@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,15 +12,6 @@ import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventChoice(boolean hidden, int level, int minLevel, int maxLevel, int maxGroup, boolean blue, String req,
 		Event event, Text text) implements XmlObject {
-
-	public static final String CHOICE_TAG_NAME = "choice";
-	public static final String CHOICE_HIDDEN_ATTRIBUTE = "hidden";
-	public static final String CHOICE_LEVEL_ATTRIBUTE = "lvl";
-	public static final String CHOICE_MIN_LEVEL_ATTRIBUTE = "min_lvl";
-	public static final String CHOICE_MAX_LEVEL_ATTRIBUTE = "max_lvl";
-	public static final String CHOICE_BLUE_ATTRIBUTE = "blue";
-	public static final String CHOICE_MAX_GROUP_ATTRIBUTE = "max_group";
-	public static final String CHOICE_REQ_ATTRIBUTE = "req";
 
 	/*
 	 * hidden true => don't show the rewards
@@ -54,30 +47,30 @@ public record EventChoice(boolean hidden, int level, int minLevel, int maxLevel,
 	@Override
 	public XmlTag<?> toXmlTag() {
 		List<Attribute> attributes = new ArrayList<Attribute>();
-		attributes.add(new Attribute(CHOICE_HIDDEN_ATTRIBUTE, Boolean.toString(hidden)));
+		attributes.add(new Attribute(HIDDEN_ATTRIBUTE_NAME, Boolean.toString(hidden)));
 
 		if (level > 0) {
-			attributes.add(new Attribute(CHOICE_LEVEL_ATTRIBUTE, Integer.toString(level)));
+			attributes.add(new Attribute(LVL_ATTRIBUTE_NAME, Integer.toString(level)));
 		}
 
 		if (minLevel > 0) {
-			attributes.add(new Attribute(CHOICE_MIN_LEVEL_ATTRIBUTE, Integer.toString(minLevel)));
+			attributes.add(new Attribute(MIN_LEVEL_ATTRIBUTE_NAME, Integer.toString(minLevel)));
 		}
 
 		if (maxLevel > 0) {
-			attributes.add(new Attribute(CHOICE_MAX_LEVEL_ATTRIBUTE, Integer.toString(maxLevel)));
+			attributes.add(new Attribute(MAX_LEVEL_ATTRIBUTE_NAME, Integer.toString(maxLevel)));
 		}
 
 		if (maxGroup > 0) {
-			attributes.add(new Attribute(CHOICE_MAX_GROUP_ATTRIBUTE, Integer.toString(maxGroup)));
+			attributes.add(new Attribute(MAX_GROUP_ATTRIBUTE_NAME, Integer.toString(maxGroup)));
 		}
 
 		if (blue) {
-			attributes.add(new Attribute(CHOICE_BLUE_ATTRIBUTE, Boolean.toString(blue)));
+			attributes.add(new Attribute(BLUE_ATTRIBUTE_NAME, Boolean.toString(blue)));
 		}
 
 		if (!req.isBlank()) {
-			attributes.add(new Attribute(CHOICE_REQ_ATTRIBUTE, req));
+			attributes.add(new Attribute(REQ_ATTRIBUTE_NAME, req));
 		}
 
 		List<XmlTag<?>> tags = new ArrayList<XmlTag<?>>();

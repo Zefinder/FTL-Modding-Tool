@@ -1,48 +1,6 @@
 package net.zefinder.ftlmod.weapon;
 
-import static net.zefinder.ftlmod.weapon.Weapon.BP_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.BREACH_CHANCE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.CHARGE_LEVELS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.COLOR_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.COOLDOWN_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.COST_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.DAMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.DESCRIPTION_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.DRONE_TARGETABLE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.EXPLOSION_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.FIRE_CHANCE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.FLAVOR_TYPE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.HIT_SHIELD_SOUNDS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.HIT_SHIP_SOUNDS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.HULL_BUST_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.ICON_IMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.ID_ATTRIBUTE;
-import static net.zefinder.ftlmod.weapon.Weapon.IMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.ION_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.LAUNCH_SOUNDS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.LENGTH_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.LOCKDOWN_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.LOCKED_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.MISSILES_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.MISS_SOUNDS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.PERS_DAMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.POWER_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.PROJECTILES_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.RADIUS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.RARITY_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SHIELD_PIERCING_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SHORT_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SHOTS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SPEED_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SPIN_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.STUN_CHANCE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.STUN_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SYSTEM_DAMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.TIP_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.TITLE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.TOOLTIP_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.WEAPON_ART_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.WEAPON_TYPE_TAG_NAME;
+import static net.zefinder.ftlmod.Consts.*;
 
 import java.awt.Color;
 import java.util.List;
@@ -60,7 +18,7 @@ final class WeaponPropertyFactory {
 	}
 
 	public static final XmlTag<WeaponType> createWeaponType(WeaponType weaponType) {
-		return new XmlTag<WeaponType>(WEAPON_TYPE_TAG_NAME, weaponType);
+		return new XmlTag<WeaponType>(TYPE_TAG_NAME, weaponType);
 	}
 
 	public static final XmlTag<String> createTip(String tipReference) {
@@ -69,7 +27,7 @@ final class WeaponPropertyFactory {
 
 	public static final XmlTag<?> createTitle(String title, boolean isReference) {
 		if (isReference) {
-			return new XmlTag<Void>(TITLE_TAG_NAME, new Attribute(ID_ATTRIBUTE, title));
+			return new XmlTag<Void>(TITLE_TAG_NAME, new Attribute(ID_ATTRIBUTE_NAME, title));
 		}
 
 		return new XmlTag<String>(TITLE_TAG_NAME, title);
@@ -77,7 +35,7 @@ final class WeaponPropertyFactory {
 
 	public static final XmlTag<?> createShortTitle(String shortTitle, boolean isReference) {
 		if (isReference) {
-			return new XmlTag<Void>(SHORT_TAG_NAME, new Attribute(ID_ATTRIBUTE, shortTitle));
+			return new XmlTag<Void>(SHORT_TAG_NAME, new Attribute(ID_ATTRIBUTE_NAME, shortTitle));
 		}
 
 		return new XmlTag<String>(SHORT_TAG_NAME, shortTitle);
@@ -85,7 +43,7 @@ final class WeaponPropertyFactory {
 
 	public static final XmlTag<?> createDescription(String description, boolean isReference) {
 		if (isReference) {
-			return new XmlTag<Void>(DESCRIPTION_TAG_NAME, new Attribute(ID_ATTRIBUTE, description));
+			return new XmlTag<Void>(DESCRIPTION_TAG_NAME, new Attribute(ID_ATTRIBUTE_NAME, description));
 		}
 
 		return new XmlTag<String>(DESCRIPTION_TAG_NAME, description);
@@ -93,7 +51,7 @@ final class WeaponPropertyFactory {
 
 	public static final XmlTag<?> createTooltip(String tooltip, boolean isReference) {
 		if (isReference) {
-			return new XmlTag<Void>(TOOLTIP_TAG_NAME, new Attribute(ID_ATTRIBUTE, tooltip));
+			return new XmlTag<Void>(TOOLTIP_TAG_NAME, new Attribute(ID_ATTRIBUTE_NAME, tooltip));
 		}
 
 		return new XmlTag<String>(TOOLTIP_TAG_NAME, tooltip);
@@ -182,7 +140,7 @@ final class WeaponPropertyFactory {
 
 	public static final XmlTag<?> createFlavorType(String flavorType, boolean isReference) {
 		if (isReference) {
-			return new XmlTag<Void>(FLAVOR_TYPE_TAG_NAME, new Attribute(ID_ATTRIBUTE, flavorType));
+			return new XmlTag<Void>(FLAVOR_TYPE_TAG_NAME, new Attribute(ID_ATTRIBUTE_NAME, flavorType));
 		}
 
 		return new XmlTag<String>(FLAVOR_TYPE_TAG_NAME, flavorType);

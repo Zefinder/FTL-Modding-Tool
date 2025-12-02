@@ -1,8 +1,9 @@
 package net.zefinder.ftlmod.analyser;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -11,9 +12,13 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.zefinder.ftlmod.event.EventManager;
 import net.zefinder.ftlmod.project.Project;
 import net.zefinder.ftlmod.project.ProjectCreationException;
 import net.zefinder.ftlmod.project.ProjectManager;
+import net.zefinder.ftlmod.text.TextLanguage;
+import net.zefinder.ftlmod.text.TextListManager;
+import net.zefinder.ftlmod.text.TextManager;
 import net.zefinder.ftlmod.weapon.WeaponCreationException;
 
 /**
@@ -73,20 +78,22 @@ public class BlueprintAnalyser {
 					Document doc = reader.read(fileToAnalyse);
 					Element root = doc.getRootElement();
 
-					TextAnalyser.analyse(root.elements("text"), isUser);
+					TextAnalyser.analyse(root.elements(TEXT_TAG_NAME), isUser);
+					TextListAnalyser.analyse(root.elements(TEXT_LIST_TAG_NAME), isUser);
 
 					try {
-						WeaponAnalyser.analyse(root.elements("weaponBlueprint"), isUser);
+						WeaponAnalyser.analyse(root.elements(WEAPON_BLUEPRINT_TAG_NAME), isUser);
 					} catch (WeaponCreationException e) {
 						log.error(
 								"Error when reading a weapon, skip weapon analysis for file " + fileToAnalyse.getName(),
 								e);
 					}
-					
+
 					// Analyse events from root and from event lists
-					EventAnalyser.analyse(root.elements("event"), isUser);
+//					EventAnalyser.analyseEventList(root.elements("eventList"), isUser);
+					EventAnalyser.analyseEvent(root.elements(EVENT_TAG_NAME), isUser);
 //					EventAnalyser.analyse(root.elements("eventList"), isUser);
-					
+
 					// Events
 //					ElementAnalyser.analyse(root.elements("event"), isUser);
 //					ElementAnalyser.analyse(root.elements("eventList").stream().map(t -> t.elements("event"))
@@ -94,16 +101,27 @@ public class BlueprintAnalyser {
 //					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("choice"))
 //							.<Element>flatMap(t -> t.stream()).map(t -> t.elements("event"))
 //							.<Element>flatMap(t -> t.stream()).toList(), isUser);
-					
-					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("item_modify"))
-					.<Element>flatMap(t -> t.stream()).toList(), isUser);
-					
+
+//					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("item_modify"))
+//					.<Element>flatMap(t -> t.stream()).toList(), isUser);
+
 					// Choices
 //					ElementAnalyser.analyse(root.elements("event").stream().map(t -> t.elements("choice"))
 //							.<Element>flatMap(t -> t.stream()).toList(), isUser);
 
+//					ENGI_MANTIS_FIGHT
+
 				}
-				ElementAnalyser.showResults();
+				EventManager.getInstance().getObject("ENGI_MANTIS_FIGHT");
+				log.info("Text ENGI_MANTIS_FIGHT. Used: %b\nValue:\n%s".formatted(
+						TextListManager.getInstance().isObjectUsed("ENGI_MANTIS_FIGHT"),
+						TextListManager.getInstance().getOriginalObject("ENGI_MANTIS_FIGHT").get().toXmlTag()));
+				log.info("Text text_ENGI_MANTIS_FIGHT_1. Used: %b\nValue:\n%s".formatted(TextManager.getInstance().isTextUsed("text_ENGI_MANTIS_FIGHT_1", TextLanguage.FR), TextManager.getInstance().getOriginalText("text_ENGI_MANTIS_FIGHT_1", TextLanguage.FR)));
+
+				log.info("Text text_REBEL_PULSAR_TEXT_1. Used: %b\nValue:\n%s".formatted(TextManager.getInstance().isTextUsed("text_REBEL_PULSAR_TEXT_1", TextLanguage.PL), TextManager.getInstance().getOriginalText("text_REBEL_PULSAR_TEXT_1", TextLanguage.PL)));
+				
+				
+//				ElementAnalyser.showResults();
 			} else {
 				log.info("Data directory do not exist... Why user? whyyyyyyy?");
 			}

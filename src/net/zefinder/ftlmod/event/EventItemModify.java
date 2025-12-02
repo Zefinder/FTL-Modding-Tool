@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,13 +10,6 @@ import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventItemModify(boolean steal, Item... items) implements XmlObject {
-
-	public static final String ITEM_MODIFY_TAG_NAME = "item_modify";
-	public static final String ITEM_TAG_NAME = "item";
-	public static final String STEAL_ATTRIBUTE_NAME = "steal";
-	public static final String MIN_ATTRIBUTE_NAME = "min";
-	public static final String MAX_ATTRIBUTE_NAME = "max";
-	public static final String TYPE_ATTRIBUTE_NAME = "type";
 
 	public static enum ItemType {
 		SCRAP("scrap"), DRONES("drones"), FUEL("fuel"), MISSILES("missiles");

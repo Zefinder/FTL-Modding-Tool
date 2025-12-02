@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import net.zefinder.ftlmod.game.DamageEffect;
 import net.zefinder.ftlmod.game.ShipSystem;
 import net.zefinder.ftlmod.xml.XmlObject;
@@ -7,11 +9,6 @@ import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventDamage(int amount, ShipSystem system, DamageEffect effect) implements XmlObject {
-
-	public static final String DAMAGE_TAG_NAME = "damage";
-	public static final String AMOUNT_ATTRIBUTE_NAME = "amount";
-	public static final String SYSTEM_ATTRIBUTE_NAME = "system";
-	public static final String EFFECT_ATTRIBUTE_NAME = "effect";
 
 	@Override
 	public XmlTag<?> toXmlTag() {

@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
@@ -49,9 +51,6 @@ public record EventAutoReward(RewardLevel level, RewardType type) implements Xml
 			}
 		}
 	}
-
-	public static final String AUTO_REWARD_TAG_NAME = "autoReward";
-	public static final String LEVEL_ATTRIBUTE_NAME = "level";
 
 	public EventAutoReward(RewardLevel level, RewardType type) {
 		this.level = level == null ? RewardLevel.LOW : level;

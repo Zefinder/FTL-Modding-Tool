@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.weapon;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,70 +28,6 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 		List<WeaponSound> missSounds) implements NamedObject, XmlObject {
 
 	private static final Logger log = LoggerFactory.getLogger(Weapon.class);
-	
-	public static final String WEAPON_BLUEPRINT_TAG_NAME = "weaponBlueprint";
-	public static final String WEAPON_TYPE_TAG_NAME = "type";
-	public static final String TIP_TAG_NAME = "tip";
-	public static final String TITLE_TAG_NAME = "title";
-	public static final String SHORT_TAG_NAME = "short";
-	public static final String DESCRIPTION_TAG_NAME = "desc";
-	public static final String TOOLTIP_TAG_NAME = "tooltip";
-	public static final String COOLDOWN_TAG_NAME = "cooldown";
-	public static final String POWER_TAG_NAME = "power";
-	public static final String COST_TAG_NAME = "cost";
-	public static final String RARITY_TAG_NAME = "rarity";
-	public static final String DAMAGE_TAG_NAME = "damage";
-	public static final String SHIELD_PIERCING_TAG_NAME = "sp";
-	public static final String BP_TAG_NAME = "bp";
-	public static final String FIRE_CHANCE_TAG_NAME = "fireChance";
-	public static final String BREACH_CHANCE_TAG_NAME = "breachChance";
-	public static final String IMAGE_TAG_NAME = "image";
-	public static final String ICON_IMAGE_TAG_NAME = "iconImage";
-	public static final String WEAPON_ART_TAG_NAME = "weaponArt";
-	public static final String LAUNCH_SOUNDS_TAG_NAME = "launchSounds";
-	public static final String SOUND_TAG_NAME = "sound";
-	public static final String LENGTH_TAG_NAME = "length";
-	public static final String COLOR_TAG_NAME = "color";
-	public static final String R_TAG_NAME = "r";
-	public static final String G_TAG_NAME = "g";
-	public static final String B_TAG_NAME = "b";
-	public static final String PROJECTILES_TAG_NAME = "projectiles";
-	public static final String PROJECTILE_TAG_NAME = "projectile";
-	public static final String RADIUS_TAG_NAME = "radius";
-	public static final String SPIN_TAG_NAME = "spin";
-	public static final String SHOTS_TAG_NAME = "shots";
-	public static final String FLAVOR_TYPE_TAG_NAME = "flavorType";
-	public static final String STUN_CHANCE_TAG_NAME = "stunChance";
-	public static final String STUN_TAG_NAME = "stun";
-	public static final String SPEED_TAG_NAME = "speed";
-	public static final String PERS_DAMAGE_TAG_NAME = "persDamage";
-	public static final String LOCKDOWN_TAG_NAME = "lockdown";
-	public static final String SYSTEM_DAMAGE_TAG_NAME = "sysDamage";
-	public static final String HULL_BUST_TAG_NAME = "hullBust";
-	public static final String DRONE_TARGETABLE_TAG_NAME = "drone_targetable";
-	public static final String MISSILES_TAG_NAME = "missiles";
-	public static final String ION_TAG_NAME = "ion";
-	public static final String EXPLOSION_TAG_NAME = "explosion";
-	public static final String LOCKED_TAG_NAME = "locked";
-	public static final String WEAPON_BOOST_TAG_NAME = "boost";
-	public static final String BOOST_TYPE_TAG_NAME = "type";
-	public static final String BOOST_AMOUNT_TAG_NAME = "amount";
-	public static final String BOOST_COUNT_TAG_NAME = "count";
-	public static final String CHARGE_LEVELS_TAG_NAME = "chargeLevels";
-	public static final String HIT_SHIP_SOUNDS_TAG_NAME = "hitShipSounds";
-	public static final String HIT_SHIELD_SOUNDS_TAG_NAME = "hitShieldSounds";
-	public static final String MISS_SOUNDS_TAG_NAME = "missSounds";
-
-	public static final String NAME_ATTRIBUTE = "name";
-	public static final String ID_ATTRIBUTE = "id";
-	public static final String COUNT_ATTRIBUTE = "count";
-	public static final String FAKE_ATTRIBUTE = "fake";
-	public static final String NOLOC_ATTRIBUTE = "NOLOC";
-
-	public static final String NOLOC_ATTRIBUTE_FALSE = "0";
-	public static final String NOLOC_ATTRIBUTE_TRUE = "1";
-	
-	public static final String RANDOM_WEAPON_NAME = "RANDOM";
 
 	/**
 	 * Default weapon is only the mandatory parts of the laser burst 1 shot
@@ -721,9 +659,9 @@ public record Weapon(String name, boolean noloc, boolean titleReference, boolean
 		}
 
 		final List<Attribute> attributes = new ArrayList<Attribute>();
-		attributes.add(new Attribute(NAME_ATTRIBUTE, name));
+		attributes.add(new Attribute(NAME_ATTRIBUTE_NAME, name));
 		if (noloc) {
-			attributes.add(new Attribute(NOLOC_ATTRIBUTE, NOLOC_ATTRIBUTE_TRUE));
+			attributes.add(new Attribute(NOLOC_ATTRIBUTE_NAME, NOLOC_ATTRIBUTE_TRUE));
 		}
 
 		return new XmlTag<List<XmlTag<?>>>(WEAPON_BLUEPRINT_TAG_NAME, tags, attributes.toArray(Attribute[]::new));

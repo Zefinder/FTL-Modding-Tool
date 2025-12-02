@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import net.zefinder.ftlmod.game.ShipSystem;
 import net.zefinder.ftlmod.game.Target;
 import net.zefinder.ftlmod.xml.XmlObject;
@@ -7,12 +9,6 @@ import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventStatus(int amount, StatusType type, ShipSystem system, Target target) implements XmlObject {
-
-	public static final String STATUS_TAG_NAME = "status";
-	public static final String AMOUNT_ATTRIBUTE_NAME = "amount";
-	public static final String SYSTEM_ATTRIBUTE_NAME = "system";
-	public static final String TYPE_ATTRIBUTE_NAME = "type";
-	public static final String TARGET_ATTRIBUTE_NAME = "target";
 
 	public static enum StatusType {
 		LOSS("loss"), LIMIT("limit"), CLEAR("clear"), DIVIDE("divide");

@@ -6,13 +6,20 @@ import java.util.Map;
 import java.util.Optional;
 
 import net.zefinder.ftlmod.ObjectManager;
+import net.zefinder.ftlmod.analyser.TextListAnalyser;
 
 public final class TextManager {
 
+	// TODO TextLists
 	// This uses one manager per language
 	private static final Map<TextLanguage, LanguageTextManager> LANGUAGE_MAP = new HashMap<TextLanguage, LanguageTextManager>();
 
 	private static final class LanguageTextManager extends ObjectManager<Text> {
+				
+		public LanguageTextManager(TextLanguage language) {
+			super(language.name());
+		}
+		
 	}
 
 	private static final TextManager instance = new TextManager();
@@ -58,7 +65,10 @@ public final class TextManager {
 	}
 
 	public final void addText(final Text text, final TextLanguage language, final boolean isUser) {
-		LANGUAGE_MAP.computeIfAbsent(language, l -> new LanguageTextManager()).addObject(text, isUser);
+		if (text.name().equals("ENGI_MANTIS_FIGHT")) {
+			System.out.println("");
+		}
+		LANGUAGE_MAP.computeIfAbsent(language, l -> new LanguageTextManager(l)).addObject(text, isUser);
 	}
 
 	public final void addText(final Text text, final boolean isUser) {
@@ -66,11 +76,18 @@ public final class TextManager {
 	}
 
 	public final void useText(final String name, final TextLanguage language) {
-		LANGUAGE_MAP.computeIfAbsent(language, l -> new LanguageTextManager()).useObject(name);
+		LANGUAGE_MAP.computeIfAbsent(language, l -> new LanguageTextManager(l)).useObject(name);
 	}
 
+	/**
+	 * Set the text usage for all languages.
+	 * 
+	 * @param name
+	 */
 	public final void useText(final String name) {
-		useText(name, TextLanguage.EN);
+		for (TextLanguage language : TextLanguage.values()) {			
+			useText(name, language);
+		}
 	}
 
 	public final boolean isTextUsed(final String name, final TextLanguage language) {

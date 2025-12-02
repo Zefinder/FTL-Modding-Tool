@@ -1,6 +1,6 @@
 package net.zefinder.ftlmod.weapon;
 
-import static net.zefinder.ftlmod.weapon.Weapon.*;
+import static net.zefinder.ftlmod.Consts.*;
 import java.util.List;
 
 import net.zefinder.ftlmod.xml.XmlObject;

@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,19 +12,6 @@ import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventCrewMember(int amount, Crew crew) implements XmlObject {
-
-	public static final String CREW_MEMBER_TAG_NAME = "crewMember";
-	public static final String AMOUNT_ATTRIBUTE_NAME = "amount";
-	public static final String ID_ATTRIBUTE_NAME = "id";
-	public static final String CLASS_ATTRIBUTE_NAME = "class";
-
-	public static final String ALL_SKILLS_ATTRIBUTE_NAME = "all_skills";
-	public static final String PILOT_ATTRIBUTE_NAME = "pilot";
-	public static final String SHIELDS_ATTRIBUTE_NAME = "shields";
-	public static final String ENGINES_ATTRIBUTE_NAME = "engines";
-	public static final String COMBAT_ATTRIBUTE_NAME = "combat";
-	public static final String REPAIR_ATTRIBUTE_NAME = "repair";
-	public static final String WEAPONS_ATTRIBUTE_NAME = "weapons";
 
 	public EventCrewMember(int amount, Crew crew) {
 		this.amount = amount;

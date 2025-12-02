@@ -1,62 +1,6 @@
 package net.zefinder.ftlmod.analyser;
 
-import static net.zefinder.ftlmod.weapon.Weapon.BOOST_AMOUNT_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.BOOST_COUNT_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.BOOST_TYPE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.BP_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.BREACH_CHANCE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.B_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.CHARGE_LEVELS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.COLOR_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.COOLDOWN_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.COST_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.COUNT_ATTRIBUTE;
-import static net.zefinder.ftlmod.weapon.Weapon.DAMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.DESCRIPTION_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.DRONE_TARGETABLE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.EXPLOSION_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.FAKE_ATTRIBUTE;
-import static net.zefinder.ftlmod.weapon.Weapon.FIRE_CHANCE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.FLAVOR_TYPE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.G_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.HIT_SHIELD_SOUNDS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.HIT_SHIP_SOUNDS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.HULL_BUST_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.ICON_IMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.ID_ATTRIBUTE;
-import static net.zefinder.ftlmod.weapon.Weapon.IMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.ION_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.LAUNCH_SOUNDS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.LENGTH_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.LOCKDOWN_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.LOCKED_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.MISSILES_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.MISS_SOUNDS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.NAME_ATTRIBUTE;
-import static net.zefinder.ftlmod.weapon.Weapon.NOLOC_ATTRIBUTE;
-import static net.zefinder.ftlmod.weapon.Weapon.NOLOC_ATTRIBUTE_TRUE;
-import static net.zefinder.ftlmod.weapon.Weapon.PERS_DAMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.POWER_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.PROJECTILES_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.PROJECTILE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.RADIUS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.RARITY_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.R_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SHIELD_PIERCING_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SHORT_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SHOTS_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SOUND_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SPEED_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SPIN_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.STUN_CHANCE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.STUN_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.SYSTEM_DAMAGE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.TIP_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.TITLE_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.TOOLTIP_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.WEAPON_ART_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.WEAPON_BOOST_TAG_NAME;
-import static net.zefinder.ftlmod.weapon.Weapon.WEAPON_TYPE_TAG_NAME;
+import static net.zefinder.ftlmod.Consts.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,8 +30,8 @@ final class WeaponAnalyser {
 			throws WeaponCreationException {
 		WeaponManager manager = WeaponManager.getInstance();
 		for (Element weaponElement : weaponElements) {
-			final String name = weaponElement.attributeValue(NAME_ATTRIBUTE);
-			String noLocAttribute = weaponElement.attributeValue(NOLOC_ATTRIBUTE);
+			final String name = weaponElement.attributeValue(NAME_ATTRIBUTE_NAME);
+			String noLocAttribute = weaponElement.attributeValue(NOLOC_ATTRIBUTE_NAME);
 			final boolean noLoc = noLocAttribute != null && noLocAttribute.equals(NOLOC_ATTRIBUTE_TRUE);
 
 			WeaponBuilder weaponBuilder = new WeaponBuilder();
@@ -101,7 +45,7 @@ final class WeaponAnalyser {
 //				System.out.println(propertyName);
 
 				switch (propertyName) {
-				case WEAPON_TYPE_TAG_NAME:
+				case TYPE_TAG_NAME:
 					weaponBuilder.setWeaponType(WeaponType.fromString(data));
 					break;
 
@@ -112,7 +56,7 @@ final class WeaponAnalyser {
 				case TITLE_TAG_NAME:
 					if (data == null || data.isBlank()) {
 						weaponBuilder.setTitleReference(true);
-						weaponBuilder.setTitle(weaponProperty.attributeValue(ID_ATTRIBUTE));
+						weaponBuilder.setTitle(weaponProperty.attributeValue(ID_ATTRIBUTE_NAME));
 					} else {
 						weaponBuilder.setTitleReference(true);
 						weaponBuilder.setTitle(data);
@@ -122,7 +66,7 @@ final class WeaponAnalyser {
 				case SHORT_TAG_NAME:
 					if (data == null || data.isBlank()) {
 						weaponBuilder.setShortTitleReference(true);
-						weaponBuilder.setShortTitle(weaponProperty.attributeValue(ID_ATTRIBUTE));
+						weaponBuilder.setShortTitle(weaponProperty.attributeValue(ID_ATTRIBUTE_NAME));
 					} else {
 						weaponBuilder.setShortTitleReference(false);
 						weaponBuilder.setShortTitle(data);
@@ -132,7 +76,7 @@ final class WeaponAnalyser {
 				case DESCRIPTION_TAG_NAME:
 					if (data == null || data.isBlank()) {
 						weaponBuilder.setDescriptionReference(true);
-						weaponBuilder.setDescription(weaponProperty.attributeValue(ID_ATTRIBUTE));
+						weaponBuilder.setDescription(weaponProperty.attributeValue(ID_ATTRIBUTE_NAME));
 					} else {
 						weaponBuilder.setDescriptionReference(false);
 						weaponBuilder.setDescription(data);
@@ -142,7 +86,7 @@ final class WeaponAnalyser {
 				case TOOLTIP_TAG_NAME:
 					if (data == null || data.isBlank()) {
 						weaponBuilder.setTooltipReference(true);
-						weaponBuilder.setTooltip(weaponProperty.attributeValue(ID_ATTRIBUTE));
+						weaponBuilder.setTooltip(weaponProperty.attributeValue(ID_ATTRIBUTE_NAME));
 					} else {
 						weaponBuilder.setTooltipReference(false);
 						weaponBuilder.setTooltip(data);
@@ -235,7 +179,7 @@ final class WeaponAnalyser {
 				case FLAVOR_TYPE_TAG_NAME:
 					if (data == null || data.isBlank()) {
 						weaponBuilder.setFlavorTypeReference(true);
-						weaponBuilder.setFlavorType(weaponProperty.attributeValue(ID_ATTRIBUTE));
+						weaponBuilder.setFlavorType(weaponProperty.attributeValue(ID_ATTRIBUTE_NAME));
 					} else {
 						weaponBuilder.setFlavorTypeReference(false);
 						weaponBuilder.setFlavorType(data);
@@ -399,7 +343,7 @@ final class WeaponAnalyser {
 		int projectileNumber = 0;
 		for (Element projectileElement : projectileElements) {
 			projectileNumber++;
-			String countAttribute = projectileElement.attributeValue(COUNT_ATTRIBUTE);
+			String countAttribute = projectileElement.attributeValue(COUNT_ATTRIBUTE_NAME);
 			if (countAttribute == null) {
 				log.error("count attribute missing for projectile %d!".formatted(projectileNumber));
 				continue;
@@ -412,7 +356,7 @@ final class WeaponAnalyser {
 				continue;
 			}
 
-			String fakeAttribute = projectileElement.attributeValue(FAKE_ATTRIBUTE);
+			String fakeAttribute = projectileElement.attributeValue(FAKE_ATTRIBUTE_NAME);
 			if (fakeAttribute == null) {
 				log.error("fake attribute missing for projectile %d!".formatted(projectileNumber));
 				continue;
@@ -432,7 +376,7 @@ final class WeaponAnalyser {
 	}
 
 	private static final WeaponBoost getWeaponBoostFromElement(Element element) {
-		Element boostTypeElement = element.element(BOOST_TYPE_TAG_NAME);
+		Element boostTypeElement = element.element(TYPE_TAG_NAME);
 		if (boostTypeElement == null) {
 			log.error("type tag missing for boost element!");
 			return null;
@@ -444,7 +388,7 @@ final class WeaponAnalyser {
 		}
 		WeaponBoostType weaponBoostType = WeaponBoostType.fromString(boostType);
 
-		Element countElement = element.element(BOOST_COUNT_TAG_NAME);
+		Element countElement = element.element(COUNT_TAG_NAME);
 		if (countElement == null) {
 			log.error("count tag missing for boost element!");
 			return null;
@@ -457,7 +401,7 @@ final class WeaponAnalyser {
 			return null;
 		}
 
-		Element amountElement = element.element(BOOST_AMOUNT_TAG_NAME);
+		Element amountElement = element.element(AMOUNT_TAG_NAME);
 		if (amountElement == null) {
 			log.error("amount tag missing for boost element!");
 			return null;

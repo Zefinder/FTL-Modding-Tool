@@ -1,5 +1,7 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import net.zefinder.ftlmod.game.Race;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
@@ -7,11 +9,7 @@ import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventBoarders(boolean breach, int min, int max, Race race) implements XmlObject {
 
-	public static final String BOARDERS_TAG_NAME = "boarders";
-	public static final String BREACH_ATTRIBUTE_NAME = "breach";
-	public static final String MIN_ATTRIBUTE_NAME = "min";
-	public static final String MAX_ATTRIBUTE_NAME = "max";
-	public static final String CLASS_ATTRIBUTE_NAME = "class";
+
 
 	public EventBoarders(boolean breach, int min, int max, Race race) {
 		this.breach = breach;
