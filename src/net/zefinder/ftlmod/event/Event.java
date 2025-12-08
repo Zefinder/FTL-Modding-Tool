@@ -12,8 +12,8 @@ import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
-public record Event(EventType eventType, String name, boolean unique, Text eventText, boolean repair, boolean fleet,
-		EventDamage eventDamage, EventImg eventImg, EventBoarders eventBoarders, boolean secretSector,
+public record Event(EventType eventType, String name, boolean unique, Text eventText, boolean repair, EventFleetType fleet,
+		List<EventDamage> eventDamages, EventImg eventImg, EventBoarders eventBoarders, boolean secretSector,
 		EventItemModify eventItemModify, EventShip eventShip, Event eventQuest, String remove, int modifyPoursuit,
 		String augmentName, String weaponName, boolean revealMap, EventAutoReward eventAutoReward,
 		EventUpgrade eventUpgrade, int unlockShip, boolean store, String droneName, boolean distressBeacon,
@@ -22,8 +22,8 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 
 	public static final Event EMPTY = new EventBuilder().setEventType(EventType.NONE).build();
 
-	public Event(EventType eventType, String name, boolean unique, Text eventText, boolean repair, boolean fleet,
-			EventDamage eventDamage, EventImg eventImg, EventBoarders eventBoarders, boolean secretSector,
+	public Event(EventType eventType, String name, boolean unique, Text eventText, boolean repair, EventFleetType fleet,
+			List<EventDamage> eventDamages, EventImg eventImg, EventBoarders eventBoarders, boolean secretSector,
 			EventItemModify eventItemModify, EventShip eventShip, Event eventQuest, String remove, int modifyPoursuit,
 			String augmentName, String weaponName, boolean revealMap, EventAutoReward eventAutoReward,
 			EventUpgrade eventUpgrade, int unlockShip, boolean store, String droneName, boolean distressBeacon,
@@ -52,8 +52,8 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 		this.unique = unique;
 		this.eventText = eventText == null ? Text.EMPTY : eventText;
 		this.repair = repair;
-		this.fleet = fleet;
-		this.eventDamage = eventDamage;
+		this.fleet = fleet == null ? EventFleetType.NONE : fleet;
+		this.eventDamages = eventDamages;
 		this.eventImg = eventImg;
 		this.eventBoarders = eventBoarders;
 		this.secretSector = secretSector;
@@ -80,7 +80,7 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 
 	public Event(EventBuilder builder) {
 		this(builder.getEventType(), builder.getName(), builder.isUnique(), builder.getEventText(), builder.isRepair(),
-				builder.isFleet(), builder.getEventDamage(), builder.getEventImg(), builder.getEventBoarders(),
+				builder.getFleet(), builder.getEventDamages(), builder.getEventImg(), builder.getEventBoarders(),
 				builder.isSecretSector(), builder.getEventItemModify(), builder.getEventShip(), builder.getEventQuest(),
 				builder.getRemove(), builder.getModifyPoursuit(), builder.getAugmentName(), builder.getWeaponName(),
 				builder.isRevealMap(), builder.getEventAutoReward(), builder.getEventUpgrade(), builder.getUnlockShip(),
@@ -116,12 +116,12 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 			tags.add(new XmlTag<Void>(REPAIR_TAG_NAME));
 		}
 
-		if (fleet) {
-			tags.add(new XmlTag<Void>(FLEET_TAG_NAME));
+		if (fleet != EventFleetType.NONE) {
+			tags.add(new XmlTag<String>(FLEET_TAG_NAME, fleet.type()));
 		}
 
-		if (eventDamage != null) {
-			tags.add(eventDamage.toXmlTag());
+		if (!eventDamages.isEmpty()) {
+			eventDamages.forEach(eventDamage -> tags.add(eventDamage.toXmlTag()));
 		}
 
 		if (eventImg != null) {

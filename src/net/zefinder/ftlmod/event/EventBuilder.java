@@ -14,8 +14,8 @@ public class EventBuilder implements Builder {
 
 	private Text eventText;
 	private boolean repair;
-	private boolean fleet;
-	private EventDamage eventDamage;
+	private EventFleetType fleet;
+	private List<EventDamage> eventDamages;
 	private EventImg eventImg;
 	private EventBoarders eventBoarders;
 	private boolean secretSector;
@@ -45,8 +45,8 @@ public class EventBuilder implements Builder {
 		this.unique = false;
 		this.eventText = Text.EMPTY;
 		this.repair = false;
-		this.fleet = false;
-		this.eventDamage = null;
+		this.fleet = EventFleetType.NONE;
+		this.eventDamages = new ArrayList<EventDamage>();
 		this.eventImg = null;
 		this.eventBoarders = null;
 		this.secretSector = false;
@@ -91,12 +91,12 @@ public class EventBuilder implements Builder {
 		return repair;
 	}
 
-	public boolean isFleet() {
+	public EventFleetType getFleet() {
 		return fleet;
 	}
 
-	public EventDamage getEventDamage() {
-		return eventDamage;
+	public List<EventDamage> getEventDamages() {
+		return eventDamages;
 	}
 
 	public EventImg getEventImg() {
@@ -212,13 +212,13 @@ public class EventBuilder implements Builder {
 		return this;
 	}
 
-	public EventBuilder setFleet(final boolean fleet) {
+	public EventBuilder setFleet(final EventFleetType fleet) {
 		this.fleet = fleet;
 		return this;
 	}
 
-	public EventBuilder setEventDamage(final EventDamage eventDamage) {
-		this.eventDamage = eventDamage;
+	public EventBuilder addEventDamage(final EventDamage eventDamage) {
+		this.eventDamages.add(eventDamage);
 		return this;
 	}
 

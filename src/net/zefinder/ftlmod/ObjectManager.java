@@ -38,6 +38,7 @@ public abstract class ObjectManager<T extends NamedObject> {
 	
 	public final Optional<T> getOriginalObject(final String name) {
 		if (originalObjects.containsKey(name)) {
+			// TODO Remove when finished testing
 			T a = originalObjects.get(name).getObject();
 			if (a instanceof Event event) {				
 				log.info("Retrun %s. Used: %b\nValue: %s".formatted(name, originalObjects.get(name).isUsed(), event.toXmlTag().toString() ));

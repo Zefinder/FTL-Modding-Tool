@@ -14,7 +14,7 @@ import net.zefinder.ftlmod.text.TextManager;
 import net.zefinder.ftlmod.text.TextType;
 
 /**
- * Analyser used to get all isolated text tags (they must be named)
+ * Analyser used to parse text tags
  */
 public final class TextAnalyser {
 

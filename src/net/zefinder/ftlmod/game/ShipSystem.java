@@ -3,7 +3,7 @@ package net.zefinder.ftlmod.game;
 public enum ShipSystem {
 	// Random system, is not a true system BUT is used for some events
 	RANDOM("random"),
-	
+
 	// Primary
 	PILOT("pilot"), BATTERY("battery"), SENSORS("sensors"), DOORS("doors"),
 
@@ -11,9 +11,13 @@ public enum ShipSystem {
 	REACTOR("reactor"), SHIELDS("shields"), ENGINES("engines"), OXYGEN("oxygen"), MEDBAY("medbay"),
 	CLONEBAY("clonebay"), HACKING("hacking"), MIND("mind"), CLOAKING("cloaking"), TELEPORTER("teleporter"),
 	WEAPONS("weapons"), DRONES("drones"),
-	
+
 	// Empty room
-	ROOM("room");
+	ROOM("room"),
+
+	// None is also possible in some cases like in damage events, although it is not
+	// possible to get it from String!
+	NONE("");
 
 	private final String systemName;
 
@@ -24,12 +28,12 @@ public enum ShipSystem {
 	public String systemName() {
 		return systemName;
 	}
-	
+
 	public static final ShipSystem fromString(String name) {
 		if (name == null) {
 			return ROOM;
 		}
-		
+
 		return switch (name) {
 		case "random" -> RANDOM;
 		case "pilot" -> PILOT;

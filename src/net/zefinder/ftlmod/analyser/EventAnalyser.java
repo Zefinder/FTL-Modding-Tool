@@ -11,8 +11,15 @@ import org.slf4j.LoggerFactory;
 import net.zefinder.ftlmod.event.Event;
 import net.zefinder.ftlmod.event.EventBuilder;
 import net.zefinder.ftlmod.event.EventCreationException;
+import net.zefinder.ftlmod.event.EventDamage;
+import net.zefinder.ftlmod.event.EventFleetType;
+import net.zefinder.ftlmod.event.EventImg;
 import net.zefinder.ftlmod.event.EventManager;
 import net.zefinder.ftlmod.event.EventType;
+import net.zefinder.ftlmod.game.Background;
+import net.zefinder.ftlmod.game.DamageEffect;
+import net.zefinder.ftlmod.game.Planet;
+import net.zefinder.ftlmod.game.ShipSystem;
 import net.zefinder.ftlmod.text.Text;
 import net.zefinder.ftlmod.text.TextListManager;
 import net.zefinder.ftlmod.text.TextManager;
@@ -25,92 +32,149 @@ public class EventAnalyser {
 	private EventAnalyser() {
 	}
 
-	public static final void analyseEvent(final List<Element> elements, final boolean isUser) throws EventCreationException {
+	public static final void analyseEvent(final List<Element> elements, final boolean isUser)
+			throws EventCreationException {
 		for (Element eventElement : elements) {
 			if (!eventElement.getName().equals(EVENT_TAG_NAME)) {
 				continue;
 			}
+
+			Event event = getEventFromElement(eventElement);
+			EventType type = event.eventType();
 			
-			String load = eventElement.attributeValue(LOAD_ATTRIBUTE_NAME);
-			String name = eventElement.attributeValue(NAME_ATTRIBUTE_NAME);
-			if (load != null) {
+			if (type == EventType.LOAD) {
 				// Load event, register usage in manager
-				log.info("Load event %s, register usage in manager...".formatted(load));
-				EventManager.getInstance().useObject(load);
-			} else if (name == null) {
+				log.info("Load event %s, register usage in manager...".formatted(event.name()));
+				EventManager.getInstance().useObject(event.name());
+//				System.exit(0);
+			} else if (type == EventType.NONE) {
 				// Empty event
 				log.info("Empty event, skip!");
 			} else {
 				// Normal event
-				analyseNormalEvent(eventElement, name, isUser);
+				log.info("Registering event %s (unique: %b)".formatted(event.name(), event.unique()));
+				EventManager.getInstance().addObject(event, isUser);
+				System.out.println(event.toXmlTag());
 			}
-			
-			
-//			System.exit(0);
+
+			// FUEL_ESCAPE_PULSAR
+			System.exit(0);
 		}
 	}
-	
-	public static void analyseEventList(final List<Element> elements, final boolean isUser) {
-		for (Element eventListElement : elements) {
-			if (!eventListElement.getName().equals("eventList")) {
-				continue;
-			}
-			
-			final String listName = eventListElement.attributeValue("name");
-			if (listName == null || listName.isBlank()) {
-				log.error("Empty name, ignore!");
-				continue;
-			}
-			
-			log.info("Registering event list " + listName);
-			
-			// Each element here should be an event
-			for (Element eventElement : eventListElement.elements(EVENT_TAG_NAME)) {
-				final String load = eventElement.attributeValue(LOAD_ATTRIBUTE_NAME);
-				final String name = eventElement.attributeValue(NAME_ATTRIBUTE_NAME);
-				if (load != null) {
-					// Load event, register usage in manager
-					log.info("Load event %s for event list...".formatted(load));
-					EventManager.getInstance().useObject(load);
-					
-					// Create custom event for list
-					// TODO Change to EventListManager!
-					Event loadEvent = new EventBuilder().setEventType(EventType.LOAD).setName(load).build();
-					EventManager.getInstance().addObject(loadEvent, isUser);
-				} else if (name == null) {
-					// Empty event
-					log.info("Empty event, skip!");
-				} else {
-					// Normal event
-					analyseNormalEvent(eventElement, name, isUser);
-				}
-			}
-		}
-	}
-	
-	private static void analyseNormalEvent(Element eventElement, String name, boolean isUser) {
+
+//	public static void analyseEventList(final List<Element> elements, final boolean isUser) {
+//		for (Element eventListElement : elements) {
+//			if (!eventListElement.getName().equals("eventList")) {
+//				continue;
+//			}
+//
+//			final String listName = eventListElement.attributeValue("name");
+//			if (listName == null || listName.isBlank()) {
+//				log.error("Empty name, ignore!");
+//				continue;
+//			}
+//
+//			log.info("Registering event list " + listName);
+//
+//			// Each element here should be an event
+//			for (Element eventElement : eventListElement.elements(EVENT_TAG_NAME)) {
+//				final String load = eventElement.attributeValue(LOAD_ATTRIBUTE_NAME);
+//				final String name = eventElement.attributeValue(NAME_ATTRIBUTE_NAME);
+//				if (load != null) {
+//					// Load event, register usage in manager
+//					log.info("Load event %s for event list...".formatted(load));
+//					EventManager.getInstance().useObject(load);
+//
+//					// Create custom event for list
+//					// TODO Change to EventListManager!
+//					Event loadEvent = new EventBuilder().setEventType(EventType.LOAD).setName(load).build();
+//					EventManager.getInstance().addObject(loadEvent, isUser);
+//				} else if (name == null) {
+//					// Empty event
+//					log.info("Empty event, skip!");
+//				} else {
+//					// Normal event
+//					Event event = getEventFromElement(eventElement, name);
+//					EventManager.getInstance().addObject(event, isUser);
+//
+//				}
+//			}
+//		}
+//	}
+
+	public static Event getEventFromElement(Element eventElement) {
 		EventBuilder builder = new EventBuilder();
 		boolean unique = Boolean.valueOf(eventElement.attributeValue(UNIQUE_ATTRIBUTE_NAME));
-		log.info("Registering event %s (unique: %b)".formatted(name, unique));
-		
+		String load = eventElement.attributeValue(LOAD_ATTRIBUTE_NAME);
+		String name = eventElement.attributeValue(NAME_ATTRIBUTE_NAME);
+
+		if (load != null && !load.isBlank()) {
+			builder.setEventType(EventType.LOAD);
+			builder.setName(load);
+			return builder.build();
+		}
+
+		if (name == null || name.isBlank()) {
+			builder.setEventType(EventType.NONE);
+			return builder.build();
+		}
+
+		// From here normal event
 		builder.setEventType(EventType.NORMAL);
 		builder.setName(name);
 		builder.setUnique(unique);
-		builder.setEventText(getTextFromElement(eventElement));
 		
-		// Add to manager
-		EventManager.getInstance().addObject(builder.build(), isUser);	
+		for (Element eventProperty : eventElement.elements()) {
+			String propertyName = eventProperty.getName();
+			String data = (String) eventProperty.getData();
+			
+			switch (propertyName) {
+			case TEXT_TAG_NAME:
+				builder.setEventText(getTextFromElement(eventElement));
+				break;
+				
+			case REPAIR_TAG_NAME:
+				builder.setRepair(eventElement.element(REPAIR_TAG_NAME) != null);
+				break;
+				
+			case FLEET_TAG_NAME:
+				final EventFleetType fleetType = EventFleetType.fromString(data);
+				if (fleetType == EventFleetType.NONE) {
+					log.warn("Empty tag or unknown value when reading fleet... ignore!");
+				}
+				builder.setFleet(fleetType);
+				break;
+				
+			case DAMAGE_TAG_NAME:
+				final EventDamage damage = getEventDamageFromElement(eventProperty);
+				if (damage == null) {
+					log.error("Error when reading event damage... ignore!");
+				} else {
+					builder.addEventDamage(damage);
+				}
+				break;
+				
+			case IMG_TAG_NAME:
+				builder.setEventImg(getEventImgFromElement(eventProperty));
+				break;
+				
+//			default:
+//				log.info("Unknown tag %s... ignore!".formatted(propertyName));
+			}
+		}
+
+		return builder.build();
 	}
 
-	private static Text getTextFromElement(Element eventElement) {
+	private static final Text getTextFromElement(Element eventElement) {
 		final Element textElement = eventElement.element(TEXT_TAG_NAME);
 		if (textElement == null) {
 			return Text.EMPTY;
 		}
-		
+
 		final Text text = TextAnalyser.getTextFromElement(textElement);
 		final TextType type = text.textType();
-		
+
 		// If the text refers to another text, then use in text manager
 		if (type == TextType.REFERENCE) {
 			TextManager.getInstance().useText(text.name());
@@ -119,8 +183,44 @@ public class EventAnalyser {
 		else if (type == TextType.LOAD) {
 			TextListManager.getInstance().useObject(text.name());
 		}
-		
+
 		return text;
+	}
+	
+	private static final EventDamage getEventDamageFromElement(Element damageElement) {
+		final String amountString = damageElement.attributeValue(AMOUNT_ATTRIBUTE_NAME);
+		final int amount;
+		try {
+			amount = Integer.valueOf(amountString);
+		} catch (NumberFormatException e) {
+			log.error("Wrong type for damage amount, must be an integer!", e);
+			return null;
+		}
+		
+		ShipSystem system = ShipSystem.NONE;
+		DamageEffect effect = DamageEffect.NONE;
+		
+		final String systemName = damageElement.attributeValue(SYSTEM_ATTRIBUTE_NAME);
+		if (systemName != null && !systemName.isBlank()) {
+			system = ShipSystem.fromString(systemName);
+			
+			final String effectName = damageElement.attributeValue(EFFECT_ATTRIBUTE_NAME);
+			if (effectName != null && !effectName.isBlank()) {
+				effect = DamageEffect.fromString(effectName);
+			}
+		}
+		
+		return new EventDamage(amount, system, effect);
+	}
+
+	private static final EventImg getEventImgFromElement(Element imgElement) {
+		final String planetString = imgElement.attributeValue(PLANET_ATTRIBUTE_NAME);
+		final String backgroundString = imgElement.attributeValue(BACKGROUND_ATTRIBUTE_NAME);
+		
+		final Planet planet = Planet.fromString(planetString);
+		final Background background = Background.fromString(backgroundString);
+		
+		return new EventImg(planet, background);
 	}
 	
 }
