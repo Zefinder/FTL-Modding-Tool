@@ -21,9 +21,9 @@ public class EventBuilder implements Builder {
 	private boolean secretSector;
 	private EventItemModify eventItemModify;
 	private EventShip eventShip;
-	private Event eventQuest;
+	private String eventQuest;
 	private String remove;
-	private int modifyPoursuit;
+	private int modifyPursuit;
 	private String augmentName;
 	private String weaponName;
 	private boolean revealMap;
@@ -54,7 +54,7 @@ public class EventBuilder implements Builder {
 		this.eventShip = null;
 		this.eventQuest = null;
 		this.remove = "";
-		this.modifyPoursuit = 0;
+		this.modifyPursuit = 0;
 		this.augmentName = "";
 		this.weaponName = "";
 		this.revealMap = false;
@@ -119,7 +119,7 @@ public class EventBuilder implements Builder {
 		return eventShip;
 	}
 
-	public Event getEventQuest() {
+	public String getEventQuest() {
 		return eventQuest;
 	}
 
@@ -127,8 +127,8 @@ public class EventBuilder implements Builder {
 		return remove;
 	}
 
-	public int getModifyPoursuit() {
-		return modifyPoursuit;
+	public int getModifyPursuit() {
+		return modifyPursuit;
 	}
 
 	public String getAugmentName() {
@@ -247,7 +247,7 @@ public class EventBuilder implements Builder {
 		return this;
 	}
 
-	public EventBuilder setEventQuest(final Event eventQuest) {
+	public EventBuilder setEventQuest(final String eventQuest) {
 		this.eventQuest = eventQuest;
 		return this;
 	}
@@ -257,8 +257,8 @@ public class EventBuilder implements Builder {
 		return this;
 	}
 
-	public EventBuilder setModifyPoursuit(final int modifyPoursuit) {
-		this.modifyPoursuit = modifyPoursuit;
+	public EventBuilder setModifyPursuit(final int modifyPursuit) {
+		this.modifyPursuit = modifyPursuit;
 		return this;
 	}
 

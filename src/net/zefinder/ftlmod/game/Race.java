@@ -34,7 +34,7 @@ public enum Race {
 		case "crystal" -> CRYSTAL;
 		case "ghost" -> GHOST;
 		case "traitor" -> TRAITOR;
-		default -> NONE;
+		default -> HUMAN;
 		};
 	}
 }

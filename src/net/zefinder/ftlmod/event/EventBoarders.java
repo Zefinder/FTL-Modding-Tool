@@ -9,8 +9,6 @@ import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventBoarders(boolean breach, int min, int max, Race race) implements XmlObject {
 
-
-
 	public EventBoarders(boolean breach, int min, int max, Race race) {
 		this.breach = breach;
 		this.min = min;

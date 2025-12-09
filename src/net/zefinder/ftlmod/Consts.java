@@ -49,7 +49,7 @@ public final class Consts {
 	public static final String LOCKED_TAG_NAME = "locked";
 	public static final String MISS_SOUNDS_TAG_NAME = "missSounds";
 	public static final String MISSILES_TAG_NAME = "missiles";
-	public static final String MODIFY_POURSUIT_TAG_NAME = "modifyPoursuit";
+	public static final String MODIFY_PURSUIT_TAG_NAME = "modifyPursuit";
 	public static final String PERS_DAMAGE_TAG_NAME = "persDamage";
 	public static final String POWER_TAG_NAME = "power";
 	public static final String PROJECTILE_TAG_NAME = "projectile";

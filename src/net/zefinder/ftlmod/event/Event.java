@@ -14,7 +14,7 @@ import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record Event(EventType eventType, String name, boolean unique, Text eventText, boolean repair, EventFleetType fleet,
 		List<EventDamage> eventDamages, EventImg eventImg, EventBoarders eventBoarders, boolean secretSector,
-		EventItemModify eventItemModify, EventShip eventShip, Event eventQuest, String remove, int modifyPoursuit,
+		EventItemModify eventItemModify, EventShip eventShip, String eventQuest, String remove, int modifyPursuit,
 		String augmentName, String weaponName, boolean revealMap, EventAutoReward eventAutoReward,
 		EventUpgrade eventUpgrade, int unlockShip, boolean store, String droneName, boolean distressBeacon,
 		EventEnvironment eventEnvironment, EventRemoveCrew eventRemoveCrew, EventCrewMember eventCrewMember,
@@ -24,7 +24,7 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 
 	public Event(EventType eventType, String name, boolean unique, Text eventText, boolean repair, EventFleetType fleet,
 			List<EventDamage> eventDamages, EventImg eventImg, EventBoarders eventBoarders, boolean secretSector,
-			EventItemModify eventItemModify, EventShip eventShip, Event eventQuest, String remove, int modifyPoursuit,
+			EventItemModify eventItemModify, EventShip eventShip, String eventQuest, String remove, int modifyPursuit,
 			String augmentName, String weaponName, boolean revealMap, EventAutoReward eventAutoReward,
 			EventUpgrade eventUpgrade, int unlockShip, boolean store, String droneName, boolean distressBeacon,
 			EventEnvironment eventEnvironment, EventRemoveCrew eventRemoveCrew, EventCrewMember eventCrewMember,
@@ -59,9 +59,9 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 		this.secretSector = secretSector;
 		this.eventItemModify = eventItemModify;
 		this.eventShip = eventShip;
-		this.eventQuest = eventQuest;
+		this.eventQuest = eventQuest == null ? "" : eventQuest;
 		this.remove = remove == null ? "" : remove;
-		this.modifyPoursuit = modifyPoursuit;
+		this.modifyPursuit = modifyPursuit;
 		this.augmentName = augmentName == null ? "" : augmentName;
 		this.weaponName = weaponName == null ? "" : weaponName;
 		this.revealMap = revealMap;
@@ -82,7 +82,7 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 		this(builder.getEventType(), builder.getName(), builder.isUnique(), builder.getEventText(), builder.isRepair(),
 				builder.getFleet(), builder.getEventDamages(), builder.getEventImg(), builder.getEventBoarders(),
 				builder.isSecretSector(), builder.getEventItemModify(), builder.getEventShip(), builder.getEventQuest(),
-				builder.getRemove(), builder.getModifyPoursuit(), builder.getAugmentName(), builder.getWeaponName(),
+				builder.getRemove(), builder.getModifyPursuit(), builder.getAugmentName(), builder.getWeaponName(),
 				builder.isRevealMap(), builder.getEventAutoReward(), builder.getEventUpgrade(), builder.getUnlockShip(),
 				builder.isStore(), builder.getDroneName(), builder.isDistressBeacon(), builder.getEventEnvironment(),
 				builder.getEventRemoveCrew(), builder.getEventCrewMember(), builder.getEventStatus(),
@@ -148,13 +148,13 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 			tags.add(eventShip.toXmlTag());
 		}
 
-		if (eventQuest != null) {
-			tags.add(new XmlTag<Void>(QUEST_TAG_NAME, new Attribute(EVENT_ATTRIBUTE_NAME, eventQuest.name)));
+		if (!eventQuest.isBlank()) {
+			tags.add(new XmlTag<Void>(QUEST_TAG_NAME, new Attribute(EVENT_ATTRIBUTE_NAME, eventQuest)));
 		}
 
-		if (modifyPoursuit != 0) {
-			tags.add(new XmlTag<Void>(MODIFY_POURSUIT_TAG_NAME,
-					new Attribute(AMOUNT_ATTRIBUTE_NAME, Integer.toString(modifyPoursuit))));
+		if (modifyPursuit != 0) {
+			tags.add(new XmlTag<Void>(MODIFY_PURSUIT_TAG_NAME,
+					new Attribute(AMOUNT_ATTRIBUTE_NAME, Integer.toString(modifyPursuit))));
 		}
 
 		if (!augmentName.isBlank()) {
