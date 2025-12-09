@@ -1,15 +1,13 @@
 package net.zefinder.ftlmod.event;
 
+import static net.zefinder.ftlmod.Consts.*;
+
 import net.zefinder.ftlmod.game.ShipSystem;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
 
 public record EventUpgrade(int amount, ShipSystem system) implements XmlObject {
-
-	public static final String UPGRADE_TAG_NAME = "upgrade";
-	public static final String AMOUNT_ATTRIBUTE_NAME = "amount";
-	public static final String SYSTEM_ATTRIBUTE_NAME = "system";
 
 	public EventUpgrade(int amount, ShipSystem system) {
 		this.amount = amount < 1 ? 1 : amount;

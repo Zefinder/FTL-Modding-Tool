@@ -80,10 +80,12 @@ public final class Consts {
 	public static final String TITLE_TAG_NAME = "title";
 	public static final String TOOLTIP_TAG_NAME = "tooltip";
 	public static final String UNLOCK_SHIP_TAG_NAME = "unlockShip";
+	public static final String UPGRADE_TAG_NAME = "upgrade";
 	public static final String WEAPON_ART_TAG_NAME = "weaponArt";
 	public static final String WEAPON_BLUEPRINT_TAG_NAME = "weaponBlueprint";
 	public static final String WEAPON_BOOST_TAG_NAME = "boost";
 	public static final String WEAPON_TAG_NAME = "weapon";
+	
 	
 	/******************************
 	 *         Attributes         *

@@ -1,7 +1,7 @@
 package net.zefinder.ftlmod.game;
 
 public enum Target {
-
+	NONE(""),
 	ALL("all"), ENEMY("enemy"), PLAYER("player");
 
 	private final String targetName;

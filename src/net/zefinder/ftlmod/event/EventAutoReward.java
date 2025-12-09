@@ -29,9 +29,10 @@ public record EventAutoReward(RewardLevel level, RewardType type) implements Xml
 	 * used...).
 	 */
 	public static enum RewardType {
-		STANDARD("standard"), STUFF("stuff"), FUEL("fuel"), MISSILES("missiles"), DRONEPARTS("droneparts"),
-		FUEL_ONLY("fuel_only"), MISSILES_ONLY("missiles_only"), DRONEPARTS_ONLY("droneparts_only"),
-		SCRAP_ONLY("scrap_only"), WEAPON("weapon"), AUGMENT("augment"), DRONE("drone"), ITEM("item");
+		STANDARD("standard"), STUFF("stuff"), SCRAP("scrap"), FUEL("fuel"), MISSILES("missiles"),
+		DRONEPARTS("droneparts"), FUEL_ONLY("fuel_only"), MISSILES_ONLY("missiles_only"),
+		DRONEPARTS_ONLY("droneparts_only"), SCRAP_ONLY("scrap_only"), WEAPON("weapon"), AUGMENT("augment"),
+		DRONE("drone"), ITEM("item");
 
 		private final String rewardType;
 
@@ -44,11 +45,26 @@ public record EventAutoReward(RewardLevel level, RewardType type) implements Xml
 		}
 
 		public static final RewardType fromString(String type) {
-			try {
-				return RewardType.valueOf(type);
-			} catch (Exception e) {
+			if (type == null) {
 				return STANDARD;
 			}
+
+			return switch (type) {
+			case "stuff" -> STUFF;
+			case "scrap" -> SCRAP;
+			case "fuel" -> FUEL;
+			case "missiles" -> MISSILES;
+			case "droneparts" -> DRONEPARTS;
+			case "fuel_only" -> FUEL_ONLY;
+			case "missiles_only" -> MISSILES_ONLY;
+			case "droneparts_only" -> DRONEPARTS_ONLY;
+			case "scrap_only" -> SCRAP_ONLY;
+			case "weapon" -> WEAPON;
+			case "augment" -> AUGMENT;
+			case "drone" -> DRONE;
+			case "item" -> ITEM;
+			default -> STANDARD;
+			};
 		}
 	}
 
@@ -59,7 +75,7 @@ public record EventAutoReward(RewardLevel level, RewardType type) implements Xml
 
 	@Override
 	public XmlTag<?> toXmlTag() {
-		return new XmlTag<String>(LEVEL_ATTRIBUTE_NAME, type.rewardType(),
+		return new XmlTag<String>(AUTO_REWARD_TAG_NAME, type.rewardType(),
 				new Attribute(LEVEL_ATTRIBUTE_NAME, level.name()));
 	}
 

@@ -41,8 +41,8 @@ public record EventStatus(int amount, StatusType type, ShipSystem system, Target
 	public EventStatus(int amount, StatusType type, ShipSystem system, Target target) {
 		this.amount = amount < 0 ? 0 : amount;
 		this.type = type == null ? StatusType.LOSS : type;
-		this.system = system == null ? ShipSystem.REACTOR : system;
-		this.target = target == null ? Target.PLAYER : target;
+		this.system = system == null ? ShipSystem.ROOM : system;
+		this.target = target == null ? Target.ALL : target;
 	}
 
 	@Override
