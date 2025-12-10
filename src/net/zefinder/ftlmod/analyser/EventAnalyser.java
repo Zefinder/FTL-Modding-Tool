@@ -15,6 +15,8 @@ import net.zefinder.ftlmod.event.EventAutoReward.RewardLevel;
 import net.zefinder.ftlmod.event.EventAutoReward.RewardType;
 import net.zefinder.ftlmod.event.EventBoarders;
 import net.zefinder.ftlmod.event.EventBuilder;
+import net.zefinder.ftlmod.event.EventChoice;
+import net.zefinder.ftlmod.event.EventChoiceBuilder;
 import net.zefinder.ftlmod.event.EventCreationException;
 import net.zefinder.ftlmod.event.EventCrewMember;
 import net.zefinder.ftlmod.event.EventDamage;
@@ -66,60 +68,18 @@ public class EventAnalyser {
 				// Load event, register usage in manager
 				log.info("Load event %s, register usage in manager...".formatted(event.name()));
 				EventManager.getInstance().useObject(event.name());
-				// System.exit(0);
+
 			} else if (type == EventType.NONE) {
 				// Empty event
 				log.info("Empty event, skip!");
+			} else if (type == EventType.ANONYMOUS) {
+				log.info("Anonymous event, skip!");
 			} else {
 				// Normal event
 				EventManager.getInstance().addObject(event, isUser);
-//				System.out.println(event.toXmlTag());
 			}
-
-			// FUEL_ESCAPE_PULSAR
-			// System.exit(0);
 		}
 	}
-
-//	public static void analyseEventList(final List<Element> elements, final boolean isUser) {
-//		for (Element eventListElement : elements) {
-//			if (!eventListElement.getName().equals("eventList")) {
-//				continue;
-//			}
-//
-//			final String listName = eventListElement.attributeValue("name");
-//			if (listName == null || listName.isBlank()) {
-//				log.error("Empty name, ignore!");
-//				continue;
-//			}
-//
-//			log.info("Registering event list " + listName);
-//
-//			// Each element here should be an event
-//			for (Element eventElement : eventListElement.elements(EVENT_TAG_NAME)) {
-//				final String load = eventElement.attributeValue(LOAD_ATTRIBUTE_NAME);
-//				final String name = eventElement.attributeValue(NAME_ATTRIBUTE_NAME);
-//				if (load != null) {
-//					// Load event, register usage in manager
-//					log.info("Load event %s for event list...".formatted(load));
-//					EventManager.getInstance().useObject(load);
-//
-//					// Create custom event for list
-//					// TODO Change to EventListManager!
-//					Event loadEvent = new EventBuilder().setEventType(EventType.LOAD).setName(load).build();
-//					EventManager.getInstance().addObject(loadEvent, isUser);
-//				} else if (name == null) {
-//					// Empty event
-//					log.info("Empty event, skip!");
-//				} else {
-//					// Normal event
-//					Event event = getEventFromElement(eventElement, name);
-//					EventManager.getInstance().addObject(event, isUser);
-//
-//				}
-//			}
-//		}
-//	}
 
 	public static Event getEventFromElement(Element eventElement) {
 		EventBuilder builder = new EventBuilder();
@@ -134,14 +94,21 @@ public class EventAnalyser {
 		}
 
 		if (name == null || name.isBlank()) {
-			builder.setEventType(EventType.NONE);
-			return builder.build();
+			if (eventElement.elements().size() == 0) {
+				builder.setEventType(EventType.NONE);
+				return builder.build();
+			}
+
+			builder.setEventType(EventType.ANONYMOUS);
+			log.info("Registering anonymous event (unique: %b)".formatted(unique));
+
+		} else {
+			builder.setEventType(EventType.NAMED);
+			builder.setName(name);
+			log.info("Registering event %s (unique: %b)".formatted(name, unique));
 		}
 
 		// From here normal event
-		log.info("Registering event %s (unique: %b)".formatted(name, unique));
-		builder.setEventType(EventType.NORMAL);
-		builder.setName(name);
 		builder.setUnique(unique);
 
 		for (Element eventProperty : eventElement.elements()) {
@@ -161,7 +128,6 @@ public class EventAnalyser {
 				final EventFleetType fleetType = EventFleetType.fromString(data);
 				if (fleetType == EventFleetType.NONE) {
 					log.warn("Empty tag or unknown value when reading fleet... ignore!");
-					// System.exit(0);
 				}
 				builder.setFleet(fleetType);
 				break;
@@ -170,7 +136,6 @@ public class EventAnalyser {
 				final EventDamage damage = getEventDamageFromElement(eventProperty);
 				if (damage == null) {
 					log.error("Error when reading event damage... ignore!");
-					// System.exit(0);
 				} else {
 					builder.addEventDamage(damage);
 				}
@@ -184,7 +149,6 @@ public class EventAnalyser {
 				final EventBoarders boarders = getEventBoardersFromElement(eventProperty);
 				if (boarders == null) {
 					log.error("Error when reading event boarders... ignore!");
-					// System.exit(0);
 				} else {
 					builder.setEventBoarders(boarders);
 				}
@@ -206,7 +170,6 @@ public class EventAnalyser {
 				final String questName = eventProperty.attributeValue(EVENT_ATTRIBUTE_NAME);
 				if (questName == null || questName.isBlank()) {
 					log.error("Empty event quest... ignore!");
-					// System.exit(0);
 				} else {
 					// Use event in the manager
 					EventManager.getInstance().useObject(questName);
@@ -218,7 +181,6 @@ public class EventAnalyser {
 				final String removeName = eventProperty.attributeValue(NAME_ATTRIBUTE_NAME);
 				if (removeName == null || removeName.isBlank()) {
 					log.error("Empty remove... ignore!");
-					// System.exit(0);
 				} else {
 					// Use event in the manager
 					builder.setRemove(removeName);
@@ -231,7 +193,7 @@ public class EventAnalyser {
 					builder.setModifyPursuit(Integer.valueOf(modifyPursuitString));
 				} catch (NumberFormatException e) {
 					log.error("Wrong type for modify pursuit amount, must be an integer... ignore!", e);
-					// System.exit(0);
+
 				}
 				break;
 
@@ -239,7 +201,6 @@ public class EventAnalyser {
 				final String augmentName = eventProperty.attributeValue(NAME_ATTRIBUTE_NAME);
 				if (augmentName == null || augmentName.isBlank()) {
 					log.error("Empty augment name... ignore!");
-					// System.exit(0);
 				} else {
 					if (!augmentName.equals(RANDOM_NAME)) {
 						// TODO Set use of augment in manager
@@ -252,7 +213,6 @@ public class EventAnalyser {
 				final String weaponName = eventProperty.attributeValue(NAME_ATTRIBUTE_NAME);
 				if (weaponName == null || weaponName.isBlank()) {
 					log.error("Empty weapon name... ignore!");
-					// System.exit(0);
 				} else {
 					// Use weapon in manager
 					if (!weaponName.equals(RANDOM_NAME)) {
@@ -274,7 +234,6 @@ public class EventAnalyser {
 				final EventUpgrade upgrade = getEventUpgradeFromElement(eventProperty);
 				if (upgrade == null) {
 					log.error("Error when reading event upgrade... ignore!");
-					// System.exit(0);
 				} else {
 					builder.setEventUpgrade(upgrade);
 				}
@@ -286,7 +245,6 @@ public class EventAnalyser {
 					builder.setUnlockShip(Integer.valueOf(unlockString));
 				} catch (NumberFormatException e) {
 					log.error("Wrong type for unlock ship id, must be an integer... ignore!", e);
-					// System.exit(0);
 				}
 				break;
 
@@ -298,7 +256,6 @@ public class EventAnalyser {
 				final String droneName = eventProperty.attributeValue(NAME_ATTRIBUTE_NAME);
 				if (droneName == null || droneName.isBlank()) {
 					log.error("Empty drone name... ignore!");
-					// System.exit(0);
 				} else {
 					if (!droneName.equals(RANDOM_NAME)) {
 						// TODO Set use of drone in manager
@@ -323,7 +280,6 @@ public class EventAnalyser {
 				final EventCrewMember crewMember = getEventCrewMemberFromElement(eventProperty);
 				if (crewMember == null) {
 					log.error("Error when reading event crew member... ignore!");
-					// System.exit(0);
 				} else {
 					builder.setEventCrewMember(crewMember);
 				}
@@ -334,11 +290,17 @@ public class EventAnalyser {
 				break;
 
 			case CHOICE_TAG_NAME:
+				final EventChoice choice = getEventChoiceFromElement(eventProperty);
+				if (choice == null) {
+					log.error("Error when reading event choice... ignore!");
+				} else {
+					builder.addChoice(choice);
+				}
 				break;
 
 			default:
 				log.info("Unknown tag %s... ignore!".formatted(propertyName));
-				// System.exit(0);
+
 			}
 		}
 
@@ -373,7 +335,6 @@ public class EventAnalyser {
 			amount = Integer.valueOf(amountString);
 		} catch (NumberFormatException e) {
 			log.error("Wrong type for damage amount, must be an integer!", e);
-			// System.exit(0);
 			return null;
 		}
 
@@ -411,7 +372,6 @@ public class EventAnalyser {
 			min = Integer.valueOf(minString);
 		} catch (NumberFormatException e) {
 			log.error("Wrong type for min boarders, must be an integer!", e);
-			// System.exit(0);
 			return null;
 		}
 
@@ -421,7 +381,6 @@ public class EventAnalyser {
 			max = Integer.valueOf(maxString);
 		} catch (NumberFormatException e) {
 			log.error("Wrong type for max boarders, must be an integer!", e);
-			// System.exit(0);
 			return null;
 		}
 
@@ -437,7 +396,6 @@ public class EventAnalyser {
 		// Message if no items
 		if (itemElements.size() == 0) {
 			log.warn("Item modify tag does not have any items in it... Is it a mistake?");
-			// System.exit(0);
 		}
 
 		for (Element itemElement : itemElements) {
@@ -447,7 +405,6 @@ public class EventAnalyser {
 				min = Integer.valueOf(minString);
 			} catch (NumberFormatException e) {
 				log.error("Wrong type for min items, must be an integer... ignore!", e);
-				// System.exit(0);
 				continue;
 			}
 
@@ -457,7 +414,6 @@ public class EventAnalyser {
 				max = Integer.valueOf(maxString);
 			} catch (NumberFormatException e) {
 				log.error("Wrong type for max items, must be an integer... ignore!", e);
-				// System.exit(0);
 				continue;
 			}
 
@@ -489,7 +445,6 @@ public class EventAnalyser {
 			amount = Integer.valueOf(amountString);
 		} catch (NumberFormatException e) {
 			log.error("Wrong type for upgrade amount, must be an integer... ignore!", e);
-			// System.exit(0);
 			return null;
 		}
 
@@ -515,20 +470,12 @@ public class EventAnalyser {
 		final boolean clone;
 		if (cloneTag == null) {
 			log.warn("No clone tag for remove crew, considered as false");
-			// System.exit(0);
 			clone = false;
 		} else {
 			clone = Boolean.valueOf((String) cloneTag.getData());
 		}
 
-		final Element textElement = removeCrewElement.element(TEXT_TAG_NAME);
-		final Text text;
-		if (textElement == null) {
-			text = Text.EMPTY;
-		} else {
-			text = TextAnalyser.getTextFromElement(textElement);
-		}
-
+		final Text text = getTextFromElement(removeCrewElement);
 		return new EventRemoveCrew(clone, text);
 	}
 
@@ -539,7 +486,6 @@ public class EventAnalyser {
 			amount = Integer.valueOf(amountString);
 		} catch (NumberFormatException e) {
 			log.error("Wrong type for crew amount, must be an integer... ignore!", e);
-			// System.exit(0);
 			return null;
 		}
 
@@ -559,7 +505,6 @@ public class EventAnalyser {
 				allSkills = Integer.valueOf(allSkillsString);
 			} catch (NumberFormatException e) {
 				log.error("Wrong type for all skills amount, must be an integer... assuming 0!", e);
-				// System.exit(0);
 				allSkills = 0; // This breaks the final modifier
 			}
 
@@ -573,7 +518,6 @@ public class EventAnalyser {
 					pilot = Integer.valueOf(pilotString);
 				} catch (NumberFormatException e) {
 					log.error("Wrong type for pilot skill, must be an integer... assuming 0!!", e);
-					// System.exit(0);
 				}
 			}
 
@@ -584,7 +528,6 @@ public class EventAnalyser {
 					shields = Integer.valueOf(shieldsString);
 				} catch (NumberFormatException e) {
 					log.error("Wrong type for shields skill, must be an integer... assuming 0!", e);
-					// System.exit(0);
 				}
 			}
 
@@ -595,7 +538,6 @@ public class EventAnalyser {
 					engines = Integer.valueOf(enginesString);
 				} catch (NumberFormatException e) {
 					log.error("Wrong type for engines skill, must be an integer... assuming 0!", e);
-					// System.exit(0);
 				}
 			}
 
@@ -606,7 +548,6 @@ public class EventAnalyser {
 					combat = Integer.valueOf(combatString);
 				} catch (NumberFormatException e) {
 					log.error("Wrong type for combat skill, must be an integer... assuming 0!", e);
-					// System.exit(0);
 				}
 			}
 
@@ -617,7 +558,6 @@ public class EventAnalyser {
 					repair = Integer.valueOf(repairString);
 				} catch (NumberFormatException e) {
 					log.error("Wrong type for repair skill, must be an integer... assuming 0!", e);
-					// System.exit(0);
 				}
 			}
 
@@ -628,7 +568,6 @@ public class EventAnalyser {
 					weapons = Integer.valueOf(weaponsString);
 				} catch (NumberFormatException e) {
 					log.error("Wrong type for weapons skill, must be an integer... assuming 0!", e);
-					// System.exit(0);
 				}
 			}
 
@@ -645,7 +584,6 @@ public class EventAnalyser {
 			amount = Integer.valueOf(amountString);
 		} catch (NumberFormatException e) {
 			log.error("Wrong type for status amount, must be an integer... assuming 0!", e);
-			// System.exit(0);
 		}
 
 		final StatusType type = StatusType.fromString(statusElement.attributeValue(TYPE_ATTRIBUTE_NAME));
@@ -653,6 +591,81 @@ public class EventAnalyser {
 		final Target target = Target.fromString(statusElement.attributeValue(TARGET_ATTRIBUTE_NAME));
 
 		return new EventStatus(amount, type, system, target);
+	}
+
+	private static final EventChoice getEventChoiceFromElement(Element choiceElement) {
+		final EventChoiceBuilder builder = new EventChoiceBuilder();
+		builder.setHidden(Boolean.valueOf(choiceElement.attributeValue(HIDDEN_ATTRIBUTE_NAME)));
+
+		final String lvlString = choiceElement.attributeValue(LVL_ATTRIBUTE_NAME);
+		int lvl = 0;
+		if (lvlString != null && !lvlString.isBlank()) {
+			try {
+				lvl = Integer.valueOf(lvlString);
+			} catch (NumberFormatException e) {
+				log.error("Wrong type for choice level, must be an integer... assuming 0!", e);
+			}
+		}
+		builder.setLevel(lvl);
+
+		final String minLvlString = choiceElement.attributeValue(MIN_LEVEL_ATTRIBUTE_NAME);
+		int minLvl = 0;
+		if (minLvlString != null && !minLvlString.isBlank()) {
+			try {
+				minLvl = Integer.valueOf(minLvlString);
+			} catch (NumberFormatException e) {
+				log.error("Wrong type for choice min level, must be an integer... assuming 0!", e);
+			}
+		}
+		builder.setMinLevel(minLvl);
+
+		final String maxLvlString = choiceElement.attributeValue(MAX_LEVEL_ATTRIBUTE_NAME);
+		int maxLvl = 0;
+		if (maxLvlString != null && !maxLvlString.isBlank()) {
+			try {
+				maxLvl = Integer.valueOf(maxLvlString);
+			} catch (NumberFormatException e) {
+				log.error("Wrong type for choice max level, must be an integer... assuming 0!", e);
+			}
+		}
+		builder.setMaxLevel(maxLvl);
+
+		final String maxGroupString = choiceElement.attributeValue(MAX_GROUP_ATTRIBUTE_NAME);
+		int maxGroup = 0;
+		if (maxGroupString != null && !maxGroupString.isBlank()) {
+			try {
+				maxGroup = Integer.valueOf(maxGroupString);
+			} catch (NumberFormatException e) {
+				log.error("Wrong type for choice max group, must be an integer... assuming 0!", e);
+			}
+		}
+		builder.setMaxGroup(maxGroup);
+
+		builder.setBlue(Boolean.valueOf(choiceElement.attributeValue(BLUE_ATTRIBUTE_NAME)));
+
+		String reqString = choiceElement.attributeValue(REQ_ATTRIBUTE_NAME); // TODO Change!
+		if (reqString == null) {
+			reqString = "";
+		}
+		builder.setReq(reqString);
+
+		final Text text = getTextFromElement(choiceElement);
+		if (text == Text.EMPTY) {
+			log.error("Choice text cannot be empty... ignore!");
+			return null;
+		}
+		builder.setText(text);
+
+		final Element eventElement = choiceElement.element(EVENT_TAG_NAME);
+		final Event event;
+		if (eventElement == null) {
+			event = Event.EMPTY;
+		} else {
+			event = getEventFromElement(eventElement);
+		}
+		builder.setEvent(event);
+
+		return builder.build();
 	}
 
 }

@@ -326,9 +326,9 @@ public class EventBuilder implements Builder {
 		this.eventStatus = eventStatus;
 		return this;
 	}
-
-	public EventBuilder setChoices(final List<EventChoice> choices) {
-		this.choices = choices;
+	
+	public EventBuilder addChoice(final EventChoice choice) {
+		this.choices.add(choice);
 		return this;
 	}
 

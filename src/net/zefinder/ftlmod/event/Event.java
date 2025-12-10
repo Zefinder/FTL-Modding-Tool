@@ -40,8 +40,8 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 			}
 		}
 
-		if (eventType == EventType.NORMAL) {
-			// If loading an event, the name cannot be null!
+		if (eventType == EventType.NAMED) {
+			// If creating a named event, the name cannot be null!
 			if (name == null || name.isBlank()) {
 				throw new EventCreationException("Event name cannot be null or empty, error!");
 			}
@@ -103,7 +103,9 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 		List<Attribute> attributes = new ArrayList<Attribute>();
 
 		// From here there must be a non empty name
-		attributes.add(new Attribute(NAME_ATTRIBUTE_NAME, name));
+		if (eventType == EventType.NAMED) {
+			attributes.add(new Attribute(NAME_ATTRIBUTE_NAME, name));			
+		}
 
 		if (unique) {
 			attributes.add(new Attribute(UNIQUE_ATTRIBUTE_NAME, Boolean.toString(unique)));
@@ -218,7 +220,7 @@ public record Event(EventType eventType, String name, boolean unique, Text event
 	}
 
 	public static void main(String[] args) {
-		System.out.println(new EventBuilder().setEventType(EventType.NORMAL)
+		System.out.println(new EventBuilder().setEventType(EventType.NAMED)
 				.setName("Test")
 				.setEventText(new Text(TextType.NORMAL, "This is a test event")).setDroneName("drone_COMBAT1").build()
 				.toXmlTag().toString());

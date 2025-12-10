@@ -15,7 +15,7 @@ public class EventChoiceBuilder implements Builder {
 
 	private Event event;
 	private Text text;
-	
+
 	public EventChoiceBuilder() {
 		hidden = false;
 		level = 0;
@@ -23,7 +23,7 @@ public class EventChoiceBuilder implements Builder {
 		maxLevel = 0;
 		maxGroup = 0;
 		req = "";
-		
+
 		event = Event.EMPTY;
 		text = Text.EMPTY;
 	}
@@ -64,45 +64,54 @@ public class EventChoiceBuilder implements Builder {
 		return text;
 	}
 
-	public void setHidden(final boolean hidden) {
+	public EventChoiceBuilder setHidden(final boolean hidden) {
 		this.hidden = hidden;
+		return this;
 	}
 
-	public void setLevel(final int level) {
+	public EventChoiceBuilder setLevel(final int level) {
 		this.level = level;
+		return this;
 	}
 
-	public void setMinLevel(final int minLevel) {
+	public EventChoiceBuilder setMinLevel(final int minLevel) {
 		this.minLevel = minLevel;
+		return this;
 	}
 
-	public void setMaxLevel(final int maxLevel) {
+	public EventChoiceBuilder setMaxLevel(final int maxLevel) {
 		this.maxLevel = maxLevel;
+		return this;
 	}
 
-	public void setBlue(final boolean blue) {
+	public EventChoiceBuilder setBlue(final boolean blue) {
 		this.blue = blue;
+		return this;
 	}
 
-	public void setMaxGroup(final int maxGroup) {
+	public EventChoiceBuilder setMaxGroup(final int maxGroup) {
 		this.maxGroup = maxGroup;
+		return this;
 	}
 
-	public void setReq(final String req) {
+	public EventChoiceBuilder setReq(final String req) {
 		this.req = req;
+		return this;
 	}
 
-	public void setEvent(final Event event) {
+	public EventChoiceBuilder setEvent(final Event event) {
 		this.event = event;
+		return this;
 	}
 
-	public void setText(final Text text) {
+	public EventChoiceBuilder setText(final Text text) {
 		this.text = text;
+		return this;
 	}
-	
+
 	@Override
 	public EventChoice build() {
 		return new EventChoice(this);
 	}
-	
+
 }

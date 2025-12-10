@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.zefinder.ftlmod.text.Text;
+import net.zefinder.ftlmod.text.TextType;
 import net.zefinder.ftlmod.xml.XmlObject;
 import net.zefinder.ftlmod.xml.XmlTag;
 import net.zefinder.ftlmod.xml.XmlTag.Attribute;
@@ -25,14 +26,18 @@ public record EventChoice(boolean hidden, int level, int minLevel, int maxLevel,
 		this.maxLevel = maxLevel < 0 ? 0 : maxLevel;
 		this.maxGroup = maxGroup < 0 ? 0 : maxGroup > 1 ? 1 : maxGroup;
 		this.blue = blue;
-		this.req = req == null ? "" : req; // TODO More checks on req when systems and weapons ok
+		this.req = req == null ? "" : req;
 
 		if (event == null) {
 			throw new EventChoiceCreationException("Event must not be null when creating an event choice");
 		}
 		this.event = event;
 
-		if (text == null || text.text().isBlank()) {
+		// Check is empty text: normal/named => no text, load/ref => no name
+		if (text == null
+				|| ((text.textType() == TextType.NORMAL || text.textType() == TextType.NAMED) && text.text().isBlank())
+				|| ((text.textType() == TextType.LOAD || text.textType() == TextType.REFERENCE)
+						&& text.name().isBlank())) {
 			throw new EventChoiceCreationException(
 					"Choice text must not be null (nor blank) when creating an event choice");
 		}

@@ -1,5 +1,5 @@
 package net.zefinder.ftlmod.event;
 
 public enum EventType {
-	NORMAL, LOAD, NONE;
+	NAMED, ANONYMOUS, LOAD, NONE;
 }
